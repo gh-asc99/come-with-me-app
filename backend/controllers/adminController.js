@@ -1,5 +1,5 @@
 import Usuario from '../models/mysql/Usuario.js';
-import Invitacion from '../models/mysql/invitacion.js';
+import Invitacion from '../models/mysql/Invitacion.js';
 import Suscripcion from '../models/mysql/Suscripcion.js';
 import sequelize from '../models/mysql/index.js';
 
