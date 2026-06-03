@@ -21,7 +21,7 @@ try {
 
   defineAssociations()
 
-  await sequelize.sync()
+  await sequelize.sync({ alter: true })
   console.log('🟢 Modelos sincronizados')
 } catch (error) {
   console.error('❌ Error de conexión:', error)
