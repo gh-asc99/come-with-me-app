@@ -16,8 +16,10 @@ import uploadRouter from './routes/upload.js'
 import adminRouter from './routes/admin.js'
 
 import Evento from './models/mysql/Evento.js'
-import PaqueteModel from './models/mysql/Paquete.js'
-import PlantillaModel from './models/mysql/Plantilla.js'
+import Paquete from './models/mysql/Paquete.js'
+import Plantilla from './models/mysql/Plantilla.js'
+import PlantillaPaquete from './models/mysql/PlantillaPaquete.js'
+import crypto from 'node:crypto'
 
 try {
   await sequelize.authenticate()
@@ -65,11 +67,10 @@ app.listen(PORT, () => {
 })
 
 // ==========================================================
-// SCRIPT DE LLENADO MASIVO AUTOMÁTICO (¡Borrar tras usar!)
+// SCRIPT DE LLENADO NATIVO CORREGIDO (¡Borrar tras usar!)
 // ==========================================================
 app.get('/api/seed', async (req, res) => {
   try {
-    // Estructura limpia emparejando cada evento con sus 3 paquetes reales
     const datosSemilla = [
       {
         evento: {
@@ -97,7 +98,7 @@ app.get('/api/seed', async (req, res) => {
         },
         paquetes: [
           { nombre: 'Celebración familiar', descripcion: 'Porque cualquier excusa es buena para reunirnos con aquellos que más queremos.', precio: 0.99, imagen: 'paquetes/familia/paquete_celebracion_familiar.png' },
-          { nombre: 'Día especial en casa', descripcion: 'Un plan íntimo y acogedor para compartir tiempo de calidad con los yours.', precio: 0.99, imagen: 'paquetes/familia/paquete_dia_especial_en_casa.png' },
+          { nombre: 'Día especial en casa', descripcion: 'Un plan íntimo y acogedor para compartir tiempo de calidad con los tuyos.', precio: 0.99, imagen: 'paquetes/familia/paquete_dia_especial_en_casa.png' },
           { nombre: 'Reunión familiar importante', descripcion: 'Para anunciar noticias, decisiones o momentos que merecen ser comunicados en persona.', precio: 0.99, imagen: 'paquetes/familia/paquete_reunion_familiar_importante.png' }
         ]
       },
@@ -143,7 +144,7 @@ app.get('/api/seed', async (req, res) => {
         paquetes: [
           { nombre: 'Nuestro aniversario', descripcion: 'Celebra el tiempo compartido y todo lo que queda por vivir junto a tu alma gemela.', precio: 0.99, imagen: 'paquetes/amor/paquete_nuestro_aniversario.png' },
           { nombre: 'Una boda de ensueño', descripcion: 'El gran día merece una presentación tan especial como la historia que nos une.', precio: 0.99, imagen: 'paquetes/amor/paquete_una_boda_de_ensueno.png' },
-          { nombre: 'Salida romántica', descripcion: 'Para compartir momentos intímos cargados de sentimientos y emociones a flor de piel.', precio: 0.99, imagen: 'paquetes/amor/paquete_salida_romantica.png' }
+          { nombre: 'Salida romántica', descripcion: 'Para compartir momentos íntimos cargados de sentimientos y emociones a flor de piel.', precio: 0.99, imagen: 'paquetes/amor/paquete_salida_romantica.png' }
         ]
       },
       {
@@ -158,7 +159,7 @@ app.get('/api/seed', async (req, res) => {
         paquetes: [
           { nombre: 'Reunión de equipo', descripcion: 'Para coordinar, informar y fortalecer el trabajo en grupo.', precio: 0.99, imagen: 'paquetes/laboral/paquete_reunion_de_equipo.png' },
           { nombre: 'Anuncio corporativo', descripcion: 'Comunica cambios, novedades o hitos importantes de tu empresa.', precio: 0.99, imagen: 'paquetes/laboral/paquete_anuncio_corporativo.png' },
-          { nombre: 'Evento empresarial', descripcion: 'Presentaciones, inauguraciones o encuentros profesionales.', precio: 0.99, imagen: 'paquetes/laboral/paquete_evento_empresarial.png' }
+          { font_name: 'Evento empresarial', nombre: 'Evento empresarial', descripcion: 'Presentaciones, inauguraciones o encuentros profesionales.', precio: 0.99, imagen: 'paquetes/laboral/paquete_evento_empresarial.png' }
         ]
       }
     ];
@@ -170,42 +171,72 @@ app.get('/api/seed', async (req, res) => {
       { titulo: 'Clásica Vertical (Minimalista)', descripcion: 'Diseño limpio y directo. Ideal para eventos que requieren poca información y un impacto visual rápido con una sola imagen principal.', imagen: 'plantillas/plantilla_clasica.png' }
     ];
 
-    let eventosCreadosContador = 0;
-    let paquetesCreadosContador = 0;
+    // Limpieza radical previa controlando las claves foráneas
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true });
+    await Evento.destroy({ truncate: true, cascade: true });
+    await Paquete.destroy({ truncate: true, cascade: true });
+    await Plantilla.destroy({ truncate: true, cascade: true });
+    await PlantillaPaquete.destroy({ truncate: true, cascade: true });
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true });
 
-    // 1 y 2. Inyección secuencial de Eventos y sus Paquetes vinculados
+    const todosLosPaquetesBuffers = [];
+    let eventosContador = 0;
+    let paquetesContador = 0;
+
+    // 1 y 2. Creación nativa de Eventos y Paquetes
     for (const item of datosSemilla) {
-      const nuevoEvento = await Evento.create(item.evento);
-      eventosCreadosContador++;
+      const eventoIdBuffer = Buffer.from(crypto.randomUUID().replace(/-/g, ''), 'hex');
+      
+      await Evento.create({
+        id: eventoIdBuffer,
+        ...item.evento
+      });
+      eventosContador++;
 
       for (const p of item.paquetes) {
-        await PaqueteModel.create({
-          input: {
-            ...p,
-            evento_id: nuevoEvento.id // Enlace relacional automático con el UUID generado
-          }
+        const paqueteIdBuffer = Buffer.from(crypto.randomUUID().replace(/-/g, ''), 'hex');
+        
+        await Paquete.create({
+          id: paqueteIdBuffer,
+          ...p,
+          evento_id: eventoIdBuffer
         });
-        paquetesCreadosContador++;
+        paquetesContador++;
+        todosLosPaquetesBuffers.push(paqueteIdBuffer);
       }
     }
 
-    // 3. Creación de Plantillas (vinculará de forma automática las 18 relaciones N:M)
-    for (const plantilla of plantillasSemilla) {
-      await PlantillaModel.create({ input: plantilla });
+    // 3. Creación nativa de Plantillas y vinculación cruzada inmediata (CROSS)
+    for (const pl of plantillasSemilla) {
+      const plantillaIdBuffer = Buffer.from(crypto.randomUUID().replace(/-/g, ''), 'hex');
+      
+      await Plantilla.create({
+        id: plantillaIdBuffer,
+        ...pl
+      });
+
+      const enlaces = todosLosPaquetesBuffers.map(paqueteBuffer => ({
+        plantilla_id: plantillaIdBuffer,
+        paquete_id: paqueteBuffer
+      }));
+
+      await PlantillaPaquete.bulkCreate(enlaces);
     }
 
+    // CORREGIDO: Hacemos el cálculo matemático directo eliminando la variable conflictiva
     res.json({
       success: true,
-      mensaje: '¡Estructura de datos sembrada por completo en Aiven! 🚀🌱',
-      resumen: {
-        eventos_creados: eventosCreadosContador,
-        paquetes_creados: paquetesCreadosContador,
-        plantillas_creadas: plantillasSemilla.length,
-        combinaciones_cross_realizadas: paquetesCreadosContador * plantillasSemilla.length
+      mensaje: '¡Base de datos sembrada nativamente al 100%! 🚀🌱',
+      estadisticas: {
+        eventos: eventosContador,
+        paquetes: paquetesContador,
+        plantillas: plantillasSemilla.length,
+        relaciones_intermedias_creadas: paquetesContador * plantillasSemilla.length
       }
     });
+
   } catch (error) {
-    console.error('Error crítico en el seeding masivo:', error);
+    console.error('Error en el seeding nativo:', error);
     res.status(500).json({ error: error.message });
   }
 });
