@@ -49,7 +49,7 @@ const FaseSeleccionEvento = () => {
   // ==========================================
   // PANTALLAS DE CARGA Y ERROR 
   // ==========================================
-  if (cargando) return <Cargando mensaje="Cargando temáticas..." />;
+  if (cargando) return <Cargando mensaje="Cargando temáticas " />;
 
   if (error)
     return (

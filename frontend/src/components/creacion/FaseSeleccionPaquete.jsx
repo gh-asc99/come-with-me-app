@@ -50,7 +50,7 @@ const FaseSeleccionPaquete = () => {
   // ==========================================
   // PANTALLAS DE CARGA Y ERROR 
   // ==========================================
-  if (cargando) return <Cargando mensaje="Cargando paquetes..." />;
+  if (cargando) return <Cargando mensaje="Cargando paquetes " />;
 
   if (error)
     return (

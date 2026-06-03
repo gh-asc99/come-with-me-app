@@ -2,7 +2,7 @@
 import React from 'react';
 import fondoMosaico from '../../../public/fondo_mosaico.png'; // Ajusta la ruta a tu carpeta public/assets si es necesario
 
-const Cargando = ({ mensaje = "Cargando..." }) => {
+const Cargando = ({ mensaje = "Cargando " }) => {
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center justify-center bg-sky-50">
       
@@ -21,11 +21,6 @@ const Cargando = ({ mensaje = "Cargando..." }) => {
             ================================================== */}
         <div className="relative flex items-center justify-center mb-12">
           
-          {/* Anillos de pulso expansivos (Ondas) */}
-          <div className="absolute w-32 h-32 md:w-44 md:h-44 bg-pink-300/30 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
-          <div className="absolute w-24 h-24 md:w-32 md:h-32 bg-sky-400/40 rounded-full animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }}></div>
-          <div className="absolute w-20 h-20 md:w-28 md:h-28 bg-white/50 rounded-full blur-xl animate-pulse"></div>
-          
           {/* Favicon Flotante */}
           <div className="relative w-20 h-20 md:w-28 md:h-28 animate-bounce drop-shadow-2xl">
             <img 
@@ -41,17 +36,17 @@ const Cargando = ({ mensaje = "Cargando..." }) => {
             ================================================== */}
         <div className="bg-white/80 backdrop-blur-xl px-8 py-3.5 rounded-full shadow-lg border border-white flex items-center gap-4">
           
+          {/* Texto dinámico con gradiente */}
+          <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-pink-400 uppercase tracking-widest text-xs md:text-sm">
+            {mensaje}
+          </span>
+
           {/* Puntos saltarines intercalados de colores */}
           <div className="flex gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-bounce shadow-sm" style={{ animationDelay: '0ms' }}></div>
             <div className="w-2.5 h-2.5 rounded-full bg-pink-300 animate-bounce shadow-sm" style={{ animationDelay: '150ms' }}></div>
             <div className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-bounce shadow-sm" style={{ animationDelay: '300ms' }}></div>
           </div>
-          
-          {/* Texto dinámico con gradiente */}
-          <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-pink-400 uppercase tracking-widest text-xs md:text-sm">
-            {mensaje}
-          </span>
           
         </div>
 
