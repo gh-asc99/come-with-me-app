@@ -1,0 +1,26 @@
+# Node modules
+node_modules/
+*/node_modules/
+
+# Variables de entorno
+.env
+*/.env
+
+# Archivos de subida locales (Imágenes de prueba)
+uploads/
+*/uploads/
+
+# Logs
+npm-debug.log*
+
+# Build React
+dist/
+build/
+*/dist/
+*/build/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store

@@ -1,0 +1,47 @@
+{
+  "name": "api_comewithme",
+  "version": "1.0.0",
+  "description": "API de la aplicación web Come With Me",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gh-asc99/API-ComeWithMe.git"
+  },
+  "keywords": [
+    "node",
+    "nodejs",
+    "api",
+    "come",
+    "with",
+    "me"
+  ],
+  "author": "Alejandro Soler Cruz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gh-asc99/API-ComeWithMe/issues"
+  },
+  "homepage": "https://github.com/gh-asc99/API-ComeWithMe#readme",
+  "devDependencies": {
+    "standard": "^17.1.2"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  },
+  "dependencies": {
+    "bcrypt": "6.0.0",
+    "cors": "2.8.6",
+    "dotenv": "17.3.1",
+    "eslint": "8.57.1",
+    "express": "5.2.1",
+    "jsonwebtoken": "9.0.3",
+    "multer": "^2.1.1",
+    "mysql2": "3.17.1",
+    "sequelize": "6.37.7",
+    "zod": "4.3.6"
+  }
+}

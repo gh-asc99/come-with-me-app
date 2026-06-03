@@ -1,0 +1,356 @@
+// Eventos
+
+###Recuperar todos los eventos
+GET http://localhost:3300/eventos
+
+
+###Recuperar evento por id
+GET http://localhost:3300/eventos/1adfec8b-0c60-11f1-947c-309c2315f326
+
+
+###Crear evento SIN token
+POST http://localhost:3300/eventos
+Content-Type: application/json
+
+{
+ "nombre": "eventoNuevo",
+ "descripcion": "un evento de prueba nuevo",
+ "imagen": "https://pics.filmaffinity.com/the_chronicles_of_narnia_the_lion_the_witch_and_the_wardrobe-555349345-large.jpg"
+}
+
+### Crear evento
+POST http://localhost:3300/eventos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MTQ0MTIxOSwiZXhwIjoxNzcxNDQ4NDE5fQ.4-MsH7QKxFlqt7_FZrpT6NEzCRaNLrFXV6Mp3oyw8fA
+
+{
+ "nombre": "Fiesta VIP",
+ "descripcion": "Solo para gente autenticada",
+ "imagen": "https://ejemplo.com/imagen.jpg"
+}
+
+
+###Borrar evento por id
+DELETE http://localhost:3300/eventos/272f686a-0cfc-11f1-947c-309c2315f326
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MTQ0MTIxOSwiZXhwIjoxNzcxNDQ4NDE5fQ.4-MsH7QKxFlqt7_FZrpT6NEzCRaNLrFXV6Mp3oyw8fA
+
+
+###Actualizar evento por id
+PATCH http://localhost:3300/eventos/5eb683b5-0ca8-11f1-947c-309c2315f326
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MTQ0MTIxOSwiZXhwIjoxNzcxNDQ4NDE5fQ.4-MsH7QKxFlqt7_FZrpT6NEzCRaNLrFXV6Mp3oyw8fA
+
+{
+    "descripcion": "Realmente era esta la descripción buena"
+}
+
+
+
+// Usuarios
+
+### Obtener todos los usuarios registrados (SOLO ADMIN)
+GET http://localhost:3300/auth/usuarios
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+### Registro de usuario
+POST http://localhost:3300/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Alex",
+  "correo": "alex@test.com",
+  "password": "123456",
+  "fecha_nacimiento": "2000-05-10"
+}
+
+
+### Login de usuario
+POST http://localhost:3300/auth/login
+Content-Type: application/json
+
+{
+  "correo": "alex@test.com",
+  "password": "123456"
+}
+
+### Modificar mis datos básicos
+PATCH http://localhost:3300/auth/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJzdWJzY3JpYmVyIiwiaWF0IjoxNzcyNDU0Nzk3LCJleHAiOjE3NzI0NjE5OTd9.QgGDam42W8C5cLxmTgWnqhXm2UZyou3O5yh0z7Ve4QE
+
+{
+  "nombre": "Alex Actualizado",
+  "correo": "alex.nuevo@test.com"
+}
+
+### Borrar mi propia cuenta
+DELETE http://localhost:3300/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJzdWJzY3JpYmVyIiwiaWF0IjoxNzcyNDU0Nzk3LCJleHAiOjE3NzI0NjE5OTd9.QgGDam42W8C5cLxmTgWnqhXm2UZyou3O5yh0z7Ve4QE
+
+### Modificar los datos de CUALQUIER usuario (SOLO ADMIN)
+PATCH http://localhost:3300/auth/usuarios/8963fe30-339f-4b05-b274-59a0df82ff6d
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+{
+  "nombre": "Nombre Cambiado Por Admin",
+  "correo": "correo.forzado@test.com"
+}
+
+### Borrar a CUALQUIER usuario (SOLO ADMIN)
+DELETE http://localhost:3300/auth/usuarios/8963fe30-339f-4b05-b274-59a0df82ff6d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+### Cambiar el rol de un usuario (SOLO ADMIN)
+PATCH http://localhost:3300/auth/usuarios/PEGA-AQUI-ID-DE-OTRO-USUARIO/rol
+Content-Type: application/json
+Authorization: Bearer <TU_TOKEN_DE_ADMIN_AQUI>
+
+{
+  "rol": "subscriber"
+}
+
+
+
+// Paquetes
+
+### Obtener todos los paquetes (con su evento asociado)
+GET http://localhost:3300/paquetes
+
+### Obtener los paquetes asociados a un evento
+GET http://localhost:3300/evento/id-del-evento
+
+### Crear un Paquete (Solo Admin)
+POST http://localhost:3300/paquetes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjE5NDE2OCwiZXhwIjoxNzcyMjAxMzY4fQ.CL-nvuu0JxmwLfJx2RqiCv35XSAmLXUZJzawBlDU0KE
+
+{
+  "nombre": "Ejemplo de paquete",
+  "descripcion": "Descripción de ejemplo.",
+  "precio": 3,
+  "imagen": "https://url-imagen.com/disco.jpg",
+  "evento_id": "4b45102a-0cbd-11f1-947c-309c2315f326"
+}
+
+### Actualizar un Paquete (Solo Admin)
+PATCH http://localhost:3300/paquetes/5c344eca-13d5-11f1-947c-309c2315f326
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjE5NDE2OCwiZXhwIjoxNzcyMjAxMzY4fQ.CL-nvuu0JxmwLfJx2RqiCv35XSAmLXUZJzawBlDU0KE
+
+{
+  "precio": 55.00,
+  "descripcion": "Descripción actualizada"
+}
+
+### Borrar un Paquete (Solo Admin)
+DELETE http://localhost:3300/paquetes/5c344eca-13d5-11f1-947c-309c2315f326
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjE5NDE2OCwiZXhwIjoxNzcyMjAxMzY4fQ.CL-nvuu0JxmwLfJx2RqiCv35XSAmLXUZJzawBlDU0KE
+
+
+// Plantillas
+
+### Crear una Plantilla
+POST http://localhost:3300/plantillas
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+{
+  "titulo": "Ejemplo nuevo",
+  "descripcion": "Descripción de ejemplo.",
+  "imagen": "https://images.unsplash.com/photo-1542361345-89e58247f2d5?w=500&q=80"
+}
+
+### Eliminar una Plantilla
+DELETE  http://localhost:3300/plantillas/944e9d53-dbb3-4d20-be26-fa245f1e17e6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+### Vincular Plantilla a un Paquete
+POST http://localhost:3300/plantillas/pega-aqui-id-de-la-plantilla/vincular
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+{
+  "paquete_id": "id-de-un-paquete"
+}
+
+### Ver todas las plantillas
+GET http://localhost:3300/plantillas
+
+### Obtener una plantilla específica por su ID
+GET http://localhost:3300/plantillas/ae9ff9e6-42cb-4927-9f02-069cdfa8be74
+
+### Actualizar una Plantilla (SOLO ADMIN)
+# Puedes enviar solo 1 campo, 2, o todos los que quieras actualizar
+PATCH http://localhost:3300/plantillas/944e9d53-dbb3-4d20-be26-fa245f1e17e6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
+
+{
+  "titulo": "Título de Plantilla Editado",
+  "descripcion": "Le he cambiado la descripción para hacerla más atractiva."
+}
+
+
+// Sugerencias
+
+### 1. Crear sugerencia GENERAL para un Evento (ej. Veladas románticas)
+POST http://localhost:3300/sugerencias
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMwNTEyNSwiZXhwIjoxNzcyMzEyMzI1fQ.BIKXPjgNKJhsK9q4a9IscaSrDM4rBW2TkKlbC2d-NMU
+
+{
+  "titulo_campo": "Nuestra historia",
+  "descripcion_sugerida": "Cuenta brevemente cómo os conocisteis",
+  "tipo_campo": "textarea",
+  "obligatorio": false,
+  "orden": 1,
+  "evento_id": "4b450fb9-0cbd-11f1-947c-309c2315f326",
+  "paquete_id": null
+}
+
+### 2. Crear sugerencia ESPECÍFICA para un Paquete (ej. Salida romántica)
+POST http://localhost:3300/sugerencias
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMwNTEyNSwiZXhwIjoxNzcyMzEyMzI1fQ.BIKXPjgNKJhsK9q4a9IscaSrDM4rBW2TkKlbC2d-NMU
+
+{
+  "titulo_campo": "Dress code para la cena",
+  "descripcion_sugerida": "¿Cómo deben ir vestidos?",
+  "tipo_campo": "texto",
+  "obligatorio": true,
+  "orden": 2,
+  "evento_id": "4b450fb9-0cbd-11f1-947c-309c2315f326",
+  "paquete_id": "fdd7392c-13c1-11f1-947c-309c2315f326"
+}
+
+### 3. Simular lo que hace el Frontend (traer un formulario dinámico)
+GET http://localhost:3300/sugerencias?evento_id=4b450fb9-0cbd-11f1-947c-309c2315f326&paquete_id=fdd7392c-13c1-11f1-947c-309c2315f326
+
+
+// Invitaciones
+
+### Crear una Invitación con campos extra
+POST http://localhost:3300/invitaciones
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMwNTEyNSwiZXhwIjoxNzcyMzEyMzI1fQ.BIKXPjgNKJhsK9q4a9IscaSrDM4rBW2TkKlbC2d-NMU
+
+{
+  "plantilla_id": "9a529f37-a279-467a-a92e-5cfa704bce28",
+  "titulo": "Mi Gran Boda",
+  "mensaje": "Nos casamos y queremos que estés ahí.",
+  "fecha_evento": "2026-09-15",
+  "lugar": "Finca Los Arcos, Alicante",
+  "estado": "borrador",
+  "datos_extra": {
+    "dress_code": "Etiqueta formal",
+    "cancion_nupcial": "Perfect - Ed Sheeran",
+    "menu_vegano": true,
+    "historia_pareja": "Nos conocimos en la universidad hace 5 años..."
+  }
+}
+
+### Ver mis invitaciones
+GET http://localhost:3300/invitaciones
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+
+// Invitados
+
+### 1. Añadir un invitado a tu invitación
+POST http://localhost:3300/invitados
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+{
+  "invitacion_id": "be33f170-14e0-11f1-947c-309c2315f326",
+  "nombre": "Carlos Amigo",
+  "correo": "carlos@example.com",
+  "estado": "pendiente"
+}
+
+### 2. Intentar añadir al mismo invitado otra vez
+POST http://localhost:3300/invitados
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+{
+  "invitacion_id": "be33f170-14e0-11f1-947c-309c2315f326",
+  "nombre": "Carlos (Duplicado)",
+  "correo": "carlos@example.com",
+  "estado": "pendiente"
+}
+
+### 3. Ver la lista de invitados de tu invitación
+GET http://localhost:3300/invitados/invitacion/be33f170-14e0-11f1-947c-309c2315f326
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJzdWJzY3JpYmVyIiwiaWF0IjoxNzcyNDQwMzc2LCJleHAiOjE3NzI0NDc1NzZ9.jGNA3z5iMc240Zjoi-zVNA41TPykL75xfIBfFIbZ728
+
+### 4. Simular que el invitado confirma su asistencia
+PATCH http://localhost:3300/invitados/16be68bb-1500-11f1-947c-309c2315f326
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+{
+  "estado": "confirmado"
+}
+
+
+// Suscripciones
+
+### 1. Simular la compra de una suscripción
+POST http://localhost:3300/suscripciones/comprar
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+{
+  "tipo": "anual",
+  "precio": 50.00,
+  "fecha_inicio": "2026-03-01",
+  "fecha_fin": "2027-03-01",
+  "precio_pagado": 39.99
+}
+
+### Simular la compra de una suscripción PARA UN USUARIO (Solo Admin)
+POST http://localhost:3300/suscripciones/usuario/PEGA-AQUI-EL-ID-DEL-USUARIO/comprar
+Content-Type: application/json
+Authorization: Bearer <TU_TOKEN_DE_ADMIN>
+
+{
+  "tipo": "anual",
+  "precio": 50.00,
+  "fecha_inicio": "2026-03-01",
+  "fecha_fin": "2027-03-01",
+  "precio_pagado": 39.99
+}
+
+### 2. Ver mis suscripciones
+GET http://localhost:3300/suscripciones/mis-suscripciones
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+
+// Compras
+
+### Comprar un Evento Suelto
+POST http://localhost:3300/compras/evento
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+{
+  "evento_id": "4b450d22-0cbd-11f1-947c-309c2315f326",
+  "precio_pagado": 4.99
+}
+
+### Comprar un Paquete Suelto
+POST http://localhost:3300/compras/paquete
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
+
+{
+  "paquete_id": "1361d928-133c-11f1-947c-309c2315f326",
+  "precio_pagado": 2.99
+}
+
+### Ver mi historial de compras
+GET http://localhost:3300/compras/mis-compras
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMyMjQyNiwiZXhwIjoxNzcyMzI5NjI2fQ.i71qAK2KioB_hcd4Yj44hsDJloBk13br94ADvu8lmrc
