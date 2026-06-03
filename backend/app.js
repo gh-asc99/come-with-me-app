@@ -29,7 +29,7 @@ try {
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true })
   
   // 2. Sequelize crea todas las tablas libremente de golpe
-  await sequelize.sync()
+  await sequelize.sync({ force: true })
   
   // 3. Volvemos a encender la seguridad
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true })
