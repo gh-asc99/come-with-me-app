@@ -3,7 +3,7 @@ import sequelize from './index.js'
 
 const Invitacion = sequelize.define('Invitacion', {
   id: {
-    type: DataTypes.STRING(16).BINARY,
+    type: 'BINARY(16)',
     primaryKey: true,
     defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
     get () {
@@ -19,7 +19,7 @@ const Invitacion = sequelize.define('Invitacion', {
   hora_inicio: { type: DataTypes.TIME, allowNull: false },
   lugar: { type: DataTypes.STRING, allowNull: false },
   // Dentro de la definición de tu modelo Invitacion:
-  paquete_id: { type: DataTypes.STRING(16).BINARY, allowNull: false },
+  paquete_id: { type: 'BINARY(16)', allowNull: false },
   fecha_creacion: { type: DataTypes.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
   estado: {
     type: DataTypes.ENUM('borrador', 'publicada', 'enviada'),
