@@ -1,8 +1,11 @@
 // src/services/apiService.js
 import axios from 'axios';
 
+// Detecta automáticamente si está en Vercel (producción) o en tu PC (desarrollo)
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3300';
+
 const api = axios.create({
-  baseURL: 'http://localhost:3300',
+  baseURL: API_URL,
 });
 
 api.interceptors.request.use(
