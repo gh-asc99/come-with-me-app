@@ -5,6 +5,8 @@ const CompraPaquete = sequelize.define('CompraPaquete', {
   id: {
     type: DataTypes.BLOB('tiny'),
     primaryKey: true,
+    allowNull: false, // <-- AÑADIDO
+    defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'), // <-- AÑADIDO CON PARÉNTESIS EXTRA
     get () {
       const value = this.getDataValue('id')
       if (!value) return null
