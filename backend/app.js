@@ -15,7 +15,7 @@ import comprasRouter from './routes/compras.js'
 import uploadRouter from './routes/upload.js'
 import adminRouter from './routes/admin.js'
 
-import EventoModel from './models/mysql/Evento.js'
+import Evento from './models/mysql/Evento.js'
 import PaqueteModel from './models/mysql/Paquete.js'
 import PlantillaModel from './models/mysql/Plantilla.js'
 
@@ -175,7 +175,7 @@ app.get('/api/seed', async (req, res) => {
 
     // 1 y 2. Inyección secuencial de Eventos y sus Paquetes vinculados
     for (const item of datosSemilla) {
-      const nuevoEvento = await EventoModel.saveEvent({ input: item.evento });
+      const nuevoEvento = await Evento.create(item.evento);
       eventosCreadosContador++;
 
       for (const p of item.paquetes) {
