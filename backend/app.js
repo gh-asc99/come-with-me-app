@@ -21,10 +21,19 @@ try {
 
   defineAssociations()
 
+  // 1. Apagamos la revisión de seguridad de MySQL temporalmente
+  await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true })
+  
+  // 2. Sequelize crea todas las tablas libremente de golpe
   await sequelize.sync({ force: true })
+  
+  // 3. Volvemos a encender la seguridad
+  await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true })
+  
   console.log('🟢 Modelos sincronizados')
 } catch (error) {
-  console.error('❌ Error de conexión:', error)
+  console.error('❌ Error general de Sequelize:', error.message)
+  console.error('🔍 Detalle exacto de MySQL:', error.parent?.sqlMessage || 'No disponible')
 }
 
 const app = express()
@@ -47,11 +56,6 @@ app.use('/admin', adminRouter)
 
 const PORT = process.env.PORT ?? 3300
 
-// app.listen(PORT, () => {
-//   console.log(`Servidor corriendo en http://localhost:${PORT}`)
-// })
-
 app.listen(PORT, () => {
-  // Cambiamos el log para que simplemente indique el puerto activo en Render
   console.log(`🚀 Servidor backend listo y escuchando en el puerto ${PORT}`)
 })
