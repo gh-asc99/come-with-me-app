@@ -8,7 +8,7 @@ const Evento = sequelize.define(
       type: DataTypes.BLOB('tiny'),
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.literal('UUID_TO_BIN(UUID())'),
+      defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
       get () {
         const value = this.getDataValue('id')
         if (!value) return null

@@ -6,7 +6,7 @@ const Sugerencia = sequelize.define('Sugerencia', {
   id: {
     type: DataTypes.BLOB('tiny'),
     primaryKey: true,
-    defaultValue: Sequelize.literal('UUID_TO_BIN(UUID())'),
+    defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
     get () {
       const value = this.getDataValue('id')
       if (!value) return null
