@@ -3,7 +3,7 @@ import sequelize from './index.js'
 
 const Invitado = sequelize.define('Invitado', {
   id: {
-    type: DataTypes.BLOB('tiny'),
+    type: DataTypes.STRING(16).BINARY,
     primaryKey: true,
     defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
     get () {

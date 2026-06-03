@@ -5,7 +5,7 @@ const Evento = sequelize.define(
   'Evento',
   {
     id: {
-      type: DataTypes.BLOB('tiny'),
+      type: DataTypes.STRING(16).BINARY,
       primaryKey: true,
       allowNull: false,
       defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),

@@ -4,7 +4,7 @@ import sequelize from './index.js'
 
 const Sugerencia = sequelize.define('Sugerencia', {
   id: {
-    type: DataTypes.BLOB('tiny'),
+    type: DataTypes.STRING(16).BINARY,
     primaryKey: true,
     defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
     get () {
@@ -15,7 +15,7 @@ const Sugerencia = sequelize.define('Sugerencia', {
     }
   },
   evento_id: {
-    type: DataTypes.BLOB('tiny'),
+    type: DataTypes.STRING(16).BINARY,
     allowNull: true,
     get () {
       const value = this.getDataValue('evento_id')
@@ -25,7 +25,7 @@ const Sugerencia = sequelize.define('Sugerencia', {
     }
   },
   paquete_id: {
-    type: DataTypes.BLOB('tiny'),
+    type: DataTypes.STRING(16).BINARY,
     allowNull: true,
     get () {
       const value = this.getDataValue('paquete_id')
