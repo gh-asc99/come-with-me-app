@@ -76,7 +76,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
       return (
         // Efecto Polaroid para la narrativa
         <div className={`mt-3 w-full bg-white p-2 sm:p-3 shadow-md border border-gray-100 rounded-xl ${esModoPDF ? '' : (esIzquierda ? '-rotate-2' : 'rotate-2 sm:hover:rotate-0 transition-transform')}`}>
-          <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-48 sm:h-56 object-cover object-center rounded-lg" />
+          <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-auto max-h-48 object-cover rounded-lg" />
         </div>
       );
     }

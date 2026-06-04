@@ -52,7 +52,7 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
     if (esUrlImagen(valor)) {
       return (
         <div className="mt-3 w-full rounded-xl overflow-hidden border border-white/20 shadow-md">
-          <img src={formatearUrlImagen(valor)} alt="Imagen extra" crossOrigin="anonymous" className="w-full h-48 sm:h-56 object-cover object-center" />
+          <img src={formatearUrlImagen(valor)} alt="Imagen extra" crossOrigin="anonymous" className="w-full h-auto max-h-48 object-cover" />
         </div>
       );
     }

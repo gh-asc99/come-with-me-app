@@ -62,7 +62,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
     if (esUrlImagen(valor)) {
       return (
         <div className="mt-3 w-full rounded-2xl overflow-hidden border-[3px] border-white shadow-md bg-white">
-          <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-48 sm:h-56 object-cover object-center" />
+          <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-auto max-h-48 object-cover" />
         </div>
       );
     }
