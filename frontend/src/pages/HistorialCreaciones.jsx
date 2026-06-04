@@ -110,7 +110,7 @@ const HistorialCreaciones = () => {
   };
 
   // PANTALLA DE CARGA INTEGRADA CON CARGANDO.JSX
-  if (cargando) return <Cargando mensaje="Cargando tus creaciones..." />;
+  if (cargando) return <Cargando mensaje="Cargando tus creaciones " />;
 
   let urlImagenActiva = null;
   if (invitacionActiva?.imagen) {

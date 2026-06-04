@@ -129,7 +129,7 @@ const EditarInvitacion = () => {
     }
   };
 
-  if (cargando) return <Cargando mensaje="Cargando entorno de edición..." />;
+  if (cargando) return <Cargando mensaje="Cargando entorno de edición " />;
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center py-6 sm:py-10 bg-sky-50">

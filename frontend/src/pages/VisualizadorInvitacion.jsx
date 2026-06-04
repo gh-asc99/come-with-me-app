@@ -30,7 +30,7 @@ const VisualizadorInvitacion = () => {
     cargarInvitacion();
   }, [id]);
 
-  if (cargando) return <Cargando mensaje="Preparando invitación..." />;
+  if (cargando) return <Cargando mensaje="Preparando invitación " />;
   
   if (error) return (
     <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center text-center px-4 bg-sky-50">

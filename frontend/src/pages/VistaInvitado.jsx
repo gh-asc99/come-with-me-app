@@ -56,7 +56,7 @@ const VistaInvitado = () => {
   };
 
   // --- PANTALLAS DE CARGA Y ERROR UNIFICADAS ---
-  if (cargando) return <Cargando mensaje="Abriendo invitación..." />;
+  if (cargando) return <Cargando mensaje="Abriendo invitación " />;
   
   if (error) return (
     <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center text-center px-4 bg-sky-50">

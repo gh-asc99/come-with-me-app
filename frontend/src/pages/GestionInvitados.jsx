@@ -83,7 +83,7 @@ const GestionInvitados = () => {
   };
 
   // PANTALLA DE CARGA UNIFICADA
-  if (cargando) return <Cargando mensaje="Cargando lista de invitados..." />;
+  if (cargando) return <Cargando mensaje="Cargando lista de invitados " />;
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center bg-sky-50">
