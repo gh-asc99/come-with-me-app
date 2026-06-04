@@ -6,7 +6,7 @@ import useFormulario from "../../hooks/useFormulario.js";
 import CampoFormulario from "../forms/CampoFormulario.jsx";
 import { subirImagen } from "../../services/invitacionService.js";
 import usePlantillas from "../../hooks/useCamposPlantilla.js";
-import { MAPA_PLANTILLAS } from "../plantillas/RenderizadorPlantilla.jsx";
+//import { MAPA_PLANTILLAS } from "../plantillas/RenderizadorPlantilla.jsx";
 import Cargando from "../ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
 
 const obtenerTipoInput = (tipoSugerencia) => {
@@ -112,8 +112,26 @@ export const FormularioInvitacionUI = ({
   const contextoPlantillas = usePlantillas() || {};
   const { renderInputTimelineContext, renderInputListadoContext } = contextoPlantillas;
 
-  const idNormalizado = plantillaSeleccionada ? plantillaSeleccionada.replace(/-/g, '').toLowerCase() : '';
-  const nombrePlantillaActual = MAPA_PLANTILLAS[idNormalizado] || 'clasica';
+  //const idNormalizado = plantillaSeleccionada ? plantillaSeleccionada.replace(/-/g, '').toLowerCase() : '';
+  //const nombrePlantillaActual = MAPA_PLANTILLAS[idNormalizado] || 'clasica';
+
+  // Lógica dinámica: Buscamos la plantilla seleccionada en la lista que nos dio el backend
+  let nombrePlantillaActual = 'clasica';
+  if (plantillaSeleccionada && plantillas) {
+    const plantillaEncontrada = plantillas.find(p => {
+      // Como los IDs pueden venir con o sin guiones, los normalizamos ambos para comparar
+      const id1 = p.id.replace(/-/g, '').toLowerCase();
+      const id2 = plantillaSeleccionada.replace(/-/g, '').toLowerCase();
+      return id1 === id2;
+    });
+
+    if (plantillaEncontrada && plantillaEncontrada.titulo) {
+      const titulo = plantillaEncontrada.titulo.toLowerCase();
+      if (titulo.includes('columnas')) nombrePlantillaActual = 'dos_columnas';
+      else if (titulo.includes('narrativa')) nombrePlantillaActual = 'narrativa';
+      else if (titulo.includes('visual')) nombrePlantillaActual = 'visual';
+    }
+  }
 
   const urlPaquete = imagenPaquete 
     ? (imagenPaquete.startsWith('http') ? imagenPaquete : `http://localhost:3300/${imagenPaquete.replace(/^\//, '')}`)
