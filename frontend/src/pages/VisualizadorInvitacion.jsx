@@ -1,7 +1,8 @@
 // src/pages/VisualizadorInvitacion.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerInvitacionPorId } from '../services/invitacionService.js';
+//import { obtenerInvitacionPorId } from '../services/invitacionService.js';
+import { obtenerInvitacionPublica } from '../services/invitacionService.js';
 import RenderizadorPlantilla from '../components/plantillas/RenderizadorPlantilla.jsx';
 import Cargando from '../components/ui/Cargando.jsx'; // <-- IMPORTAMOS CARGANDO
 
@@ -13,20 +14,42 @@ const VisualizadorInvitacion = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   const cargarInvitacion = async () => {
+  //     try {
+  //       const data = await obtenerInvitacionPorId(id);
+  //       if (typeof data.datos_extra === 'string') {
+  //         data.datos_extra = JSON.parse(data.datos_extra);
+  //       }
+  //       setInvitacion(data);
+  //     } catch (err) {
+  //       setError(err);
+  //     } finally {
+  //       setCargando(false);
+  //     }
+  //   };
+  //   cargarInvitacion();
+  // }, [id]);
+
   useEffect(() => {
     const cargarInvitacion = async () => {
       try {
-        const data = await obtenerInvitacionPorId(id);
-        if (typeof data.datos_extra === 'string') {
-          data.datos_extra = JSON.parse(data.datos_extra);
+        // Usamos la función PÚBLICA que no requiere token
+        const datos = await obtenerInvitacionPublica(id);
+        
+        // Parseamos los datos extra (igual que hicimos en VistaInvitado)
+        if (typeof datos.datos_extra === 'string') {
+           datos.datos_extra = JSON.parse(datos.datos_extra);
         }
-        setInvitacion(data);
+
+        setInvitacion(datos);
       } catch (err) {
-        setError(err);
+        setError("Invitación no encontrada o ha sido eliminada.");
       } finally {
         setCargando(false);
       }
     };
+
     cargarInvitacion();
   }, [id]);
 
