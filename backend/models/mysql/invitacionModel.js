@@ -15,17 +15,20 @@ const formatearSalida = (invitacion) => {
 
 class InvitacionModel {
   static async getAllByUsuario ({ usuario_id }) {
-    const invitaciones = await Invitacion.findAll({
-      where: { usuario_id: Sequelize.fn('UUID_TO_BIN', usuario_id) },
-      include: ['plantilla_usada'],
-      attributes: {
-        include: [
-          [Sequelize.literal(`(SELECT COUNT(*) FROM invitado WHERE invitado.invitacion_id = invitacion.id)`), 'total_invitados'],
-          [Sequelize.literal(`(SELECT COUNT(*) FROM invitado WHERE invitado.invitacion_id = invitacion.id AND invitado.estado = 'confirmado')`), 'total_confirmados']
-        ]
-      }
-    })
-    return invitaciones.map(formatearSalida)
+    try {
+      const invitaciones = await Invitacion.findAll({
+        where: { usuario_id: Sequelize.fn('UUID_TO_BIN', usuario_id) },
+        // Traemos la plantilla como siempre
+        include: ['plantilla_usada'],
+        // Quitamos el Sequelize.literal y dejamos que el frontend reciba la info básica
+        // (Podemos añadir el count nativo de invitados más adelante si la relación está bien definida)
+      })
+      
+      return invitaciones.map(formatearSalida)
+    } catch (error) {
+      console.error('Error al obtener invitaciones del usuario:', error)
+      throw new Error('Error al consultar el historial de invitaciones')
+    }
   }
 
   static async create ({ input, usuario_id }) {
