@@ -5,35 +5,46 @@ import PlantillaDosColumnas from './PlantillaDosColumnas.jsx';
 import PlantillaNarrativa from './PlantillaNarrativa.jsx';
 import PlantillaVisual from './PlantillaVisual.jsx';
 
-// Hacemos el mapa EXPORTABLE para que el Formulario Dinámico pueda saber 
-// qué plantilla se está seleccionando sin repetir código.
-export const MAPA_PLANTILLAS = {
-  'fdb4eec5959f4550a3814e536f93793b': 'clasica',
-  '913f8a5bed9a45148ab894ba9c93ed88': 'dos_columnas',
-  '9a529f37a279467aa92e5cfa704bce28': 'narrativa',
-  'ae9ff9e642cb49279f02069cdfa8be74': 'visual'
-};
-
 const RenderizadorPlantilla = ({ invitacion, urlImagen, esModoPDF = false }) => {
-  
-  // MAGIA ANTI-GUIONES: Venga como venga el ID (con guiones o sin ellos), 
-  // eliminamos cualquier guión y lo pasamos a minúsculas.
-  const idNormalizado = invitacion?.plantilla_id 
-    ? invitacion.plantilla_id.replace(/-/g, '').toLowerCase() 
-    : '';
+  let nombrePlantilla = 'clasica'; // Diseño por defecto
 
-  // Buscamos en el mapa. Si no coincide, cae en la clásica.
-  const nombrePlantilla = MAPA_PLANTILLAS[idNormalizado] || 'clasica';
+  if (invitacion) {
+    // ESTRATEGIA 1: Intentar leer el título directamente desde el backend
+    // Comprobamos los posibles nombres que Sequelize le haya dado a la relación
+    const plantillaObj = invitacion.plantilla_usada || invitacion.plantilla || invitacion.Plantilla;
+    
+    if (plantillaObj && plantillaObj.titulo) {
+      const tituloBd = plantillaObj.titulo.toLowerCase();
+      if (tituloBd.includes('columnas')) nombrePlantilla = 'dos_columnas';
+      else if (tituloBd.includes('narrativa')) nombrePlantilla = 'narrativa';
+      else if (tituloBd.includes('visual')) nombrePlantilla = 'visual';
+    } 
+    // ESTRATEGIA 2: Si el backend no envía el título (ej. al generar el PDF en FaseExito), usamos la caché
+    else if (invitacion.plantilla_id) {
+      const idBuscado = invitacion.plantilla_id.replace(/-/g, '').toLowerCase();
+      try {
+        const cacheMapa = localStorage.getItem('mapa_plantillas_memoria');
+        if (cacheMapa) {
+          const mapa = JSON.parse(cacheMapa);
+          if (mapa[idBuscado]) {
+            nombrePlantilla = mapa[idBuscado];
+          }
+        }
+      } catch (error) {
+        console.error("Error leyendo caché de plantillas", error);
+      }
+    }
+  }
 
+  // Renderizado final
   switch (nombrePlantilla) {
-    case 'clasica':
-      return <PlantillaClasica invitacion={invitacion} urlImagen={urlImagen} esModoPDF={esModoPDF} />;
     case 'dos_columnas':
       return <PlantillaDosColumnas invitacion={invitacion} urlImagen={urlImagen} esModoPDF={esModoPDF} />;
     case 'narrativa':
       return <PlantillaNarrativa invitacion={invitacion} urlImagen={urlImagen} esModoPDF={esModoPDF} />;
     case 'visual':
       return <PlantillaVisual invitacion={invitacion} urlImagen={urlImagen} esModoPDF={esModoPDF} />;
+    case 'clasica':
     default:
       return <PlantillaClasica invitacion={invitacion} urlImagen={urlImagen} esModoPDF={esModoPDF} />;
   }

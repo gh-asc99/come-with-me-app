@@ -6,8 +6,7 @@ import useFormulario from "../../hooks/useFormulario.js";
 import CampoFormulario from "../forms/CampoFormulario.jsx";
 import { subirImagen } from "../../services/invitacionService.js";
 import usePlantillas from "../../hooks/useCamposPlantilla.js";
-//import { MAPA_PLANTILLAS } from "../plantillas/RenderizadorPlantilla.jsx";
-import Cargando from "../ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
+import Cargando from "../ui/Cargando.jsx";
 
 const obtenerTipoInput = (tipoSugerencia) => {
   const mapaTipos = { texto: "text", numero: "number", fecha: "date", boolean: "checkbox" };
@@ -112,14 +111,9 @@ export const FormularioInvitacionUI = ({
   const contextoPlantillas = usePlantillas() || {};
   const { renderInputTimelineContext, renderInputListadoContext } = contextoPlantillas;
 
-  //const idNormalizado = plantillaSeleccionada ? plantillaSeleccionada.replace(/-/g, '').toLowerCase() : '';
-  //const nombrePlantillaActual = MAPA_PLANTILLAS[idNormalizado] || 'clasica';
-
-  // Lógica dinámica: Buscamos la plantilla seleccionada en la lista que nos dio el backend
   let nombrePlantillaActual = 'clasica';
   if (plantillaSeleccionada && plantillas) {
     const plantillaEncontrada = plantillas.find(p => {
-      // Como los IDs pueden venir con o sin guiones, los normalizamos ambos para comparar
       const id1 = p.id.replace(/-/g, '').toLowerCase();
       const id2 = plantillaSeleccionada.replace(/-/g, '').toLowerCase();
       return id1 === id2;
@@ -204,10 +198,12 @@ export const FormularioInvitacionUI = ({
   const quitarImagen = () => {
     if (imagenPaquete) {
       setPreviewImg(urlPaquete);
-      manejarCambioFijo({ target: { name: 'imagen', value: imagenPaquete } });
+      let event = { target: { name: 'imagen', value: imagenPaquete } };
+      manejarCambioFijo(event);
     } else {
       setPreviewImg(null);
-      manejarCambioFijo({ target: { name: 'imagen', value: '' } });
+      let event = { target: { name: 'imagen', value: '' } };
+      manejarCambioFijo(event);
     }
     setErrorImg(null);
   };
@@ -267,40 +263,28 @@ export const FormularioInvitacionUI = ({
       ? datosDinamicos[sug.titulo_campo]
       : [{ hora: datosFijos?.hora_inicio || '', titulo: 'Comienza el evento' }];
 
-    useEffect(() => {
-      if (items.length > 0 && items[0].hora !== datosFijos?.hora_inicio && datosFijos?.hora_inicio) {
-        const nuevosItems = [...items];
-        nuevosItems[0].hora = datosFijos.hora_inicio;
-        manejarCambioDinamico(sug.titulo_campo, nuevosItems);
-      }
-    }, [datosFijos?.hora_inicio]);
-
-    const actualizarItem = (index, campo, valor) => {
-      const nuevosItems = [...items];
-      nuevosItems[index] = { ...nuevosItems[index], [campo]: valor };
-      manejarCambioDinamico(sug.titulo_campo, nuevosItems);
-    };
-
-    const agregarItem = () => {
-      if (items.length < 8) manejarCambioDinamico(sug.titulo_campo, [...items, { hora: '', titulo: '' }]);
-    };
-
-    const quitarItem = (index) => {
-      const nuevosItems = items.filter((_, i) => i !== index);
-      manejarCambioDinamico(sug.titulo_campo, nuevosItems);
-    };
-
     return (
       <div className="mt-3 space-y-3 bg-white/5 p-4 sm:p-5 rounded-2xl border border-white/10 shadow-inner">
         {items.map((item, index) => (
           <div key={index} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
             <div className="w-full sm:w-1/3">
-              <input type="time" value={item.hora} onChange={(e) => actualizarItem(index, 'hora', e.target.value)} required={esObligatorio(sug) && index === 0} className="w-full bg-black/20 border border-white/10 text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-pink-400 font-bold transition-colors text-sm" />
+              <input type="time" value={item.hora} onChange={(e) => {
+                const nuevosItems = [...items];
+                nuevosItems[index] = { ...nuevosItems[index], hora: e.target.value };
+                manejarCambioDinamico(sug.titulo_campo, nuevosItems);
+              }} required={esObligatorio(sug) && index === 0} className="w-full bg-black/20 border border-white/10 text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-pink-400 font-bold transition-colors text-sm" />
             </div>
             <div className="flex-1 flex gap-2 items-center">
-              <input type="text" placeholder="Ej: Ceremonia, Banquete..." value={item.titulo} onChange={(e) => actualizarItem(index, 'titulo', e.target.value)} readOnly={index === 0} required={esObligatorio(sug) && index === 0} className={`w-full bg-black/20 border border-white/10 text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-pink-400 transition-colors text-sm ${index === 0 ? 'text-gray-400 italic' : ''}`} />
+              <input type="text" placeholder="Ej: Ceremonia, Banquete..." value={item.titulo} onChange={(e) => {
+                const nuevosItems = [...items];
+                nuevosItems[index] = { ...nuevosItems[index], titulo: e.target.value };
+                manejarCambioDinamico(sug.titulo_campo, nuevosItems);
+              }} readOnly={index === 0} required={esObligatorio(sug) && index === 0} className={`w-full bg-black/20 border border-white/10 text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-pink-400 transition-colors text-sm ${index === 0 ? 'text-gray-400 italic' : ''}`} />
               {index > 0 && (
-                <button type="button" onClick={() => quitarItem(index)} className="text-red-400 hover:text-red-300 px-1 sm:px-2 font-bold hover:scale-110 transition-transform">
+                <button type="button" onClick={() => {
+                  const nuevosItems = items.filter((_, i) => i !== index);
+                  manejarCambioDinamico(sug.titulo_campo, nuevosItems);
+                }} className="text-red-400 hover:text-red-300 px-1 sm:px-2 font-bold hover:scale-110 transition-transform">
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               )}
@@ -308,7 +292,7 @@ export const FormularioInvitacionUI = ({
           </div>
         ))}
         {items.length < 8 && (
-          <button type="button" onClick={agregarItem} className="w-full mt-2 py-3 border-2 border-dashed border-pink-400/30 text-pink-400 rounded-xl hover:bg-pink-400/10 font-bold text-[11px] sm:text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
+          <button type="button" onClick={() => manejarCambioDinamico(sug.titulo_campo, [...items, { hora: '', titulo: '' }])} className="w-full mt-2 py-3 border-2 border-dashed border-pink-400/30 text-pink-400 rounded-xl hover:bg-pink-400/10 font-bold text-[11px] sm:text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Añadir nueva fase ({items.length}/8)
           </button>
@@ -326,36 +310,28 @@ export const FormularioInvitacionUI = ({
       ? datosDinamicos[sug.titulo_campo]
       : [''];
 
-    const actualizarItem = (index, valor) => {
-      const nuevosItems = [...items];
-      nuevosItems[index] = valor;
-      manejarCambioDinamico(sug.titulo_campo, nuevosItems);
-    };
-
-    const agregarItem = () => {
-      if (items.length < 10) manejarCambioDinamico(sug.titulo_campo, [...items, '']);
-    };
-
-    const quitarItem = (index) => {
-      const nuevosItems = items.filter((_, i) => i !== index);
-      manejarCambioDinamico(sug.titulo_campo, nuevosItems);
-    };
-
     return (
       <div className="mt-3 space-y-3 bg-white/5 p-4 sm:p-5 rounded-2xl border border-white/10 shadow-inner">
         {items.map((item, index) => (
           <div key={index} className="flex items-center gap-2">
             <span className="text-white font-black w-4 sm:w-6 text-right select-none text-xs sm:text-base">{index + 1}.</span>
-            <input type="text" placeholder={`Elemento ${index + 1}`} value={item} onChange={(e) => actualizarItem(index, e.target.value)} required={esObligatorio(sug) && index === 0} className="flex-1 bg-black/20 border border-white/10 text-white rounded-xl px-3 sm:px-4 py-2.5 focus:outline-none focus:border-sky-400 transition-colors placeholder-white/50 text-sm" />
+            <input type="text" placeholder={`Elemento ${index + 1}`} value={item} onChange={(e) => {
+              const nuevosItems = [...items];
+              nuevosItems[index] = e.target.value;
+              manejarCambioDinamico(sug.titulo_campo, nuevosItems);
+            }} required={esObligatorio(sug) && index === 0} className="flex-1 bg-black/20 border border-white/10 text-white rounded-xl px-3 sm:px-4 py-2.5 focus:outline-none focus:border-sky-400 transition-colors placeholder-white/50 text-sm" />
             {items.length > 1 && (
-                <button type="button" onClick={() => quitarItem(index)} className="text-red-400 hover:text-red-300 px-1 sm:px-2 font-bold hover:scale-110 transition-transform">
+                <button type="button" onClick={() => {
+                  const nuevosItems = items.filter((_, i) => i !== index);
+                  manejarCambioDinamico(sug.titulo_campo, nuevosItems);
+                }} className="text-red-400 hover:text-red-300 px-1 sm:px-2 font-bold hover:scale-110 transition-transform">
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             )}
           </div>
         ))}
         {items.length < 10 && (
-          <button type="button" onClick={agregarItem} className="w-full mt-2 py-3 border-2 border-dashed border-white/30 text-white rounded-xl hover:bg-sky-400/10 font-bold text-[11px] sm:text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
+          <button type="button" onClick={() => manejarCambioDinamico(sug.titulo_campo, [...items, ''])} className="w-full mt-2 py-3 border-2 border-dashed border-white/30 text-white rounded-xl hover:bg-sky-400/10 font-bold text-[11px] sm:text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Añadir elemento ({items.length}/10)
           </button>
@@ -659,6 +635,26 @@ const FaseFormularioDinamico = () => {
     sugerencias, plantillas, cargando, error, datosFijos, datosDinamicos, plantillaSeleccionada,
     setPlantillaSeleccionada, manejarCambioFijo, manejarCambioDinamico, manejarEnvio,
   } = useFormulario();
+
+  // Guardamos en caché el mapa de IDs dinámicos vs Nombres de maquetación 
+  // para que el RenderizadorPlantilla resuelva los diseños con total autonomía
+  useEffect(() => {
+    if (plantillas && plantillas.length > 0) {
+      const mapaTemporal = {};
+      plantillas.forEach(p => {
+        if (p.id && p.titulo) {
+          const id = p.id.replace(/-/g, '').toLowerCase();
+          const titulo = p.titulo.toLowerCase();
+          
+          if (titulo.includes('columnas')) mapaTemporal[id] = 'dos_columnas';
+          else if (titulo.includes('narrativa')) mapaTemporal[id] = 'narrativa';
+          else if (titulo.includes('visual')) mapaTemporal[id] = 'visual';
+          else mapaTemporal[id] = 'clasica';
+        }
+      });
+      localStorage.setItem('mapa_plantillas_memoria', JSON.stringify(mapaTemporal));
+    }
+  }, [plantillas]);
 
   if (cargando) return <Cargando mensaje="Cargando entorno de diseño..." />;
   
