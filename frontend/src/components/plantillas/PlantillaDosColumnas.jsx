@@ -60,7 +60,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
           src={formatearUrlImagen(valor)} 
           alt="Sugerencia Visual" 
           crossOrigin="anonymous" 
-          className="mt-3 w-full h-auto max-h-48 object-cover rounded-xl shadow-sm border border-pink-100" 
+          className="mt-3 w-full h-48 sm:h-56 object-cover object-center rounded-xl shadow-sm border border-pink-100" 
         />
       );
     }
