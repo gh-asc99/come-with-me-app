@@ -18,12 +18,36 @@ class InvitacionModel {
     try {
       const invitaciones = await Invitacion.findAll({
         where: { usuario_id: Sequelize.fn('UUID_TO_BIN', usuario_id) },
-        // Traemos la plantilla como siempre
-        include: ['plantilla_usada'],
-        // Quitamos el Sequelize.literal y dejamos que el frontend reciba la info básica
-        // (Podemos añadir el count nativo de invitados más adelante si la relación está bien definida)
+        include: [
+          'plantilla_usada',
+          // Incluimos la relación de invitados, pero sin traer todos sus datos.
+          // Solo queremos que Sequelize nos permita usar sus atributos para contar.
+          {
+            association: 'invitados', // <-- IMPORTANTE: Este nombre debe coincidir con el alias de tu relación (ej: Invitacion.hasMany(Invitado, { as: 'invitados' }))
+            attributes: [] 
+          }
+        ],
+        // Le pedimos a Sequelize que añada dos columnas dinámicas a los resultados
+        attributes: {
+          include: [
+            // Cuenta TODOS los invitados asociados a esta invitación
+            [Sequelize.fn('COUNT', Sequelize.col('invitados.id')), 'total_invitados'],
+            
+            // Cuenta SOLO los invitados cuyo estado es 'confirmado'
+            // Usamos SUM y un CASE para emular el conteo condicional sin romper la consulta principal
+            [
+              Sequelize.fn(
+                'SUM',
+                Sequelize.literal(`CASE WHEN \`invitados\`.\`estado\` = 'confirmado' THEN 1 ELSE 0 END`)
+              ),
+              'total_confirmados'
+            ]
+          ]
+        },
+        // Como estamos usando funciones de agregación (COUNT, SUM), necesitamos agrupar por el ID de la invitación
+        group: ['Invitacion.id', 'plantilla_usada.id'] 
       })
-      
+
       return invitaciones.map(formatearSalida)
     } catch (error) {
       console.error('Error al obtener invitaciones del usuario:', error)
