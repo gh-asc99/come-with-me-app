@@ -138,7 +138,7 @@ const PerfilUsuario = () => {
   const configRol = estilosRol[user?.rol] || estilosRol.user;
 
   // COMPONENTE DE CARGA
-  if (cargandoDatos) return <Cargando mensaje="Cargando tu Área Personal..." />;
+  if (cargandoDatos) return <Cargando mensaje="Cargando tu Área Personal " />;
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center py-5 bg-sky-50">

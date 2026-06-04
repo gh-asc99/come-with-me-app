@@ -15,12 +15,6 @@ import comprasRouter from './routes/compras.js'
 import uploadRouter from './routes/upload.js'
 import adminRouter from './routes/admin.js'
 
-import Evento from './models/mysql/Evento.js'
-import Paquete from './models/mysql/Paquete.js'
-import Plantilla from './models/mysql/Plantilla.js'
-import PlantillaPaquete from './models/mysql/PlantillaPaquete.js'
-import crypto from 'node:crypto'
-
 try {
   await sequelize.authenticate()
   console.log('✅ Conectado a MySQL con Sequelize')
