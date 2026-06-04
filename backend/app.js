@@ -15,6 +15,8 @@ import comprasRouter from './routes/compras.js'
 import uploadRouter from './routes/upload.js'
 import adminRouter from './routes/admin.js'
 
+import Usuario from './models/mysql/Usuario.js'
+
 try {
   await sequelize.authenticate()
   console.log('✅ Conectado a MySQL con Sequelize')
@@ -59,3 +61,38 @@ const PORT = process.env.PORT ?? 3300
 app.listen(PORT, () => {
   console.log(`🚀 Servidor backend listo y escuchando en el puerto ${PORT}`)
 })
+
+// ==========================================================
+// SCRIPT TEMPORAL PARA DAR PERMISOS DE ADMIN (¡Borrar luego!)
+// ==========================================================
+app.get('/api/hacer-admin', async (req, res) => {
+  try {
+    // 1. Buscamos tu cuenta por el correo
+    const usuario = await Usuario.findOne({ 
+      where: { correo: 'alex@test.com' } 
+    });
+
+    if (!usuario) {
+      return res.status(404).json({ error: 'No se ha encontrado ninguna cuenta con ese correo.' });
+    }
+
+    // 2. Le cambiamos el rol y guardamos
+    usuario.rol = 'admin';
+    await usuario.save();
+
+    res.json({
+      success: true,
+      mensaje: '¡Permisos concedidos! Ya eres Administrador Supremo de Come With Me. 👑',
+      datos: {
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        nuevo_rol: usuario.rol
+      }
+    });
+
+  } catch (error) {
+    console.error('Error al hacer admin:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+// ==========================================================
