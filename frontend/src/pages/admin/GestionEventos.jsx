@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import { subirImagen } from '../../services/invitacionService.js';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
-import Cargando from "../../components/ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
+import Cargando from "../../components/ui/Cargando.jsx";
 
 const GestionEventos = () => {
   const [eventos, setEventos] = useState([]);
   const [paquetes, setPaquetes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [busqueda, setBusqueda] = useState(''); // <-- NUEVO ESTADO PARA EL BUSCADOR
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
@@ -68,7 +69,12 @@ const GestionEventos = () => {
     });
   };
 
-  const eventosOrdenados = [...eventos].sort((a, b) => {
+  // --- NUEVA LÓGICA DE FILTRADO Y ORDENACIÓN ---
+  const eventosFiltrados = eventos.filter(evt =>
+    evt.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  const eventosOrdenados = [...eventosFiltrados].sort((a, b) => {
     if (!orden.columna) return 0;
 
     let valorA, valorB;
@@ -208,21 +214,36 @@ const GestionEventos = () => {
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
 
       {/* ==================================================
-          CABECERA
+          CABECERA Y BUSCADOR
           ================================================== */}
-      <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6">
-        <div>
+      <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 sm:gap-6">
+        <div className="text-left w-full xl:w-auto">
           <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">Gestión de Eventos</h1>
           <p className="text-xs sm:text-sm text-gray-300 mt-2 font-medium">Crea, edita y administra las temáticas principales de la plataforma.</p>
         </div>
 
-        <button
-          onClick={abrirModalCrear}
-          className="w-full md:w-auto bg-pink-300 text-white font-black text-[10px] sm:text-[11px] uppercase tracking-widest px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl hover:bg-pink-400 hover:scale-105 active:scale-95 transition-all flex justify-center items-center gap-2 flex-shrink-0"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-          Nuevo Evento
-        </button>
+        <div className="flex flex-col sm:flex-row w-full xl:w-auto items-center gap-4 sm:gap-6">
+          <div className="relative w-full sm:w-80 flex-shrink-0">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input 
+              type="text" 
+              placeholder="Buscar por nombre del evento"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-black/40 border border-white/10 text-white placeholder-gray-500 rounded-xl sm:rounded-2xl focus:outline-none focus:border-sky-400 transition-colors shadow-inner text-sm"
+            />
+          </div>
+
+          <button
+            onClick={abrirModalCrear}
+            className="w-full sm:w-auto bg-pink-300 text-white font-black text-[10px] sm:text-[11px] uppercase tracking-widest px-6 sm:px-8 py-3.5 sm:py-3.5 rounded-xl sm:rounded-2xl hover:bg-pink-400 hover:scale-105 active:scale-95 transition-all flex justify-center items-center gap-2 flex-shrink-0"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+            Nuevo Evento
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -240,8 +261,12 @@ const GestionEventos = () => {
           <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500 mb-3 sm:mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
           </svg>
-          <p className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight">No hay eventos creados.</p>
-          <p className="text-xs sm:text-sm text-gray-400 font-medium">Comienza creando el primer evento de la plataforma.</p>
+          <p className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight">
+            {busqueda ? 'No se encontraron eventos' : 'No hay eventos creados.'}
+          </p>
+          <p className="text-xs sm:text-sm text-gray-400 font-medium">
+            {busqueda ? 'Prueba con otros términos de búsqueda.' : 'Comienza creando el primer evento de la plataforma.'}
+          </p>
         </div>
       ) : (
         <div className="bg-black/25 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 shadow-inner min-h-[500px]">
@@ -266,7 +291,6 @@ const GestionEventos = () => {
           {/* Filas del Listado con separación vertical */}
           <div className="space-y-3 sm:space-y-4">
             {eventosOrdenados.map((evt) => {
-
               return (
                 <div
                   key={evt.id}
