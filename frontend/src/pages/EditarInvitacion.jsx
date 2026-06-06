@@ -1,32 +1,26 @@
-// src/views/EditarInvitacion.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/apiService.js';
 import { FormularioInvitacionUI } from '../components/creacion/FaseFormularioDinamico.jsx';
 import ContenedorPrincipal from "../components/layout/ContenedorPrincipal.jsx";
 import fondoMosaico from '../../public/fondo_mosaico.png'; 
-import Cargando from '../components/ui/Cargando.jsx'; // <-- IMPORTAMOS CARGANDO
+import Cargando from '../components/ui/Cargando.jsx';
 
 const EditarInvitacion = () => {
   const { id } = useParams();
   const navegar = useNavigate();
-  
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [guardando, setGuardando] = useState(false);
-
-  // Estados locales que simulan el "useFormulario"
   const [datosFijos, setDatosFijos] = useState({});
   const [datosDinamicos, setDatosDinamicos] = useState({});
   const [plantillaSeleccionada, setPlantillaSeleccionada] = useState('');
   const [paqueteId, setPaqueteId] = useState(''); 
-  
-  // Listas de apoyo y datos originales
   const [plantillasDisponibles, setPlantillasDisponibles] = useState([]);
   const [sugerencias, setSugerencias] = useState([]); 
   const [paqueteOriginal, setPaqueteOriginal] = useState(null);
 
-  // Helper a prueba de balas para garantizar que sacamos un String válido
+  // Helper para garantizar que USO un String válido
   const formatearID = (idRaw) => {
     if (!idRaw) return null;
     let hex = '';
@@ -49,7 +43,6 @@ const EditarInvitacion = () => {
         const resInvitacion = await api.get(`/invitaciones/${id}`);
         const inv = resInvitacion.data;
 
-        // Limpiamos los IDs antes de enviarlos a Axios para evitar "[object Object]"
         const evtIdLimpio = formatearID(inv.evento_id);
         const paqIdLimpio = formatearID(inv.paquete_id);
         const plantillaLimpia = formatearID(inv.plantilla_id);
@@ -106,7 +99,6 @@ const EditarInvitacion = () => {
     setDatosDinamicos({ ...datosDinamicos, [nombreCampo]: valor });
   };
 
-  // Usamos la misma función interceptora que en crear para no enviar opcionales vacíos
   const manejarEnvio = async (e) => {
     if (e?.preventDefault) e.preventDefault();
     

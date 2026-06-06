@@ -1,4 +1,3 @@
-// src/pages/PerfilUsuario.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImagenesPerfil from "../components/profile/ImagenesPerfil.jsx";
@@ -9,13 +8,13 @@ import ContenedorPrincipal from "../components/layout/ContenedorPrincipal.jsx";
 import fondoMosaico from '../../public/fondo_mosaico.png'; 
 import Aviso from "../components/ui/Aviso.jsx";
 import ModalConfirmacion from "../components/ui/ModalConfirmacion.jsx";
-import Cargando from "../components/ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
+import Cargando from "../components/ui/Cargando.jsx";
 
 const PerfilUsuario = () => {
   const { user, actualizarUsuario, cargandoAccion, errorSesion, cerrarSesion } = useSesion();
   const navegar = useNavigate();
 
-  const [cargandoDatos, setCargandoDatos] = useState(true); // <-- ESTADO PARA LA ANIMACIÓN DE CARGA
+  const [cargandoDatos, setCargandoDatos] = useState(true);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [modalBorrarCuenta, setModalBorrarCuenta] = useState(false); 
   const [mostrarZonaPeligro, setMostrarZonaPeligro] = useState(false); 
@@ -81,7 +80,7 @@ const PerfilUsuario = () => {
         } catch (e) { 
           setSuscripcionActiva(null); 
         } finally {
-          setCargandoDatos(false); // Apagamos el Cargando al terminar todo
+          setCargandoDatos(false);
         }
       };
       cargarExtras();
@@ -137,7 +136,6 @@ const PerfilUsuario = () => {
   };
   const configRol = estilosRol[user?.rol] || estilosRol.user;
 
-  // COMPONENTE DE CARGA
   if (cargandoDatos) return <Cargando mensaje="Cargando tu Área Personal " />;
 
   return (

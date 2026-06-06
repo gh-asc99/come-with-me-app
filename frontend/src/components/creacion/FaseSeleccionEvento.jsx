@@ -1,16 +1,12 @@
-// src/components/creacion/FaseSeleccionEvento.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useEventos from "../../hooks/useEventos.js";
 import useCreacion from "../../hooks/useCreacion.js";
 import useSesion from "../../hooks/useSesion.js";
 import api from "../../services/apiService.js";
-import Cargando from "../ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
+import Cargando from "../ui/Cargando.jsx";
 
 const FaseSeleccionEvento = () => {
-  // ==========================================
-  // 1. ZONA DE HOOKS
-  // ==========================================
   const { eventos, cargando, error } = useEventos();
   const { seleccionarEvento } = useCreacion();
   const { user } = useSesion();
@@ -32,9 +28,6 @@ const FaseSeleccionEvento = () => {
     cargarCompras();
   }, [user]);
 
-  // ==========================================
-  // 2. FUNCIONES
-  // ==========================================
   const getUrlImagen = (ruta) => {
     if (!ruta) return "https://via.placeholder.com/400x533?text=Evento";
     if (ruta.startsWith("http")) return ruta;
@@ -46,9 +39,6 @@ const FaseSeleccionEvento = () => {
     return ruta.startsWith("/") ? ruta : `/${ruta}`;
   };
 
-  // ==========================================
-  // PANTALLAS DE CARGA Y ERROR 
-  // ==========================================
   if (cargando) return <Cargando mensaje="Cargando temáticas " />;
 
   if (error)
@@ -58,15 +48,9 @@ const FaseSeleccionEvento = () => {
       </div>
     );
 
-  // ==========================================
-  // 3. RENDERIZADO PRINCIPAL
-  // ==========================================
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col">
       
-      {/* ==================================================
-            CABECERA DE CRISTAL OSCURO
-            ================================================== */}
       <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 overflow-hidden mb-5">
         <div className="w-full bg-black/20 p-6 sm:p-8 md:px-12 md:py-6 flex flex-col items-center gap-4 sm:gap-6">
           <div className="text-center">
@@ -87,9 +71,6 @@ const FaseSeleccionEvento = () => {
         </div>
       </div>
 
-      {/* ==================================================
-            GRILLA DE EVENTOS
-            ================================================== */}
       {eventos.length === 0 ? (
         <div className="w-full flex-1 bg-black/20 backdrop-blur-2xl p-8 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center justify-center text-center shadow-inner min-h-[300px]">
           <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -131,7 +112,6 @@ const FaseSeleccionEvento = () => {
                   className={`absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10 transition-opacity duration-500 ${!estaBloqueado ? "group-hover:from-black" : ""}`}
                 ></div>
 
-                {/* --- CAPA DE BLOQUEO --- */}
                 {estaBloqueado && (
                   <div className="absolute inset-0 bg-black/80 z-30 flex flex-col items-center justify-center p-4 sm:p-6 text-center backdrop-blur-md">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-12 h-12 sm:w-16 sm:h-16 text-white/40 mb-3 sm:mb-4 drop-shadow-md">

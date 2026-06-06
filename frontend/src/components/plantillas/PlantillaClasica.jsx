@@ -1,4 +1,3 @@
-// src/components/plantillas/PlantillaClasica.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -28,7 +27,6 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
     console.error("No se pudo leer el usuario del localStorage");
   }
 
-  // --- DETECTOR DE IMÁGENES ---
   const esUrlImagen = (valor) => {
     return typeof valor === 'string' && (valor.includes('/uploads/') || valor.match(/\.(jpeg|jpg|gif|png|webp)$/i) || valor.match(/^https?:\/\//i));
   };
@@ -39,7 +37,6 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
     return `http://localhost:3300/${ruta.replace(/^\//, '')}`;
   };
 
-  // --- RENDERIZADOR MAGICO PARA DATOS COMPLEJOS ---
   const renderizarValor = (valor) => {
     if (typeof valor === 'boolean') {
       return (
@@ -84,7 +81,6 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
   return (
     <div className={`w-full mx-auto flex flex-col relative overflow-hidden ${esModoPDF ? 'gap-8 pb-0 max-w-[700px]' : 'gap-8 sm:gap-10 pb-10 sm:pb-20 max-w-4xl'}`}>
 
-      {/* HEADER: Logo y "Generado con" */}
       <div className="flex items-center justify-center sm:justify-start gap-3 mb-2 sm:mb-4 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
         <img 
@@ -117,7 +113,7 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
         <div className="w-12 sm:w-16 h-1 bg-gradient-to-r from-sky-300 to-pink-300 mx-auto mt-4 sm:mt-6 rounded-full opacity-50" />
       </ComponenteAnimado>
 
-      {/* 3. TEMPORAL Y LUGAR */}
+      {/* 3. TIEMPO Y LUGAR */}
       <ComponenteAnimado 
         {...animationProps} 
         style={{ pageBreakInside: 'avoid' }} 

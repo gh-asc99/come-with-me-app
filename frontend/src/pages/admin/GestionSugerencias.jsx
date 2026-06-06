@@ -1,4 +1,3 @@
-// src/pages/admin/GestionSugerencias.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
@@ -9,7 +8,7 @@ const GestionSugerencias = () => {
   const [paquetes, setPaquetes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [busqueda, setBusqueda] = useState(''); // <-- NUEVO ESTADO PARA EL BUSCADOR
+  const [busqueda, setBusqueda] = useState('');
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
@@ -96,7 +95,6 @@ const GestionSugerencias = () => {
     }));
   };
 
-  // --- NUEVA LÓGICA DE FILTRADO Y ORDENACIÓN ---
   const sugerenciasFiltradas = sugerencias.filter(sug => {
     const termino = busqueda.toLowerCase();
     const titulo = (sug.titulo_campo || '').toLowerCase();
@@ -208,9 +206,6 @@ const GestionSugerencias = () => {
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
       
-      {/* ==================================================
-          CABECERA Y BUSCADOR (Admin Dark Glass)
-          ================================================== */}
       <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 sm:gap-6">
         <div className="text-left w-full xl:w-auto">
           <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">Sugerencias</h1>
@@ -349,9 +344,7 @@ const GestionSugerencias = () => {
         </div>
       )}
 
-      {/* ==================================================
-          MODAL ADMIN
-          ================================================== */}
+      {/* MODAL ADMIN */}
       {modalAbierto && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="bg-[#121212]/95 backdrop-blur-3xl w-full max-w-2xl rounded-[2.5rem] shadow-2xl relative border border-white/10 animate-scale-up max-h-[85vh] top-8 flex flex-col">

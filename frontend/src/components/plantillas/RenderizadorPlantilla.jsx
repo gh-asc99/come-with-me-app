@@ -1,4 +1,3 @@
-// src/components/plantillas/RenderizadorPlantilla.jsx
 import React from 'react';
 import PlantillaClasica from './PlantillaClasica.jsx';
 import PlantillaDosColumnas from './PlantillaDosColumnas.jsx';
@@ -6,11 +5,10 @@ import PlantillaNarrativa from './PlantillaNarrativa.jsx';
 import PlantillaVisual from './PlantillaVisual.jsx';
 
 const RenderizadorPlantilla = ({ invitacion, urlImagen, esModoPDF = false }) => {
-  let nombrePlantilla = 'clasica'; // Diseño por defecto
+  let nombrePlantilla = 'clasica';
 
   if (invitacion) {
-    // ESTRATEGIA 1: Intentar leer el título directamente desde el backend
-    // Comprobamos los posibles nombres que Sequelize le haya dado a la relación
+    // Intentar leer el título directamente desde el backend
     const plantillaObj = invitacion.plantilla_usada || invitacion.plantilla || invitacion.Plantilla;
     
     if (plantillaObj && plantillaObj.titulo) {
@@ -19,7 +17,7 @@ const RenderizadorPlantilla = ({ invitacion, urlImagen, esModoPDF = false }) => 
       else if (tituloBd.includes('narrativa')) nombrePlantilla = 'narrativa';
       else if (tituloBd.includes('visual')) nombrePlantilla = 'visual';
     } 
-    // ESTRATEGIA 2: Si el backend no envía el título (ej. al generar el PDF en FaseExito), usamos la caché
+    // Si el backend no envía el título (ej. al generar el PDF en FaseExito), uso la caché
     else if (invitacion.plantilla_id) {
       const idBuscado = invitacion.plantilla_id.replace(/-/g, '').toLowerCase();
       try {

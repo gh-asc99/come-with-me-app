@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import perfilDesconocido from "../../assets/perfil_desconocido.png";
 import useSesion from "../../hooks/useSesion.js";
 import { Link } from "react-router-dom";
-// Ajusta esta ruta dependiendo de dónde tengas exactamente tu MenuUsuario.jsx
 import ModalConfirmacion from "../ui/ModalConfirmacion.jsx";
 
 const MenuUsuario = () => {
@@ -51,7 +49,7 @@ const MenuUsuario = () => {
             </div>
 
             <button
-              onClick={() => setMostrarConfirmacion(true)} // <-- Ahora abre el modal
+              onClick={() => setMostrarConfirmacion(true)}
               title="Cerrar sesión"
               aria-label="Cerrar sesión"
               className="bg-white text-sky-500 hover:text-pink-300 hover:bg-pink-50 p-2 rounded-full transition-colors ml-2 shadow-sm flex items-center justify-center"

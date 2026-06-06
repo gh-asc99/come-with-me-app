@@ -1,4 +1,3 @@
-// src/components/plantillas/TimelineNarrativa.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -9,9 +8,6 @@ const TimelineNarrativa = ({ fases, titulo, esModoPDF = false }) => {
     { hora: "12:30", titulo: "Ceremonia", descripcion: "" },
   ];
 
-  // =========================================================================
-  // VERSIÓN PDF: 100% A PRUEBA DE FALLOS (Diseño plano y seguro)
-  // =========================================================================
   if (esModoPDF) {
     return (
       <div className="w-full bg-gray-50 p-6 rounded-3xl border border-gray-200 my-4" style={{ pageBreakInside: 'avoid' }}>
@@ -43,9 +39,7 @@ const TimelineNarrativa = ({ fases, titulo, esModoPDF = false }) => {
     );
   }
 
-  // =========================================================================
   // VERSIÓN WEB: RESPONSIVE FLUIDO
-  // =========================================================================
   const fadeInScroll = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 20, duration: 0.6 } } };
   const scaleInDot = { hidden: { scale: 0, opacity: 0 }, visible: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 200, delay: 0.1 } } };
   const lineDraw = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.8, delay: 0.2 } } };
@@ -58,7 +52,7 @@ const TimelineNarrativa = ({ fases, titulo, esModoPDF = false }) => {
       <div className="absolute bottom-10 sm:bottom-20 right-0 w-56 sm:w-72 h-56 sm:h-72 bg-sky-200 rounded-full mix-blend-multiply filter blur-[60px] sm:blur-[80px] opacity-40 -z-0"></div>
       <div className="absolute top-1/2 left-1/4 w-32 sm:w-48 h-32 sm:h-48 bg-sky-100 rounded-full mix-blend-multiply filter blur-[50px] sm:blur-[60px] opacity-50 -z-0"></div>
       
-      {/* ÍCONOS (Ocultos en móvil pequeño para evitar ruido) */}
+      {/* ÍCONOS (Ocultos en móvil para evitar ruido) */}
       <svg className="hidden sm:block absolute top-6 sm:top-10 left-6 sm:left-10 text-pink-300 w-5 sm:w-6 h-5 sm:h-6 opacity-60 animate-pulse z-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>
       <svg className="hidden sm:block absolute top-32 sm:top-40 right-6 sm:right-12 text-sky-400 w-6 sm:w-8 h-6 sm:h-8 opacity-40 z-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>
 
@@ -123,9 +117,7 @@ const TimelineNarrativa = ({ fases, titulo, esModoPDF = false }) => {
                 )}
               </div>
 
-              {/* ===============================================================
-                  VERSIÓN MÓVIL: Tarjetas 100% Ancho (Se muestran solo en sm:)
-                  =============================================================== */}
+              {/* VERSIÓN MÓVIL: Tarjetas 100% Ancho (Se muestran solo en sm:) */}
               <div className="sm:hidden flex w-full relative z-10">
                 <motion.div variants={fadeInScroll} className={`relative w-full bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-sm border-l-[4px] ${borderColor} hover:shadow-md transition-shadow`}>
                   <div className="flex items-center gap-3">

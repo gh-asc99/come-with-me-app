@@ -11,7 +11,7 @@ const ProveedorCreacion = ({ children }) => {
     plantilla: null,
     datosFijos: null,
     datosExtra: null,
-    invitacionGenerada: null // Aquí guardaremos la respuesta del backend
+    invitacionGenerada: null
   });
 
   // Estados para controlar el botón de la Fase 3
@@ -28,13 +28,12 @@ const ProveedorCreacion = ({ children }) => {
     setFaseActual(3);
   };
 
-  // --- NUEVA FUNCIÓN PARA LA FASE 3 ---
+  // --- FUNCIÓN FINAL PARA LA FASE 3 ---
   const generarInvitacionFinal = async (datosFijos, datosDinamicos, plantillaId) => {
     setCargandoCreacion(true);
     setErrorCreacion(null);
     
     try {
-      // Construimos el objeto tal y como lo espera tu base de datos
       const payload = {
         titulo: datosFijos.titulo,
         mensaje: datosFijos.mensaje,
@@ -48,8 +47,6 @@ const ProveedorCreacion = ({ children }) => {
       };
 
       const nuevaInvitacion = await crearInvitacion(payload);
-      
-      // Actualizamos el contexto con todo lo que hemos generado
       setDatosCreacion(prev => ({ 
         ...prev, 
         datosFijos,
@@ -57,8 +54,7 @@ const ProveedorCreacion = ({ children }) => {
         plantilla: plantillaId,
         invitacionGenerada: nuevaInvitacion
       }));
-      
-      // ¡Avanzamos a la fase de éxito/compartir!
+
       setFaseActual(4); 
       return { success: true };
 

@@ -1,4 +1,3 @@
-// src/pages/admin/TarjetaUsuario.jsx
 import React from 'react';
 
 const TarjetaUsuario = ({ usuario, alEditar, alBorrar, esUsuarioActual }) => {
@@ -9,8 +8,6 @@ const TarjetaUsuario = ({ usuario, alEditar, alBorrar, esUsuarioActual }) => {
       let url = usuario.imagen;
       
       if (!url.startsWith('http')) {
-        // Si es un avatar por defecto del frontend, lo dejamos tal cual.
-        // Si no, asumimos que es del backend (uploads).
         if (!url.startsWith('/avatar/')) {
           url = `http://localhost:3300/${url.replace(/^\//, '')}`;
         }
@@ -21,7 +18,6 @@ const TarjetaUsuario = ({ usuario, alEditar, alBorrar, esUsuarioActual }) => {
     return <img src={avatarPorDefecto} alt={usuario.nombre} className="w-full h-full object-cover" />;
   };
 
-  // --- DICCIONARIO DE ESTILOS "DARK GLASS" ---
   const configuracionRol = {
     admin: {
       tarjeta: 'bg-gray-400/40 border-gray-400/80 hover:shadow-[0_0_20px_rgba(156,163,175,0.2)]',

@@ -1,4 +1,3 @@
-// src/components/plantillas/PlantillaNarrativa.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import usePlantillas from '../../hooks/useCamposPlantilla.js';
@@ -49,7 +48,6 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
     console.error("No se pudo leer el usuario del localStorage");
   }
 
-  // --- DETECTOR DE IMÁGENES ---
   const esUrlImagen = (valor) => {
     return typeof valor === 'string' && (valor.includes('/uploads/') || valor.match(/\.(jpeg|jpg|gif|png|webp)$/i) || valor.match(/^https?:\/\//i));
   };
@@ -60,7 +58,6 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
     return `http://localhost:3300/${ruta.replace(/^\//, '')}`;
   };
 
-  // --- RENDERIZADOR BÁSICO PARA RESTO DE DATOS ---
   const renderizarValor = (valor, esIzquierda, clave) => {
     const textColor = esIzquierda ? 'text-pink-400' : 'text-sky-400';
 
@@ -74,7 +71,6 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
     if (esUrlImagen(valor)) {
       return (
-        // Efecto Polaroid para la narrativa
         <div className={`mt-3 w-full bg-white p-2 sm:p-3 shadow-md border border-gray-100 rounded-xl ${esModoPDF ? '' : (esIzquierda ? '-rotate-2' : 'rotate-2 sm:hover:rotate-0 transition-transform')}`}>
           <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-auto max-h-48 object-cover rounded-lg" />
         </div>
@@ -99,7 +95,6 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
   return (
     <div className={`w-full mx-auto flex flex-col relative overflow-hidden ${esModoPDF ? 'pb-0 max-w-[700px]' : 'pb-10 sm:pb-20 max-w-4xl'}`}>
       
-      {/* HEADER: Logo y "Generado con" */}
       <div className="flex items-center justify-center sm:justify-start gap-3 mb-4 sm:mb-6 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
         <img src="/logo_CWM_oficial.png" alt="Come With Me" className="h-6 sm:h-8 w-auto object-contain" />
@@ -165,7 +160,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
         </div>
       </ComponenteAnimado>
 
-      {/* 4. EL NUEVO TIMELINE ESPECTACULAR */}
+      {/* 4. TIMELINE */}
       {timelineData && (
         <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="w-full mb-8 sm:mb-12 relative z-10 px-2 mt-2 sm:mt-4">
            {renderizarTimeline(timelineData, tituloTimeline, 'Narrativa', esModoPDF)}

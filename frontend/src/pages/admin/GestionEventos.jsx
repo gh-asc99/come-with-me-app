@@ -1,4 +1,3 @@
-// src/pages/admin/GestionEventos.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import { subirImagen } from '../../services/invitacionService.js';
@@ -10,7 +9,7 @@ const GestionEventos = () => {
   const [paquetes, setPaquetes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [busqueda, setBusqueda] = useState(''); // <-- NUEVO ESTADO PARA EL BUSCADOR
+  const [busqueda, setBusqueda] = useState('');
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
@@ -69,7 +68,6 @@ const GestionEventos = () => {
     });
   };
 
-  // --- NUEVA LÓGICA DE FILTRADO Y ORDENACIÓN ---
   const eventosFiltrados = eventos.filter(evt =>
     evt.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -213,9 +211,7 @@ const GestionEventos = () => {
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
 
-      {/* ==================================================
-          CABECERA Y BUSCADOR
-          ================================================== */}
+      {/* CABECERA Y BUSCADOR */}
       <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 sm:gap-6">
         <div className="text-left w-full xl:w-auto">
           <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">Gestión de Eventos</h1>
@@ -253,9 +249,7 @@ const GestionEventos = () => {
         </div>
       )}
 
-      {/* ==================================================
-          ZONA DEL LISTADO (Div con Grid en lugar de Tabla)
-          ================================================== */}
+      {/* ZONA DEL LISTADO */}
       {eventosOrdenados.length === 0 ? (
         <div className="flex-1 bg-black/10 backdrop-blur-md p-8 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center text-center shadow-inner min-h-[300px]">
           <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500 mb-3 sm:mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -359,9 +353,6 @@ const GestionEventos = () => {
         </div>
       )}
 
-      {/* ==================================================
-          MODAL ADMIN "DARK GLASS"
-          ================================================== */}
       {modalAbierto && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="bg-[#121212]/95 backdrop-blur-3xl w-full max-w-2xl rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl relative border border-white/10 animate-scale-up max-h-[85vh] overflow-hidden flex flex-col top-8">

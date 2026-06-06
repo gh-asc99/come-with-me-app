@@ -1,7 +1,6 @@
-// src/services/apiService.js
 import axios from 'axios';
 
-// Detecta automáticamente si está en Vercel (producción) o en tu PC (desarrollo)
+// Detecta automáticamente si está en Vercel (producción) o en mi PC (desarrollo)
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3300';
 
 const api = axios.create({
@@ -23,7 +22,7 @@ api.interceptors.request.use(
   }
 );
 
-// Función nativa para limpiar la sesión desde los servicios (sin usar hooks)
+// Función para limpiar la sesión desde los servicios (sin usar hooks)
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
@@ -40,10 +39,10 @@ export const eliminarCuenta = async () => {
 
     const idUsuario = usuarioSesion.id; 
 
-    // 1. Llamamos a la API para eliminar la cuenta en la base de datos
+    // 1. Llamo a la API para eliminar la cuenta en la base de datos
     const respuesta = await api.delete(`/auth/perfil/${idUsuario}`);
     
-    // 2. Si tiene éxito, limpiamos la sesión localmente
+    // 2. Si tiene éxito, limpio la sesión localmente
     logout();
 
     return respuesta.data;
@@ -51,8 +50,5 @@ export const eliminarCuenta = async () => {
     throw error.response?.data?.error || 'Error al eliminar la cuenta';
   }
 };
-
-// Asegúrate de que el resto de tus funciones (login, register, update...) 
-// también estén en este archivo si las exportas desde aquí.
 
 export default api;

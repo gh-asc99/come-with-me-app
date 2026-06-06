@@ -56,16 +56,13 @@ const ProveedorFormulario = ({ children }) => {
         setSugerencias(datosSugerencias);
         setPlantillas(datosPlantillas);
 
-        // ====================================================================
-        // LA MAGIA: INICIALIZAMOS LOS DATOS DINÁMICOS SEGÚN SU TIPO
-        // Así nos aseguramos de que el Timeline y el Listado nazcan siendo Arrays
-        // ====================================================================
+        // INICIALIZAMOS LOS DATOS DINÁMICOS SEGÚN SU TIPO
         const iniciales = {};
         datosSugerencias.forEach(sug => {
           if (sug.tipo_campo === 'timeline') {
             iniciales[sug.titulo_campo] = [{ hora: '', titulo: 'Comienza el evento' }];
           } else if (sug.tipo_campo === 'listado') {
-            iniciales[sug.titulo_campo] = ['']; // Empezamos con un string vacío en el array
+            iniciales[sug.titulo_campo] = [''];
           } else if (sug.tipo_campo === 'boolean') {
             iniciales[sug.titulo_campo] = false;
           } else {
@@ -73,7 +70,6 @@ const ProveedorFormulario = ({ children }) => {
           }
         });
         setDatosDinamicos(iniciales);
-        // ====================================================================
 
       } catch (err) {
         let textoError = 'Error de conexión al cargar los datos';
@@ -108,7 +104,7 @@ const ProveedorFormulario = ({ children }) => {
       return;
     }
 
-    // Usamos la imagen del paquete si el usuario no subió ninguna portada
+    // Se usa la imagen del paquete si el usuario no subió ninguna portada
     const imagenFinal = datosFijos.imagen || datosCreacion.paquete?.imagen;
     
     const datosFijosActualizados = {

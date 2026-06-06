@@ -1,44 +1,24 @@
-// src/pages/HistorialCreaciones.jsx
-
 import React, { useState, useRef, useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import { useHistorial } from "../hooks/useHistorial.js";
-
 import TarjetaInvitacion from "../components/creacion/TarjetaInvitacion.jsx";
-
 import ModalConfirmacion from "../components/ui/ModalConfirmacion.jsx";
-
 import RenderizadorPlantilla from "../components/plantillas/RenderizadorPlantilla.jsx";
-
 import { QRCodeCanvas } from "qrcode.react";
-
 import html2pdf from "html2pdf.js";
-
 import ContenedorPrincipal from "../components/layout/ContenedorPrincipal.jsx";
-
 import fondoMosaico from "../../public/fondo_mosaico.png";
-
 import Aviso from "../components/ui/Aviso.jsx";
-
-import Cargando from "../components/ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
+import Cargando from "../components/ui/Cargando.jsx";
 
 const HistorialCreaciones = () => {
   const navegar = useNavigate();
-
   const { invitaciones, cargando, eliminarInvitacion } = useHistorial();
-
   const [modalAbierto, setModalAbierto] = useState(false);
-
   const [invitacionAEliminar, setInvitacionAEliminar] = useState(null);
-
   const [modalQR, setModalQR] = useState(false);
-
   const [invitacionActiva, setInvitacionActiva] = useState(null);
-
   const [generandoPDF, setGenerandoPDF] = useState(false);
-
   const [aviso, setAviso] = useState({
     visible: false,
     mensaje: "",
@@ -46,46 +26,29 @@ const HistorialCreaciones = () => {
   });
 
   const areaPdfRef = useRef(null);
-
   const tieneCreaciones = invitaciones.length > 0;
 
-  // ==========================================================================
-
   // LÓGICA DE GENERACIÓN DE PDF
-
-  // ==========================================================================
 
   useEffect(() => {
     if (generandoPDF && invitacionActiva && areaPdfRef.current) {
       const generarDocumento = async () => {
         try {
           const elemento = areaPdfRef.current;
-
           const opciones = {
             margin: [15, 0, 15, 0],
-
             filename: `Invitacion_${invitacionActiva.titulo.replace(/\s+/g, "_")}.pdf`,
-
             image: { type: "jpeg", quality: 0.98 },
-
             html2canvas: {
               scale: 2,
-
               useCORS: true,
-
               letterRendering: true,
-
               scrollY: 0,
-
               logging: false,
-
               allowTaint: true,
-
               removeContainer: true,
             },
-
             jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-
             pagebreak: { mode: ["css", "legacy"] },
           };
 
@@ -116,13 +79,11 @@ const HistorialCreaciones = () => {
 
   const manejarDescargaPDF = (invitacion) => {
     setInvitacionActiva(invitacion);
-
     setGenerandoPDF(true);
   };
 
   const solicitarEliminacion = (id, titulo) => {
     setInvitacionAEliminar({ id, titulo });
-
     setModalAbierto(true);
   };
 
@@ -133,7 +94,6 @@ const HistorialCreaciones = () => {
 
     if (resultado.success) {
       setModalAbierto(false);
-
       setInvitacionAEliminar(null);
     } else {
       setAviso({ visible: true, mensaje: resultado.error, tipo: "error" });
@@ -142,7 +102,6 @@ const HistorialCreaciones = () => {
 
   const mostrarQR = (invitacion) => {
     setInvitacionActiva(invitacion);
-
     setModalQR(true);
   };
 
@@ -151,15 +110,10 @@ const HistorialCreaciones = () => {
 
     if (canvas) {
       const urlImagen = canvas.toDataURL("image/png");
-
       const enlaceDescarga = document.createElement("a");
-
       enlaceDescarga.href = urlImagen;
-
       enlaceDescarga.download = `QR_${invitacionActiva?.titulo || "Invitacion"}.png`;
-
       enlaceDescarga.click();
-
       setAviso({
         visible: true,
         mensaje: "¡Código QR descargado con éxito!",
@@ -167,8 +121,6 @@ const HistorialCreaciones = () => {
       });
     }
   };
-
-  // PANTALLA DE CARGA INTEGRADA CON CARGANDO.JSX
 
   if (cargando) return <Cargando mensaje="Cargando tus creaciones " />;
 
@@ -186,7 +138,6 @@ const HistorialCreaciones = () => {
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center bg-sky-50">
-      {/* AVISO FLOTANTE */}
 
       <Aviso
         mensaje={aviso.mensaje}
@@ -194,8 +145,6 @@ const HistorialCreaciones = () => {
         visible={aviso.visible}
         onClose={() => setAviso({ ...aviso, visible: false })}
       />
-
-      {/* FONDO DINÁMICO */}
 
       <div
         className={`fixed inset-0 z-0 bg-cover bg-center bg-no-repeat  ${!tieneCreaciones ? "grayscale" : ""}`}
@@ -209,11 +158,8 @@ const HistorialCreaciones = () => {
       <ContenedorPrincipal className="relative z-10 w-full flex-1 animate-fade-in-up py-5 flex flex-col">
         {tieneCreaciones ? (
           <div className="w-full max-w-6xl mx-auto flex flex-col">
-            {/* ==================================================
-
-                MODO CON CREACIONES: PANEL SUPERIOR RESPONSIVE
-
-                ================================================== */}
+            
+            {/* MODO CON CREACIONES: PANEL SUPERIOR RESPONSIVE */}
 
             <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 overflow-hidden mb-5 flex flex-col">
               <div className="w-full bg-black/20 p-5 sm:p-8 md:px-12 md:py-6 flex flex-col md:flex-row justify-between items-center md:items-center gap-4 md:gap-6 text-center md:text-left">
@@ -230,22 +176,10 @@ const HistorialCreaciones = () => {
                   </p>
                 </div>
 
-                <button
-                  onClick={() => navegar("/nueva-creacion")}
-                  className="w-full md:w-auto bg-pink-300 text-white font-black text-[11px] sm:text-[12px] uppercase tracking-widest px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl hover:bg-pink-400 transition-all active:scale-95 flex-shrink-0 flex items-center justify-center gap-2"
+                <button onClick={() => navegar("/nueva-creacion")} className="w-full md:w-auto bg-pink-300 text-white font-black text-[11px] sm:text-[12px] uppercase tracking-widest px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl hover:bg-pink-400 transition-all active:scale-95 flex-shrink-0 flex items-center justify-center gap-2"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4v16m8-8H4"
-                    />
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
                   </svg>
                   NUEVA CREACIÓN
                 </button>
@@ -254,13 +188,7 @@ const HistorialCreaciones = () => {
 
             {generandoPDF && (
               <div className="w-full mb-5 bg-sky-500/20 backdrop-blur-xl border border-sky-500/30 p-4 rounded-2xl shadow-sm flex justify-center items-center gap-3 animate-pulse">
-                <svg
-                  className="w-5 h-5 sm:w-6 h-6 text-sky-300 animate-spin"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
+                <svg className="w-5 h-5 sm:w-6 h-6 text-sky-300 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -274,7 +202,7 @@ const HistorialCreaciones = () => {
               </div>
             )}
 
-            {/* GRILLA DE INVITACIONES ADAPTATIVA */}
+            {/* LISTA DE INVITACIONES */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-4">
               {invitaciones.map((inv) => (
@@ -292,11 +220,7 @@ const HistorialCreaciones = () => {
             </div>
           </div>
         ) : (
-          /* ==================================================
-
-             MODO VACÍO: ADAPTADO A RESOLUCIONES MÓVILES
-
-             ================================================== */
+          /* MODO VACÍO: ADAPTADO A RESOLUCIONES MÓVILES */
 
           <div className="flex-1 flex flex-col items-center justify-center text-center w-full h-full min-h-[50vh] px-2 sm:px-4">
             <div className="bg-black/40 backdrop-blur-2xl p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-white/10 flex flex-col items-center shadow-2xl max-w-2xl w-full">
@@ -332,12 +256,6 @@ const HistorialCreaciones = () => {
           </div>
         )}
       </ContenedorPrincipal>
-
-      {/* ==================================================
-
-          MODALES REUTILIZADOS
-
-          ================================================== */}
 
       <ModalConfirmacion
         isOpen={modalAbierto}
@@ -413,7 +331,7 @@ const HistorialCreaciones = () => {
         </div>
       )}
 
-      {/* --- ZONA OCULTA PARA GENERAR EL PDF --- */}
+      {/* ZONA OCULTA PARA GENERAR EL PDF */}
 
       {invitacionActiva && generandoPDF && (
         <div

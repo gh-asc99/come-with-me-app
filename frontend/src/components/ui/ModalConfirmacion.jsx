@@ -10,21 +10,21 @@ const ModalConfirmacion = ({
   onConfirm, 
   onCancel,
   esDestructivo = false,
-  tipo = 'info', // 'exito', 'error', 'info'. Si pasas onConfirm, asume que es 'confirmacion'.
-  duracion = 4000 // Tiempo en ms antes de desaparecer (solo si no hay botones)
+  tipo = 'info',
+  duracion = 4000
 }) => {
 
   // --- LÓGICA DE AUTO-CIERRE ---
   useEffect(() => {
     if (isOpen && !onConfirm) {
       const timer = setTimeout(() => {
-        if (onCancel) onCancel(); // Usamos onCancel() genéricamente para cerrar el modal
+        if (onCancel) onCancel();
       }, duracion);
       return () => clearTimeout(timer);
     }
   }, [isOpen, onConfirm, duracion, onCancel]);
 
-  // --- CONFIGURACIÓN VISUAL (Ajustada a la nueva paleta) ---
+  // --- CONFIGURACIÓN VISUAL ---
   const determinarEstilo = () => {
     if (esDestructivo || tipo === 'error') {
       return {
@@ -32,7 +32,7 @@ const ModalConfirmacion = ({
         border: 'border-pink-300', 
         iconColor: 'text-pink-400', 
         iconBg: 'bg-pink-50', 
-        btnConfirmar: 'bg-pink-300 hover:bg-pink-400', // Colores suavizados como pediste
+        btnConfirmar: 'bg-pink-300 hover:bg-pink-400',
         icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       };
     }
@@ -42,7 +42,6 @@ const ModalConfirmacion = ({
         icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
       };
     }
-    // Por defecto (Info / Confirmación estándar en tonos rosas)
     return {
       bg: 'bg-white', border: 'border-pink-300', iconColor: 'text-pink-500', iconBg: 'bg-pink-50', btnConfirmar: 'bg-pink-500 hover:bg-pink-600',
       icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -50,22 +49,22 @@ const ModalConfirmacion = ({
   };
 
   const estilo = determinarEstilo();
-  const requiereRespuesta = !!onConfirm; // Si onConfirm existe, mostramos los botones
+  const requiereRespuesta = !!onConfirm; // Si onConfirm existe, se muestran los botones
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* BACKDROP: Solo se muestra si es una confirmación que bloquea la pantalla */}
+          {/* Solo se muestra si es una confirmación que bloquea la pantalla */}
           {requiereRespuesta && (
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm"
-              onClick={onCancel} // Cerrar si hacen clic fuera
+              onClick={onCancel}
             />
           )}
 
-          {/* EL MODAL / TOAST */}
+          {/* MODAL */}
           <motion.div
             initial={{ opacity: 0, x: requiereRespuesta ? 0 : 100, y: requiereRespuesta ? 20 : 0, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
@@ -77,9 +76,7 @@ const ModalConfirmacion = ({
                 : 'top-6 right-6 items-start justify-end w-full max-w-sm' // Arriba a la derecha si es solo aviso
             }`}
           >
-            {/* Se elimina el border-l-4 si es una confirmación central. 
-              Se cambia max-w-md a max-w-lg para ensancharlo un poco. 
-            */}
+            
             <div className={`pointer-events-auto bg-white rounded-3xl p-6 md:p-8 shadow-2xl ${requiereRespuesta ? 'w-full max-w-xl' : `w-full border-l-4 ${estilo.border}`}`}>
               
               <div className={`flex ${requiereRespuesta ? 'flex-col items-center' : 'items-start gap-4'}`}>

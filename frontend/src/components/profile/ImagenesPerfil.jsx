@@ -1,8 +1,6 @@
-// src/components/profile/ImagenesPerfil.jsx
 import React, { useState } from 'react';
 
 const ImagenesPerfil = (props) => {
-  // NUEVOS AVATARES LOCALES EN FORMATO PNG (Transparente)
   const avataresDisponibles = [
     "/avatar/perfil_1.png",
     "/avatar/perfil_2.png",
@@ -15,13 +13,10 @@ const ImagenesPerfil = (props) => {
   const [avatarSeleccionado, setAvatarSeleccionado] = useState(props.avatarActual);
 
   return (
-    // EXACTAMENTE IGUAL QUE ModalConfirmacion.jsx (Oscurecimiento y desenfoque)
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      
-      {/* CONTENEDOR BLANCO CON BORDES REDONDEADOS Y SOMBRA */}
+
       <div className="bg-white rounded-3xl p-6 md:p-8 shadow-2xl w-full max-w-md relative animate-fade-in-up">
         
-        {/* BOTÓN CERRAR (Esquina superior derecha) */}
         <button 
           onClick={props.onClose} 
           className="absolute top-5 right-5 text-gray-400 hover:text-pink-500 transition-colors p-1"
@@ -31,7 +26,7 @@ const ImagenesPerfil = (props) => {
           </svg>
         </button>
 
-        {/* CABECERA (Centrada con icono para mantener la coherencia) */}
+        {/* CABECERA */}
         <div className="flex flex-col items-center mb-8 text-center mt-2">
           <h3 className="font-bold text-[#252525] text-2xl md:text-3xl mb-2">
             Nuevo Avatar
@@ -41,7 +36,7 @@ const ImagenesPerfil = (props) => {
           </p>
         </div>
 
-        {/* GRILLA DE AVATARES */}
+        {/* AVATARES */}
         <div className="grid grid-cols-3 gap-4 md:gap-6 mb-8">
           {avataresDisponibles.map((avatar, index) => (
             <div 
@@ -53,7 +48,6 @@ const ImagenesPerfil = (props) => {
                   : 'border-4 border-transparent hover:scale-105 hover:bg-gray-50'
               }`}
             >
-              {/* Fondo cielo para destacar las caras PNG sin fondo */}
               <img 
                 src={avatar} 
                 alt={`Avatar ${index + 1}`} 
@@ -63,7 +57,6 @@ const ImagenesPerfil = (props) => {
           ))}
         </div>
 
-        {/* BOTONES IDÉNTICOS A MODALCONFIRMACION.JSX */}
         <div className="flex flex-col sm:flex-row gap-3 w-full">
           <button 
             onClick={props.onClose}

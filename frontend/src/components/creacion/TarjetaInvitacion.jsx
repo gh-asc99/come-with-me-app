@@ -9,17 +9,15 @@ const TarjetaInvitacion = ({
   onMostrarQR,
   onEditar
 }) => {
-  // Función para construir la URL correcta de la imagen hacia el backend
-  // Lógica inteligente para saber de dónde sacar la imagen
-  let urlImagen = null; // En HistorialCreaciones llámalo urlImagenActiva y usa invitacionActiva.imagen
+  let urlImagen = null;
 
   if (invitacion?.imagen) {
     if (invitacion.imagen.startsWith("http")) {
-      // 1. Es un enlace externo (ej: Cloudinary o una web cualquiera)
+      // 1. Es un enlace externo
       urlImagen = invitacion.imagen;
     } else if (invitacion.imagen.includes("uploads")) {
       // 2. Es una imagen subida por el usuario (vive en el Backend)
-      // Usamos .replace(/^\//, '') para quitar la barra inicial si la trae y evitar "//uploads"
+      // Uso .replace(/^\//, '') para quitar la barra inicial si la trae y evitar "//uploads"
       urlImagen = `http://localhost:3300/${invitacion.imagen.replace(/^\//, "")}`;
     } else {
       // 3. Es la imagen por defecto de un paquete (vive en el Frontend /public)
@@ -50,7 +48,6 @@ const TarjetaInvitacion = ({
         </svg>
       </button>
 
-      {/* --- AQUÍ ESTÁ EL CAMBIO DE LA IMAGEN --- */}
       <div className="h-48 bg-pink-50 relative flex items-center justify-center overflow-hidden border-b border-gray-100">
         {urlImagen ? (
           <img
@@ -125,11 +122,9 @@ const TarjetaInvitacion = ({
           Gestionar Invitados
         </button>
 
-        {/* --- FILA DE 4 ICONOS --- */}
-        {/* CORRECCIÓN: Cambiamos grid-cols-3 por grid-cols-4 para que quepan todos */}
         <div className="grid grid-cols-4 gap-2 border-t border-gray-100 pt-4 mt-4">
           
-          {/* 1. Botón Visualizar (Rosa) */}
+          {/* Botón Visualizar (Rosa) */}
           <button 
             onClick={() => onVisualizar(invitacion.id)} 
             title="Visualizar en web"
@@ -141,7 +136,7 @@ const TarjetaInvitacion = ({
             </svg>
           </button>
 
-          {/* 2. Botón Descargar PDF (Azul) */}
+          {/* Botón Descargar PDF (Azul) */}
           <button 
             onClick={() => onDescargarPDF(invitacion)} 
             title="Descargar en PDF"
@@ -152,7 +147,7 @@ const TarjetaInvitacion = ({
             </svg>
           </button>
 
-          {/* 3. Botón Mostrar QR (Verde) */}
+          {/* Botón Mostrar QR (Verde) */}
           <button 
             onClick={() => onMostrarQR(invitacion)} 
             title="Ver Código QR"
@@ -163,9 +158,9 @@ const TarjetaInvitacion = ({
             </svg>
           </button>
 
-          {/* 4. Botón Editar (Amarillo) */}
+          {/* Botón Editar (Amarillo) */}
           <button 
-            onClick={() => onEditar(invitacion.id)} // O usar navegar(`/editar-invitacion/${invitacion.id}`) según la opción que eligieras
+            onClick={() => onEditar(invitacion.id)}
             title="Editar contenido"
             className="flex items-center justify-center p-2 text-gray-400 hover:bg-yellow-50 hover:text-yellow-500 rounded-lg transition-colors"
           >

@@ -1,4 +1,3 @@
-// src/pages/AcercaDe.jsx
 import React from 'react'
 import logoCwm from "../assets/logo_CWM_oficial.png";
 import logoCrs from "../assets/logo_CRS_oficial.png";
@@ -9,8 +8,7 @@ import ContenedorPrincipal from "../components/layout/ContenedorPrincipal.jsx";
 const AcercaDe = () => {
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex items-center justify-center py-5 bg-sky-50">
-      
-      {/* FONDO MOSAICO SIN DIFUMINAR (Igual que en Suscripciones) */}
+
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${fondoMosaico})` }}
@@ -19,13 +17,10 @@ const AcercaDe = () => {
       </div>
 
       <ContenedorPrincipal className="relative z-10 w-full animate-fade-in-up">
-        
-        {/* TARJETA UNIFICADA CON EFECTO CRISTAL */}
+
         <div className="bg-black/25 backdrop-blur-2xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row items-stretch w-full max-w-6xl mx-auto">
           
-          {/* ==========================================
-              LADO IZQUIERDO: CABECERA Y ESENCIA
-              ========================================== */}
+          {/* LADO IZQUIERDO: CABECERA Y ESENCIA */}
           <div className="w-full lg:w-1/2 p-6 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-center relative border-b lg:border-b-0 lg:border-r border-white/10 bg-gradient-to-br from-black/30 to-transparent">
             
 
@@ -71,9 +66,7 @@ const AcercaDe = () => {
             </ul>
           </div>
 
-          {/* ==========================================
-              LADO DERECHO: PERFIL PROFESIONAL
-              ========================================== */}
+          {/* LADO DERECHO: PERFIL PROFESIONAL */}
           <div className="w-full lg:w-1/2 p-6 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-center items-center text-center relative bg-black/20 group">
             
             <div className="relative mb-6 max-w-[140px] sm:max-w-[160px] md:max-w-[180px]">
@@ -82,7 +75,7 @@ const AcercaDe = () => {
                 <img 
                   src={fotoCeo} 
                   alt="Alejandro Soler Cruz" 
-                  className="w-full aspect-square object-cover rounded-[1.2rem] sm:rounded-[1.6rem] grayscale group-hover:grayscale-0 transition-all duration-700" 
+                  className="w-full aspect-square object-cover rounded-[1.2rem] sm:rounded-[1.6rem] transition-all duration-700" 
                 />
               </div>
             </div>

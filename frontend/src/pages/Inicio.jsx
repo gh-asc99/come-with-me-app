@@ -1,12 +1,8 @@
-// src/pages/Inicio.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ContenedorPrincipal from '../components/layout/ContenedorPrincipal.jsx';
 import fondoMosaico from '../../public/fondo_mosaico.png'; 
 
-// ============================================================================
-// COMPONENTES AUXILIARES ADAPTADOS A RESPONSIVE
-// ============================================================================
 const EtiquetaPaso = ({ paso, titulo, color = 'sky' }) => {
   const isSky = color === 'sky';
   return (
@@ -33,7 +29,6 @@ const Parrafo = ({ children }) => (
   </p>
 );
 
-// Mantiene la proporción horizontal perfecta 16:9 en cualquier resolución
 const ImagenTutorial = ({ src, alt, className = "" }) => (
   <div className={`rounded-[1.2rem] md:rounded-[2rem] overflow-hidden border-2 border-white/20 shadow-2xl bg-[#121212] group relative w-full aspect-video ${className}`}>
     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
@@ -46,14 +41,10 @@ const ImagenTutorial = ({ src, alt, className = "" }) => (
   </div>
 );
 
-// ============================================================================
-// COMPONENTE PRINCIPAL
-// ============================================================================
 const Inicio = () => {
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center bg-[#0a192f] pb-10 md:pb-20">
 
-      {/* --- CAPA DE FONDO MOSAICO --- */}
       <div
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${fondoMosaico})` }}
@@ -63,12 +54,10 @@ const Inicio = () => {
 
       <ContenedorPrincipal className="relative z-10 w-full animate-fade-in-up flex flex-col gap-12 md:gap-20 pt-8 md:pt-10">
 
-        {/* ===================================================================
-            HERO SECTION & TRAILER
-            =================================================================== */}
+        {/* HERO SECTION & TRAILER */}
         <section className="w-full max-w-6xl mx-auto flex flex-col items-center text-center px-2">
 
-          {/* LOGOTIPO ADAPTATIVO */}
+          {/* LOGOTIPO */}
           <img
             src="/logo_CWM_oficial.png"
             alt="Come With Me"
@@ -108,9 +97,7 @@ const Inicio = () => {
           </div>
         </section>
 
-        {/* ===================================================================
-            TUTORIAL PASO A PASO
-            =================================================================== */}
+        {/* TUTORIAL PASO A PASO */}
         <div id="tutorial" className="w-full max-w-6xl mx-auto flex flex-col gap-8 sm:gap-12 md:gap-20">
 
           {/* PASO 1: REGISTRO */}
@@ -253,9 +240,7 @@ const Inicio = () => {
             </div>
           </section>
 
-          {/* ===================================================================
-              CALL TO ACTION FINAL Y FOOTER CORPORATIVO
-              =================================================================== */}
+          {/* LLAMADA A LA ACCIÓN FINAL Y FOOTER CORPORATIVO */}
           <div className="w-full text-center py-5 flex flex-col items-center px-4">
             <h3 className="text-2xl sm:text-4xl font-black text-white mb-6 md:mb-8 drop-shadow-md">¿Listo para empezar tu propia historia?</h3>
             <Link to="/acceso-usuario" className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-sky-400 to-pink-400 text-white font-black text-xs uppercase tracking-widest px-8 py-4 md:px-12 md:py-5 rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 mb-12 md:mb-16 w-full sm:w-auto">

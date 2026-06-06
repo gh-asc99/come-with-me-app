@@ -1,11 +1,10 @@
-// src/pages/Checkout.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/apiService';
 import ContenedorPrincipal from '../components/layout/ContenedorPrincipal.jsx';
 import suscripcionesFondo from '../../public/suscripciones/suscripciones.png';
 import Aviso from '../components/ui/Aviso.jsx';
-import Cargando from '../components/ui/Cargando.jsx'; // <-- IMPORTAMOS CARGANDO
+import Cargando from '../components/ui/Cargando.jsx';
 
 const planesSuscripcion = [
   { id: "mensual_1", nombre: "Plan Mensual", precio: "9.99", meses: 1 },
@@ -18,15 +17,11 @@ const planesSuscripcion = [
 const Checkout = () => {
   const { tipo, id } = useParams();
   const navegar = useNavigate();
-
   const [resumen, setResumen] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [procesandoPago, setProcesandoPago] = useState(false);
   const [exito, setExito] = useState(false);
-
-  // Estado para el sistema de avisos
   const [aviso, setAviso] = useState({ visible: false, mensaje: '', tipo: 'info' });
-
   const [datosTarjeta, setDatosTarjeta] = useState({ titular: '', numero: '', caducidad: '', cvc: '' });
 
   useEffect(() => {
@@ -62,9 +57,7 @@ const Checkout = () => {
 
   const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // ===============================================
   // LÓGICA DE VALIDACIÓN DE PAGO AL PULSAR EL BOTÓN
-  // ===============================================
   const manejarPago = async (e) => {
     e.preventDefault();
     
@@ -192,8 +185,7 @@ const Checkout = () => {
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center py-5">
-      
-      {/* Componente Flotante de Avisos */}
+
       <Aviso 
         mensaje={aviso.mensaje} 
         tipo={aviso.tipo} 
@@ -256,20 +248,18 @@ const Checkout = () => {
             <form onSubmit={manejarPago} className="space-y-4 sm:space-y-6 flex-1 flex flex-col">
               <div>
                 <label className="block text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest mb-1.5 sm:mb-2">Titular de la tarjeta</label>
-                {/* Input Libre para el Titular */}
                 <input 
                   type="text" 
                   value={datosTarjeta.titular} 
                   onChange={e => setDatosTarjeta({...datosTarjeta, titular: e.target.value})} 
                   className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 text-[#252525] rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-sky-200 focus:border-sky-400 transition-all font-bold uppercase text-sm sm:text-base" 
-                  placeholder="Ej: Alejandro Soler Cruz" 
+                  placeholder="Ej: MANUEL GARCÍA ESTEVE" 
                 />
               </div>
               
               <div>
                 <label className="block text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest mb-1.5 sm:mb-2">Número de tarjeta</label>
                 <div className="relative">
-                  {/* Input Libre para la Tarjeta */}
                   <input 
                     type="text" 
                     value={datosTarjeta.numero} 
@@ -284,7 +274,6 @@ const Checkout = () => {
               <div className="grid grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest mb-1.5 sm:mb-2">Caducidad</label>
-                  {/* Input Libre para Caducidad */}
                   <input 
                     type="text" 
                     value={datosTarjeta.caducidad} 
@@ -295,7 +284,6 @@ const Checkout = () => {
                 </div>
                 <div>
                   <label className="block text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest mb-1.5 sm:mb-2">CVC</label>
-                  {/* Input Libre para CVC */}
                   <input 
                     type="text" 
                     value={datosTarjeta.cvc} 
@@ -332,8 +320,7 @@ const Checkout = () => {
           </div>
 
         </div>
-        
-        {/* Usamos max-w-6xl mx-auto para asegurar que respete el mismo ancho del perfil */}
+
         <div className="w-full max-w-6xl mx-auto mt-4 sm:mt-6 px-2 sm:px-0">
           <button 
             onClick={() => navegar(-1)}

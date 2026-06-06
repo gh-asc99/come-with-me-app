@@ -1,4 +1,3 @@
-// src/components/plantillas/PlantillaVisual.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -33,7 +32,6 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
     console.error("No se pudo leer el usuario del localStorage");
   }
 
-  // --- DETECTOR DE IMÁGENES ---
   const esUrlImagen = (valor) => {
     return typeof valor === 'string' && (valor.includes('/uploads/') || valor.match(/\.(jpeg|jpg|gif|png|webp)$/i) || valor.match(/^https?:\/\//i));
   };
@@ -44,7 +42,6 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
     return `http://localhost:3300/${ruta.replace(/^\//, '')}`;
   };
 
-  // --- RENDERIZADOR MAGICO PARA DATOS COMPLEJOS ---
   const renderizarValor = (valor, esIzquierda, clave) => {
     const colorBg = esIzquierda ? 'bg-pink-50' : 'bg-sky-50';
     const colorText = esIzquierda ? 'text-pink-500' : 'text-sky-500';
@@ -57,8 +54,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
         </span>
       );
     }
-    
-    // Si detectamos que el texto es una imagen...
+
     if (esUrlImagen(valor)) {
       return (
         <div className="mt-3 w-full rounded-2xl overflow-hidden border-[3px] border-white shadow-md bg-white">
@@ -98,8 +94,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
   return (
     <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px]' : 'pb-10 sm:pb-20 max-w-4xl'}`}>
-      
-      {/* HEADER: Logo y "Generado con" */}
+
       <div className="flex items-center justify-center sm:justify-start gap-3 mb-6 sm:mb-8 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
         <img src="/logo_CWM_oficial.png" alt="Come With Me" className="h-6 sm:h-8 w-auto object-contain" />

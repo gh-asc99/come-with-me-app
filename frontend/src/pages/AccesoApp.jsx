@@ -1,4 +1,3 @@
-// src/pages/AccesoApp.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import historialFondo from '../assets/acceso/historial.png';
@@ -33,7 +32,6 @@ const AccesoApp = () => {
   ];
 
   return (
-    // En escritorio el padre limita la altura a 1 pantalla. En móvil crece según sus hijos.
     <div className="flex flex-col md:flex-row w-full md:h-[calc(100vh-64px)] bg-[#252525]">
       
       {paneles.map((panel) => (
@@ -43,7 +41,6 @@ const AccesoApp = () => {
           // En móvil cada panel ocupa 100vh. En escritorio comparten el espacio equitativamente (flex-1).
           className="relative flex items-center justify-center overflow-hidden group cursor-pointer border-b md:border-b-0 md:border-r border-[#252525]/20 last:border-0 w-full h-[calc(100vh-64px)] md:h-full md:flex-1"
         >
-          {/* IMAGEN DE FONDO (Zoom y Blur solo en Desktop) */}
           <div 
             className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out md:group-hover:scale-110 md:group-hover:blur-sm"
             style={{ backgroundImage: `url(${panel.imagenFondo})` }}
@@ -52,7 +49,6 @@ const AccesoApp = () => {
           {/* CAPA DE OSCURECIMIENTO (Más oscura en móvil por defecto para leer bien el texto) */}
           <div className="absolute inset-0 bg-black/50 md:bg-black/40 transition-colors duration-700 md:group-hover:bg-black/60" />
 
-          {/* CONTENEDOR DE TEXTOS */}
           <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 w-full max-w-md">
             
             {/* TÍTULO */}

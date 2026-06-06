@@ -1,4 +1,3 @@
-// src/pages/admin/ModalUsuario.jsx
 import React, { useState, useEffect } from 'react';
 
 const ModalUsuario = ({ usuario, alCerrar, alGuardar }) => {
@@ -32,7 +31,6 @@ const ModalUsuario = ({ usuario, alCerrar, alGuardar }) => {
 
   if (!usuario) return null;
 
-  // NUEVA PALETA DARK GLASS
   const estilosRol = {
     admin: { 
       bordeFoco: 'border-gray-400 bg-gray-500/10 text-gray-300 shadow-[0_0_15px_rgba(156,163,175,0.2)]', 
@@ -127,7 +125,6 @@ const ModalUsuario = ({ usuario, alCerrar, alGuardar }) => {
             </div>
           </div>
 
-          {/* Botonera */}
           <div className="pt-4 sm:pt-6 flex gap-3 sm:gap-4 border-t border-white/10 mt-6">
             <button 
               type="button" 

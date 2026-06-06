@@ -1,4 +1,3 @@
-// src/pages/admin/GestionPaquetes.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import { subirImagen } from '../../services/invitacionService.js';
@@ -9,7 +8,7 @@ const GestionPaquetes = () => {
   const [eventos, setEventos] = useState([]); 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [busqueda, setBusqueda] = useState(''); // <-- NUEVO ESTADO PARA EL BUSCADOR
+  const [busqueda, setBusqueda] = useState('');
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
@@ -68,7 +67,6 @@ const GestionPaquetes = () => {
     });
   };
 
-  // --- NUEVA LÓGICA DE FILTRADO Y ORDENACIÓN ---
   const paquetesFiltrados = paquetes.filter(pkt =>
     pkt.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -228,9 +226,6 @@ const GestionPaquetes = () => {
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
       
-      {/* ==================================================
-          CABECERA Y BUSCADOR (Admin Dark Glass)
-          ================================================== */}
       <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 sm:gap-6">
         <div className="text-left w-full xl:w-auto">
           <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">Gestión de Paquetes</h1>
@@ -268,9 +263,7 @@ const GestionPaquetes = () => {
         </div>
       )}
 
-      {/* ==================================================
-          ZONA DEL LISTADO
-          ================================================== */}
+      {/* ZONA DEL LISTADO */}
       {cargando && paquetes.length === 0 ? (
         <div className="flex-1 flex justify-center items-center py-32">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-4 border-sky-400"></div>
@@ -328,7 +321,6 @@ const GestionPaquetes = () => {
                     <div className="font-black text-white text-xl drop-shadow-md line-clamp-1" title={pkt.nombre}>{pkt.nombre}</div>
                     <div className="text-sm text-gray-300 mt-1 line-clamp-2 max-w-sm font-medium drop-shadow-sm" title={pkt.descripcion}>{pkt.descripcion}</div>
                     
-                    {/* Badge de Evento visible en móvil dentro de la información */}
                     <div className="sm:hidden mt-3 inline-flex">
                       <span className="bg-white/10 text-sky-300 text-xs px-3 py-1 rounded-full font-black shadow-inner backdrop-blur-md border border-white/20">
                         {obtenerNombreEvento(pkt.evento_id)}
@@ -384,9 +376,6 @@ const GestionPaquetes = () => {
         </div>
       )}
 
-      {/* ==================================================
-          MODAL ADMIN "DARK GLASS"
-          ================================================== */}
       {modalAbierto && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="bg-[#121212]/95 backdrop-blur-3xl w-full max-w-2xl rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl relative border border-white/10 animate-scale-up max-h-[90vh] overflow-hidden flex flex-col">

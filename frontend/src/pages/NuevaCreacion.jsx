@@ -1,4 +1,3 @@
-// src/pages/NuevaCreacion.jsx
 import React from 'react';
 import FaseSeleccionEvento from '../components/creacion/FaseSeleccionEvento.jsx';
 import FaseSeleccionPaquete from '../components/creacion/FaseSeleccionPaquete.jsx';
@@ -11,7 +10,6 @@ import fondoMosaico from '../../public/fondo_mosaico.png';
 const NuevaCreacion = () => {
   const { faseActual } = useCreacion();
 
-  // Textos descriptivos e información para cada fase
   const fases = [
     { id: 1, titulo: "Fase 1", desc: "Selección de Evento", color: "pink" },
     { id: 2, titulo: "Fase 2", desc: "Selección de Paquete", color: "sky" },
@@ -19,7 +17,6 @@ const NuevaCreacion = () => {
     { id: 4, titulo: "Fase 4", desc: "Confirmación", color: "sky" }
   ];
 
-  // Cálculo para el llenado suave de la línea de progreso
   const getProgressWidth = () => {
     if (faseActual === 1) return '0%';
     if (faseActual === 2) return '33.33%';
@@ -30,8 +27,7 @@ const NuevaCreacion = () => {
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col bg-sky-50">
-      
-      {/* CAPA DE FONDO */}
+
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${fondoMosaico})` }}
@@ -41,8 +37,7 @@ const NuevaCreacion = () => {
 
       {/* BARRA DE PROGRESO VERTICAL (Se oculta en móvil para dar más espacio a la interfaz principal) */}
       <div className="fixed right-4 md:right-8 lg:right-12 top-1/2 -translate-y-1/2 z-50 h-[300px] md:h-[500px] bg-black/25 backdrop-blur-2xl p-2 md:p-3 py-6 md:py-8 rounded-full border border-white/10 shadow-xl hidden sm:flex flex-col justify-between items-center">
-        
-        {/* Línea base de conexión */}
+
         <div className="absolute left-1/2 top-8 bottom-8 md:top-10 md:bottom-10 w-1 bg-white/10 z-0 rounded-full -translate-x-1/2">
           <div 
             className="w-full bg-gradient-to-b from-pink-300 via-sky-400 to-pink-300 transition-all duration-1000 ease-in-out rounded-full"
@@ -83,7 +78,6 @@ const NuevaCreacion = () => {
         })}
       </div>
 
-      {/* CONTENEDOR PRINCIPAL: Ajustado con padding responsivo */}
       <ContenedorPrincipal className="relative z-10 w-full animate-fade-in-up py-5 flex flex-col items-center">
         
         {/* CONTENEDOR DE FASES */}

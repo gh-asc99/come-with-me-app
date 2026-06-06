@@ -1,4 +1,3 @@
-// src/components/navigation/Menu.jsx
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useSesion from "../../hooks/useSesion.js";

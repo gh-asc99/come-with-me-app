@@ -1,4 +1,3 @@
-// src/components/creacion/FaseFormularioDinamico.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useCreacion from "../../hooks/useCreacion.js";
@@ -636,7 +635,7 @@ const FaseFormularioDinamico = () => {
     setPlantillaSeleccionada, manejarCambioFijo, manejarCambioDinamico, manejarEnvio,
   } = useFormulario();
 
-  // Guardamos en caché el mapa de IDs dinámicos vs Nombres de maquetación 
+  // Guardo en caché el mapa de IDs dinámicos vs Nombres de maquetación 
   // para que el RenderizadorPlantilla resuelva los diseños con total autonomía
   useEffect(() => {
     if (plantillas && plantillas.length > 0) {

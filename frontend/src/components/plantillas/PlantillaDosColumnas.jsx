@@ -1,4 +1,3 @@
-// src/components/plantillas/PlantillaDosColumnas.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -33,7 +32,6 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
     console.error("No se pudo leer el usuario del localStorage");
   }
 
-  // --- DETECTOR DE IMÁGENES ---
   const esUrlImagen = (valor) => {
     return typeof valor === 'string' && (valor.includes('/uploads/') || valor.match(/\.(jpeg|jpg|gif|png|webp)$/i) || valor.match(/^https?:\/\//i));
   };
@@ -44,7 +42,6 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
     return `http://localhost:3300/${ruta.replace(/^\//, '')}`;
   };
 
-  // --- RENDERIZADOR MAGICO PARA DATOS COMPLEJOS ---
   const renderizarValor = (valor) => {
     if (typeof valor === 'boolean') {
       return (
@@ -120,13 +117,11 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
   return (
     <div className={`w-full mx-auto flex flex-col relative overflow-hidden ${esModoPDF ? 'pb-0 max-w-[700px]' : 'pb-10 sm:pb-20 max-w-5xl px-2 sm:px-4'}`}>
       
-      {/* HEADER: Logo y "Generado con" */}
       <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[8px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
         <img src="/logo_CWM_oficial.png" alt="Come With Me" className="h-5 sm:h-8 w-auto object-contain" />
       </div>
 
-      {/* AQUÍ ESTÁ LA MAGIA: flex-row forzado en todos los tamaños con anchos del 50% (w-1/2) */}
       <div className={`relative z-10 flex ${esModoPDF ? 'flex-row gap-6' : 'flex-row gap-3 sm:gap-10'} items-start w-full`}>
         
         {/* --- COLUMNA IZQUIERDA (50%) --- */}
@@ -174,7 +169,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
             </ComponenteAnimado>
           )}
 
-          {/* TEMPORAL Y LUGAR */}
+          {/* TIEMPO Y LUGAR */}
           <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="flex flex-col gap-3 sm:gap-4">
             <div className="bg-gradient-to-br from-sky-400 to-sky-600 p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] shadow-md text-white flex flex-col items-center justify-center text-center">
               <span className="text-sky-100 uppercase text-[7px] sm:text-[9px] font-black tracking-[0.2em] mb-1">¿Cuándo nos vemos?</span>

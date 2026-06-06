@@ -1,4 +1,3 @@
-// src/pages/admin/GestionCompras.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import ModalUsuario from '../../pages/admin/ModalUsuario.jsx';
@@ -46,7 +45,6 @@ const GestionCompras = () => {
     };
   };
 
-  // --- LÓGICA DE AVATAR CORREGIDA ---
   const renderAvatar = (imagen, nombre) => {
     if (imagen) {
       let url = imagen;
@@ -133,7 +131,7 @@ const GestionCompras = () => {
                           {compra.usuario_correo || '---'}
                         </span>
                         
-                        {/* Badges y datos para móvil */}
+                        {/* Datos para móvil */}
                         <div className="md:hidden flex flex-col gap-1.5 mt-2">
                           <div className="flex items-center gap-2">
                             <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border shadow-inner ${

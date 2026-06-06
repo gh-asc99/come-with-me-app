@@ -1,4 +1,3 @@
-// src/components/creacion/FaseExito.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useCreacion from "../../hooks/useCreacion.js";
@@ -101,9 +100,7 @@ const FaseExito = () => {
   return (
     <ContenedorPrincipal className="w-full flex flex-col items-center animate-fade-in-up">
       
-      {/* ==================================================
-          PANEL CENTRAL DE ÉXITO
-          ================================================== */}
+      {/* PANEL CENTRAL DE ÉXITO */}
       <div className="w-full bg-gradient-to-br from-black/50 to-black/20 backdrop-blur-2xl p-8 sm:p-10 md:p-16 rounded-[2rem] sm:rounded-[3rem] border border-white/10 flex flex-col items-center text-center mb-5 shadow-2xl">
         
         <div className="flex justify-center mb-4 sm:mb-5 relative">
@@ -130,9 +127,7 @@ const FaseExito = () => {
         </button>
       </div>
 
-      {/* ==================================================
-          OPCIONES DE COMPARTIR Y DESCARGAR
-          ================================================== */}
+      {/* OPCIONES DE COMPARTIR Y DESCARGAR */}
       <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
         <button 
           onClick={compartirWhatsApp} 
@@ -168,9 +163,7 @@ const FaseExito = () => {
         </button>
       </div>
 
-      {/* ==================================================
-          NAVEGACIÓN FINAL
-          ================================================== */}
+      {/* NAVEGACIÓN FINAL */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 w-full max-w-2xl px-2 sm:px-0">
         <button 
           onClick={() => navegar("/acceso-app")} 
@@ -186,7 +179,7 @@ const FaseExito = () => {
         </button>
       </div>
 
-      {/* --- ZONA OCULTA PARA GENERAR EL PDF --- */}
+      {/* ZONA OCULTA PARA GENERAR EL PDF */}
       <div style={{ position: "absolute", top: "-10000px", left: "-10000px", width: "794px", pointerEvents: "none" }}>
         <div ref={areaPdfRef} className="bg-white relative" style={{ width: '680px', margin: '0 auto', paddingBottom: '20px' }}>
            <RenderizadorPlantilla 
@@ -197,7 +190,7 @@ const FaseExito = () => {
         </div>
       </div>
 
-      {/* --- MODAL QR PREMIUM --- */}
+      {/* MODAL QR */}
       {mostrarQR && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[9999] flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 max-w-sm w-full relative shadow-2xl">

@@ -1,4 +1,3 @@
-// src/layouts/AdminLayout.jsx
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
@@ -13,7 +12,7 @@ const AdminLayout = () => {
   return (
     <div className="flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden relative bg-[#121212]">
       
-      {/* FONDO MAESTRO ADMIN */}
+      {/* FONDO ADMIN */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat "
         style={{ backgroundImage: `url('/admin_mosaico.png')` }}

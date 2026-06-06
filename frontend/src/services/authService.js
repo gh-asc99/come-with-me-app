@@ -35,10 +35,8 @@ export const update = async (datosUsuario) => {
 
     const idUsuario = usuarioSesion.id; 
 
-    // ¡Apuntamos a la nueva ruta /auth/perfil/ para usar el esquema con imagen!
     const respuesta = await api.put(`/auth/perfil/${idUsuario}`, datosUsuario);
-    
-    // Actualizamos el localStorage con los datos reales que nos devuelve el servidor
+
     const usuarioActualizado = { ...usuarioSesion, ...respuesta.data.usuario };
     localStorage.setItem('user', JSON.stringify(usuarioActualizado));
 

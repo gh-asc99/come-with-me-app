@@ -1,4 +1,3 @@
-// src/pages/admin/GestionPlanes.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
@@ -38,7 +37,6 @@ const GestionPlanes = () => {
     }
   };
 
-  // --- CALCULADORA DE MÉTRICAS ---
   const metricas = {
     mensual_1: { titulo: '1 Mes', color: 'text-sky-300', bg: 'bg-sky-500/30', border: 'border-sky-300/20', shadow: 'shadow-[0_0_15px_rgba(56,189,248,0.1)]', activas: 0, ingresos: 0 },
     mensual_3: { titulo: '3 Meses', color: 'text-indigo-300', bg: 'bg-indigo-500/30', border: 'border-indigo-300/20', shadow: 'shadow-[0_0_15px_rgba(99,102,241,0.1)]', activas: 0, ingresos: 0 },
@@ -59,7 +57,6 @@ const GestionPlanes = () => {
     return new Date(fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
-  // --- LÓGICA DE AVATAR CORREGIDA ---
   const renderAvatar = (usuario) => {
     if (!usuario) return <div className="w-12 h-12 rounded-xl bg-gray-800 border border-gray-600 flex-shrink-0"></div>;
     
@@ -148,7 +145,7 @@ const GestionPlanes = () => {
                       {sub.usuario?.correo || '---'}
                     </span>
                     
-                    {/* Badges para móvil */}
+                    {/* Datos para móvil */}
                     <div className="md:hidden flex flex-wrap items-center gap-2 mt-2">
                       <span className="bg-white/10 text-white border border-white/20 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest truncate">
                         {sub.tipo.replace('_', ' ')}

@@ -8,7 +8,6 @@ const ContextoSesion = createContext();
 const ProveedorSesion = ({ children }) => {
   const navegar = useNavigate();
 
-  // Estados iniciales de los formularios
   const datosInicialesRegistro = {
     nombre: "",
     correo: "",
@@ -22,7 +21,6 @@ const ProveedorSesion = ({ children }) => {
     password: ""
   };
 
-  // Estados
   const [datosRegistro, setDatosRegistro] = useState(datosInicialesRegistro);
   const [datosLogin, setDatosLogin] = useState(datosInicialesLogin);
   const [user, setUser] = useState(null);
@@ -30,7 +28,6 @@ const ProveedorSesion = ({ children }) => {
   const [cargandoAccion, setCargandoAccion] = useState(false);
   const [errorSesion, setErrorSesion] = useState("");
 
-  // Efecto inicial para comprobar si hay sesión guardada
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const userGuardado = localStorage.getItem("user");
@@ -42,7 +39,6 @@ const ProveedorSesion = ({ children }) => {
     setCargandoGlobal(false);
   }, []);
 
-  // Manejadores de cambios en los inputs
   const actualizarDatoRegistro = (valor, nombreCampo) => {
     setDatosRegistro((prev) => ({ ...prev, [nombreCampo]: valor }));
   };
@@ -51,7 +47,6 @@ const ProveedorSesion = ({ children }) => {
     setDatosLogin((prev) => ({ ...prev, [nombreCampo]: valor }));
   };
 
-  // Funciones de conexión a la API
   const registrarUsuario = async (e) => {
     e.preventDefault();
     setErrorSesion("");
@@ -126,20 +121,18 @@ const ProveedorSesion = ({ children }) => {
   setCargandoAccion(true);
 
   try {
-    // Llamamos al servicio de autenticación (debes tener este método en authService)
-    // Enviamos solo los campos editables: nombre, correo y avatar
+    // Llamo al servicio de autenticación y envio solo los campos editables: nombre, correo y avatar
     const { usuario } = await authService.update({
       nombre: datosNuevos.nombre,
       correo: datosNuevos.correo,
       imagen: datosNuevos.imagen
     });
 
-    // 1. Actualizamos el estado global 'user' con los nuevos datos
-    // Es vital mantener los datos que no cambian (como rol o id)
+    // 1. Actualizo el estado global con los nuevos datos
     const usuarioActualizado = { ...user, ...usuario };
     setUser(usuarioActualizado);
 
-    // 2. Actualizamos el localStorage para que al recargar la página se mantengan los cambios
+    // 2. Actualizo el localStorage para que al recargar la página se mantengan los cambios
     localStorage.setItem("user", JSON.stringify(usuarioActualizado));
 
     return { success: true };

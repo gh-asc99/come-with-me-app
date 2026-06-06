@@ -1,11 +1,10 @@
-// src/pages/GestionInvitados.jsx
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInvitados } from '../hooks/useInvitado.js';
 import ModalConfirmacion from '../components/ui/ModalConfirmacion.jsx';
 import ContenedorPrincipal from "../components/layout/ContenedorPrincipal.jsx";
 import fondoMosaico from '../../public/fondo_mosaico.png'; 
-import Cargando from '../components/ui/Cargando.jsx'; // <-- IMPORTAMOS EL CARGANDO
+import Cargando from '../components/ui/Cargando.jsx';
 
 const GestionInvitados = () => {
   const { id } = useParams();
@@ -58,7 +57,6 @@ const GestionInvitados = () => {
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`, '_blank');
   };
 
-  // --- ETIQUETAS DE ESTADO "DARK GLASS" ---
   const renderEstado = (estado) => {
     switch(estado) {
       case 'confirmado': 
@@ -82,13 +80,11 @@ const GestionInvitados = () => {
     }
   };
 
-  // PANTALLA DE CARGA UNIFICADA
   if (cargando) return <Cargando mensaje="Cargando lista de invitados " />;
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center bg-sky-50">
-      
-      {/* FONDO MOSAICO */}
+
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${fondoMosaico})` }}
@@ -97,13 +93,10 @@ const GestionInvitados = () => {
       </div>
 
       <ContenedorPrincipal className="relative z-10 w-full animate-fade-in-up py-5">
-        
-        {/* TARJETA UNIFICADA */}
+
         <div className="bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row items-stretch w-full max-w-6xl mx-auto">
           
-          {/* ==================================================
-              LADO IZQUIERDO: CABECERA Y FORMULARIO
-              ================================================== */}
+          {/* LADO IZQUIERDO: CABECERA Y FORMULARIO */}
           <div className="w-full lg:w-5/12 flex flex-col relative border-b lg:border-b-0 lg:border-r border-white/10 bg-gradient-to-br from-black/30 to-transparent p-6 sm:p-10 md:p-12 lg:p-14">
             
             <div className="mb-8 md:mb-10">
@@ -143,9 +136,7 @@ const GestionInvitados = () => {
 
           </div>
           
-          {/* ==================================================
-              LADO DERECHO: LISTA DE INVITADOS
-              ================================================== */}
+          {/* LADO DERECHO: LISTA DE INVITADOS */}
           <div className="w-full lg:w-7/12 flex flex-col bg-black/20">
             
             <div className="p-6 sm:p-8 md:p-12 border-b border-white/10 flex flex-col h-full min-h-[400px] md:min-h-[500px]">

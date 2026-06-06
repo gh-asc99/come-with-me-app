@@ -1,4 +1,3 @@
-// src/pages/Suscripciones.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import useSesion from '../hooks/useSesion.js';
@@ -17,7 +16,6 @@ const Suscripciones = () => {
     { id: "ilimitada", nombre: "Licencia Ilimitada", precio: "199.99", periodo: "pago único", color: "sky", especial: true },
   ];
 
-  // Estado para controlar qué plan está seleccionado (por defecto el Semestral)
   const [planSeleccionado, setPlanSeleccionado] = useState(planesDisponibles[2]);
   const [procesando, setProcesando] = useState(false);
 
@@ -36,12 +34,10 @@ const Suscripciones = () => {
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex items-center justify-center py-5">
       
-      {/* FONDO DINÁMICO CLARO */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat scale-105"
         style={{ backgroundImage: `url(${suscripcionesFondo})` }}
       >
-        {/* Un ligerísimo velo y desenfoque para asegurar que el texto blanco siga siendo legible, sin oscurecer la imagen */}
         <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
       </div>
 
@@ -49,9 +45,7 @@ const Suscripciones = () => {
         
         <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row items-stretch w-full max-w-6xl mx-auto shadow-2xl">
           
-          {/* ==========================================
-              LADO IZQUIERDO: PROPUESTA DE VALOR
-              ========================================== */}
+          {/* LADO IZQUIERDO: PROPUESTA DE VALOR */}
           <div className="w-full lg:w-5/12 p-6 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-black/20 to-transparent border-b lg:border-b-0 lg:border-r border-white/10">
             <span className="bg-sky-500/20 text-sky-400 px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-4 sm:mb-6 inline-block w-fit border border-sky-500/30 shadow-sm">
               Membresía Premium
@@ -78,9 +72,7 @@ const Suscripciones = () => {
             </ul>
           </div>
 
-          {/* ==========================================
-              LADO DERECHO: SELECTOR DE PLANES
-              ========================================== */}
+          {/* LADO DERECHO: SELECTOR DE PLANES */}
           <div className="w-full lg:w-7/12 p-6 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-center relative bg-black/10">
             <h2 className="text-lg sm:text-xl font-black text-white mb-4 sm:mb-6">Selecciona tu plan</h2>
             
@@ -101,7 +93,6 @@ const Suscripciones = () => {
                         : 'border-white/20 bg-white/10 hover:bg-white/20 hover:border-white/30'
                     }`}
                   >
-                    {/* Badge Recomendado Inline */}
                     {plan.popular && !isSelected && (
                       <div className="absolute -top-2.5 right-4 sm:right-6 bg-pink-300 text-white text-[8px] sm:text-[9px] font-black uppercase px-2 sm:px-3 py-1 rounded-full tracking-widest shadow-lg">
                         Recomendado
@@ -109,7 +100,6 @@ const Suscripciones = () => {
                     )}
 
                     <div className="flex items-center gap-3 sm:gap-4">
-                      {/* Radio Button Custom */}
                       <div className={`flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                         isSelected 
                           ? activeColor === 'sky' ? 'border-sky-400' : 'border-pink-300'

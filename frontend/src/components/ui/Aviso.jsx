@@ -1,4 +1,3 @@
-// src/components/ui/Aviso.jsx
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 

@@ -1,4 +1,3 @@
-// src/pages/admin/GestionEstadisticas.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService'; 
 import { 
@@ -6,20 +5,12 @@ import {
   PieChart, Pie, Cell, Legend 
 } from 'recharts';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
-import Cargando from "../../components/ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
-
-// =========================================================================
-// NOTA IMPORTANTE PARA EL LAYOUT:
-// Para que el fondo "admin_mosaico.png" se aplique a TODAS las vistas del admin 
-// de forma consistente y sin cortarse, asegúrate de que tu AdminLayout.jsx
-// mantenga la capa de fondo y el velo negro configurados correctamente.
-// =========================================================================
+import Cargando from "../../components/ui/Cargando.jsx";
 
 const GestionEstadisticas = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-  // Estado inicial vacío esperando a la API
   const [datos, setDatos] = useState({
     kpis: {
       totalUsuarios: 0,
@@ -49,9 +40,6 @@ const GestionEstadisticas = () => {
     fetchEstadisticas();
   }, []);
 
-  // ==========================================
-  // TARJETA DE KPI ESTILO "DARK Glass"
-  // ==========================================
   const KpiCard = ({ titulo, valor, icono, colorTexto, colorFondoBg }) => (
     <div className="bg-black/25 backdrop-blur-2xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 flex items-center gap-4 sm:gap-5 transition-transform hover:-translate-y-1">
       <div className={`w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-xl sm:rounded-2xl flex items-center justify-center border shadow-inner ${colorFondoBg}`}>
@@ -64,11 +52,10 @@ const GestionEstadisticas = () => {
     </div>
   );
 
-  // PANTALLA DE CARGA UNIFICADA
   if (cargando) return <Cargando mensaje="Cargando estadísticas..." />;
 
   return (
-    // Usamos ContenedorPrincipal para respetar los márgenes horizontales de la app
+    // Uso ContenedorPrincipal para respetar los márgenes horizontales de la app
     <ContenedorPrincipal className="animate-fade-in-up flex flex-col">
       
       {/* CABECERA */}
@@ -87,14 +74,10 @@ const GestionEstadisticas = () => {
       )}
 
       <>
-        {/* ==================================================
-            FILA 1: KPIs
-            ================================================== */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-5">
           <KpiCard 
             titulo="Usuarios Totales" 
-            valor={datos.kpis.totalUsuarios} 
-            // Cero Emojis: Usamos SVGs limpios para un look Admin
+            valor={datos.kpis.totalUsuarios}
             icono={<svg className="w-5 h-5 sm:w-6 sm:h-6 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
             colorTexto="text-white" 
             colorFondoBg="bg-sky-500/20 border-sky-500/30" 
@@ -122,9 +105,7 @@ const GestionEstadisticas = () => {
           />
         </div>
 
-        {/* ==================================================
-            FILA 2: GRÁFICOS PRINCIPALES
-            ================================================== */}
+        {/* GRÁFICOS PRINCIPALES */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8 mb-5">
           
           {/* GRÁFICO CIRCULAR: Distribución de Usuarios */}
@@ -178,7 +159,7 @@ const GestionEstadisticas = () => {
                     tickLine={false} 
                     tick={{ fill: '#9ca3af', fontSize: 10, fontWeight: 'bold' }} 
                     dy={15} 
-                    angle={-45} // Inclinamos el texto para que quepa en móviles
+                    angle={-45}
                     textAnchor="end"
                   />
                   <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 10, fontWeight: 'bold' }} dx={-10} />
@@ -194,9 +175,7 @@ const GestionEstadisticas = () => {
           </div>
         </div>
 
-        {/* ==================================================
-            FILA 3: GRÁFICO DE BARRAS (Paquetes)
-            ================================================== */}
+        {/* GRÁFICO DE BARRAS (Paquetes) */}
         <div className="bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 mb-10 flex flex-col min-h-[350px]">
           <h3 className="text-xs sm:text-sm font-black text-gray-300 uppercase tracking-widest mb-4 sm:mb-6 flex items-center gap-2 border-b border-white/10 pb-3 sm:pb-4">
             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>

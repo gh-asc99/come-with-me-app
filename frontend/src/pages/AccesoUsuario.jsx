@@ -1,4 +1,3 @@
-// src/pages/AccesoUsuario.jsx
 import React, { useState, useEffect } from "react";
 import logoCwm from "../assets/logo_CWM_oficial.png";
 import logoCrs from "../assets/logo_CRS_oficial.png";
@@ -20,25 +19,19 @@ const AccesoUsuario = () => {
     errorSesion,
   } = useSesion();
 
-  // ESTADO PARA EL SISTEMA DE AVISOS FLOTANTES
   const [aviso, setAviso] = useState({ visible: false, mensaje: '', tipo: 'info' });
   
-  // ESTADOS PARA SABER QUÉ ACCIÓN ESTAMOS ESPERANDO DEL SERVIDOR
   const [intentandoRegistro, setIntentandoRegistro] = useState(false);
   const [intentandoLogin, setIntentandoLogin] = useState(false);
 
-  // 1. Escuchamos los errores que provienen directamente del servidor (base de datos)
   useEffect(() => {
     if (errorSesion) {
       setAviso({ visible: true, mensaje: errorSesion, tipo: 'error' });
     }
   }, [errorSesion]);
 
-  // 2. Magia para detectar cuándo el SERVIDOR termina el REGISTRO con éxito
   useEffect(() => {
-    // Si estábamos intentando registrar, y 'cargandoAccion' acaba de pasar a false...
     if (intentandoRegistro && !cargandoAccion) {
-      // Y si además el servidor no nos ha devuelto ningún error...
       if (!errorSesion) {
         setAviso({ 
           visible: true, 
@@ -46,14 +39,12 @@ const AccesoUsuario = () => {
           tipo: 'exito' 
         });
       }
-      setIntentandoRegistro(false); // Reiniciamos el estado
+      setIntentandoRegistro(false);
     }
   }, [cargandoAccion, intentandoRegistro, errorSesion]);
 
 
-  // =========================================================
   // VALIDACIÓN Y CONTROL DE REGISTRO
-  // =========================================================
   const manejarRegistro = (e) => {
     e.preventDefault();
     const errores = [];
@@ -111,7 +102,7 @@ const AccesoUsuario = () => {
       errores.push("• Las contraseñas introducidas no coinciden.");
     }
 
-    // Si hay errores de validación local, bloqueamos el envío y mostramos el Aviso
+    // Si hay errores de validación local, se bloquea el envío y se muestra el Aviso
     if (errores.length > 0) {
       setAviso({ 
         visible: true, 
@@ -121,18 +112,15 @@ const AccesoUsuario = () => {
       return;
     }
 
-    // Si pasa los filtros de la UI, ejecutamos la petición al servidor e indicamos que estamos esperando
+    // Si pasa los filtros de la UI, ejecuta la petición al servidor e indica que se está esperando
     setIntentandoRegistro(true);
     registrarUsuario(e);
   };
 
-  // =========================================================
   // VALIDACIÓN Y CONTROL DE LOGIN
-  // =========================================================
   const manejarLogin = (e) => {
     e.preventDefault();
     
-    // Verificación rápida en frontend para evitar peticiones inútiles a BD
     if (!datosLogin.correo.trim() || !datosLogin.password) {
       setAviso({ 
         visible: true, 
@@ -148,8 +136,7 @@ const AccesoUsuario = () => {
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex items-center justify-center py-5 bg-sky-50">
-      
-      {/* COMPONENTE DE AVISOS FLOTANTES */}
+
       <Aviso 
         mensaje={aviso.mensaje} 
         tipo={aviso.tipo} 
@@ -157,7 +144,6 @@ const AccesoUsuario = () => {
         onClose={() => setAviso({ ...aviso, visible: false })} 
       />
 
-      {/* FONDO MOSAICO */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${fondoMosaico})` }}
@@ -166,13 +152,10 @@ const AccesoUsuario = () => {
       </div>
 
       <ContenedorPrincipal className="relative z-10 w-full animate-fade-in-up">
-        
-        {/* TARJETA UNIFICADA CON EFECTO CRISTAL AHUMADO */}
+
         <div className="bg-black/25 backdrop-blur-2xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row items-stretch w-full max-w-6xl mx-auto">
           
-          {/* ==========================================
-              LADO IZQUIERDO: INICIO DE SESIÓN
-              ========================================== */}
+          {/* LADO IZQUIERDO: INICIO DE SESIÓN */}
           <div className="w-full lg:w-1/2 p-6 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-center relative border-b lg:border-b-0 lg:border-r border-white/10 bg-gradient-to-br from-black/30 to-transparent">
             
             <div className="flex flex-col items-center mb-8 md:mb-12 text-center">
@@ -232,9 +215,7 @@ const AccesoUsuario = () => {
             </form>
           </div>
 
-          {/* ==========================================
-              LADO DERECHO: REGISTRO DE USUARIO
-              ========================================== */}
+          {/* LADO DERECHO: REGISTRO DE USUARIO */}
           <div className="w-full lg:w-1/2 p-6 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-center relative bg-black/20">
             
             <div className="text-center mb-8 md:mb-10">

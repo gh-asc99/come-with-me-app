@@ -1,4 +1,3 @@
-// src/pages/VistaInvitado.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -7,7 +6,7 @@ import {
 } from "../services/invitadoService.js";
 import { obtenerInvitacionPublica } from "../services/invitacionService.js";
 import RenderizadorPlantilla from '../components/plantillas/RenderizadorPlantilla.jsx';
-import Cargando from "../components/ui/Cargando.jsx"; // <-- IMPORTAMOS CARGANDO
+import Cargando from "../components/ui/Cargando.jsx";
 
 const VistaInvitado = () => {
   const { idInvitacion, idInvitado } = useParams();
@@ -27,7 +26,6 @@ const VistaInvitado = () => {
           obtenerInvitadoPublico(idInvitado),
         ]);
 
-        // Parseamos los datos extra para que el Renderizador de plantillas pueda leerlos (timelines, etc.)
         if (typeof datosInvitacion.datos_extra === 'string') {
           datosInvitacion.datos_extra = JSON.parse(datosInvitacion.datos_extra);
         }
@@ -55,7 +53,6 @@ const VistaInvitado = () => {
     }
   };
 
-  // --- PANTALLAS DE CARGA Y ERROR UNIFICADAS ---
   if (cargando) return <Cargando mensaje="Abriendo invitación " />;
   
   if (error) return (
@@ -70,7 +67,6 @@ const VistaInvitado = () => {
     </div>
   );
 
-  // --- LÓGICA DE IMAGEN DE PORTADA ---
   let urlImagen = null; 
   if (invitacion?.imagen) {
     if (invitacion.imagen.startsWith('http')) {
@@ -85,20 +81,15 @@ const VistaInvitado = () => {
   return (
     <div className="min-h-screen bg-sky-50 flex flex-col items-center pb-24 sm:pb-20 relative">
       
-      {/* =========================================================
-          LA INVITACIÓN REAL (Usando el RenderizadorPlantilla)
-          ========================================================= */}
+      {/* INVITACIÓN REAL (Usando el RenderizadorPlantilla) */}
       <div className="max-w-4xl w-full mt-6 sm:mt-10 px-2 sm:px-4">
-        {/* Magia pura: El invitado ve exactamente la misma plantilla que el creador diseñó */}
+        {/* El invitado ve exactamente la misma plantilla que el creador diseñó */}
         <RenderizadorPlantilla 
           invitacion={invitacion} 
           urlImagen={urlImagen} 
         />
       </div>
 
-      {/* =========================================================
-          BARRA INFERIOR (DARK GLASS) PARA CONFIRMAR ASISTENCIA
-          ========================================================= */}
       {invitado && (
         <div className="w-full bg-white/80 sm:bg-transparent backdrop-blur-xl border-t border-white/20 fixed bottom-0 z-50 animate-fade-in-up shadow-[0_-10px_30px_rgba(0,0,0,0.05)] sm:shadow-none">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">

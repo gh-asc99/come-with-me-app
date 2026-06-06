@@ -1,4 +1,3 @@
-// src/hooks/useInvitados.js
 import { useState, useEffect, useCallback } from 'react';
 import { obtenerInvitados, agregarInvitado as apiAgregar, eliminarInvitado as apiEliminar } from '../services/invitadoService.js';
 
@@ -7,7 +6,6 @@ export const useInvitados = (idInvitacion) => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-  // Usamos useCallback para que la función no se re-cree en cada render
   const cargarInvitados = useCallback(async () => {
     setCargando(true);
     try {

@@ -1,4 +1,3 @@
-// src/pages/Error.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ContenedorPrincipal from '../components/layout/ContenedorPrincipal.jsx';
@@ -7,7 +6,6 @@ const Error = () => {
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex flex-col items-center bg-sky-50">
       
-      {/* FONDO DINÁMICO EN BLANCO Y NEGRO (Estilo Historial vacío) */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-700 grayscale"
         style={{ backgroundImage: "url('/historial_vacio.png')" }}
@@ -15,14 +13,11 @@ const Error = () => {
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
 
-      {/* CONTENEDOR PRINCIPAL: Respeta los márgenes laterales y aplica py-8 */}
       <ContenedorPrincipal className="relative z-10 w-full flex-1 flex flex-col py-8 animate-fade-in-up">
         
-        {/* CENTRADO VERTICAL Y HORIZONTAL (Misma estructura que HistorialCreaciones vacío) */}
         <div className="flex-1 flex flex-col items-center justify-center text-center w-full h-full min-h-[50vh]">
           <div className="bg-black/40 backdrop-blur-2xl p-6 md:p-8 rounded-[3rem] border border-white/10 flex flex-col items-center max-w-3xl w-full">
             
-            {/* TEXTOS Y BOTÓN ORIGINALES */}
             <span className="bg-pink-300/20 text-pink-300 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 inline-block border border-pink-300/30 shadow-sm">
               Error 404
             </span>
