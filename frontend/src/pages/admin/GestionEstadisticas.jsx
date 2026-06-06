@@ -52,7 +52,7 @@ const GestionEstadisticas = () => {
     </div>
   );
 
-  if (cargando) return <Cargando mensaje="Cargando estadísticas..." />;
+  if (cargando) return <Cargando mensaje="Cargando estadísticas " />;
 
   return (
     // Uso ContenedorPrincipal para respetar los márgenes horizontales de la app

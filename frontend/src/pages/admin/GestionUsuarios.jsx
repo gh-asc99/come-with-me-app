@@ -91,7 +91,7 @@ const GestionUsuarios = () => {
     );
   });
 
-  if (cargando) return <Cargando mensaje="Cargando panel de usuarios..." />;
+  if (cargando) return <Cargando mensaje="Cargando panel de usuarios " />;
 
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">

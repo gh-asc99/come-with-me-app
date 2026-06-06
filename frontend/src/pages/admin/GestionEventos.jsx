@@ -225,7 +225,7 @@ const GestionEventos = () => {
       : <svg className="w-3 h-3 sm:w-4 sm:h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>;
   };
 
-  if (cargando && eventos.length === 0) return <Cargando mensaje="Cargando eventos..." />;
+  if (cargando && eventos.length === 0) return <Cargando mensaje="Cargando eventos " />;
 
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">

@@ -3,6 +3,7 @@ import api from '../../services/apiService';
 import { subirImagen } from '../../services/invitacionService.js';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
 import ModalConfirmacion from "../../components/ui/ModalConfirmacion.jsx";
+import Cargando from "../../components/ui/Cargando.jsx";
 
 const GestionPaquetes = () => {
   const [paquetes, setPaquetes] = useState([]);
@@ -224,7 +225,6 @@ const GestionPaquetes = () => {
   const cancelarBorrado = () => {
     setModalConfirmacion({ abierto: false, paqueteId: null, nombrePaquete: '' });
   };
-  // ------------------------------------
 
   const toggleBloqueoPaquete = async (pkt) => {
     try {
@@ -242,6 +242,8 @@ const GestionPaquetes = () => {
       ? <svg className="w-3 h-3 sm:w-4 sm:h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" /></svg>
       : <svg className="w-3 h-3 sm:w-4 sm:h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>;
   };
+
+  if (cargando && paquetes.length === 0) return <Cargando mensaje="Cargando paquetes " />;
 
   return (
     <>
@@ -285,11 +287,7 @@ const GestionPaquetes = () => {
         )}
 
         {/* ZONA DEL LISTADO */}
-        {cargando && paquetes.length === 0 ? (
-          <div className="flex-1 flex justify-center items-center py-32">
-            <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-4 border-sky-400"></div>
-          </div>
-        ) : paquetesOrdenados.length === 0 ? (
+        {paquetesOrdenados.length === 0 ? (
           <div className="flex-1 bg-black/10 backdrop-blur-md p-8 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center text-center shadow-inner min-h-[300px]">
             <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500 mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
