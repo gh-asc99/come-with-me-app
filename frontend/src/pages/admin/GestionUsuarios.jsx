@@ -5,6 +5,7 @@ import ModalUsuario from '../../pages/admin/ModalUsuario.jsx';
 import useSesion from '../../hooks/useSesion.js';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
 import Cargando from "../../components/ui/Cargando.jsx";
+import ModalConfirmacion from "../../components/ui/ModalConfirmacion.jsx";
 
 const GestionUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -15,6 +16,12 @@ const GestionUsuarios = () => {
 
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
+
+  const [modalConfirmacion, setModalConfirmacion] = useState({
+    abierto: false,
+    usuarioId: null,
+    nombreUsuario: ''
+  });
 
   const cargarUsuarios = async () => {
     setCargando(true);
@@ -51,16 +58,28 @@ const GestionUsuarios = () => {
     }
   };
 
-  const borrarUsuario = async (id, nombre) => {
-    if (window.confirm(`¿Estás completamente seguro de que deseas eliminar al usuario "${nombre}"? Esta acción borrará todas sus compras, eventos e invitaciones.`)) {
-      try {
-        await api.delete(`/auth/usuarios/${id}`);
-        await cargarUsuarios();
-      } catch (err) {
-        console.error(err);
-        alert('Hubo un error al intentar eliminar el usuario.');
-      }
+  const solicitarBorradoUsuario = (id, nombre) => {
+    setModalConfirmacion({
+      abierto: true,
+      usuarioId: id,
+      nombreUsuario: nombre
+    });
+  };
+
+  const confirmarBorrado = async () => {
+    try {
+      await api.delete(`/auth/usuarios/${modalConfirmacion.usuarioId}`);
+      await cargarUsuarios();
+    } catch (err) {
+      console.error(err);
+      alert('Hubo un error al intentar eliminar el usuario.');
+    } finally {
+      setModalConfirmacion({ abierto: false, usuarioId: null, nombreUsuario: '' });
     }
+  };
+
+  const cancelarBorrado = () => {
+    setModalConfirmacion({ abierto: false, usuarioId: null, nombreUsuario: '' });
   };
 
   const usuariosFiltrados = usuarios.filter(u => {
@@ -122,7 +141,7 @@ const GestionUsuarios = () => {
                 key={usuario.id} 
                 usuario={usuario} 
                 alEditar={editarUsuario}
-                alBorrar={borrarUsuario}
+                alBorrar={solicitarBorradoUsuario}
                 esUsuarioActual={user?.id === usuario.id} 
               />
             ))}
@@ -130,7 +149,19 @@ const GestionUsuarios = () => {
         </div>
       )}
 
-      {/*  MODAL */}
+      <ModalConfirmacion
+        isOpen={modalConfirmacion.abierto}
+        titulo="Eliminar Usuario"
+        mensaje={`¿Estás completamente seguro de que deseas eliminar al usuario "${modalConfirmacion.nombreUsuario}"? Esta acción borrará todas sus compras, eventos e invitaciones y no se puede deshacer.`}
+        textoConfirmar="Eliminar Usuario"
+        textoCancelar="Cancelar"
+        onConfirm={confirmarBorrado}
+        onCancel={cancelarBorrado}
+        esDestructivo={true}
+        tipo="error"
+      />
+
+      {/* MODAL EDICIÓN USUARIO */}
       {mostrarModal && (
         <ModalUsuario 
           usuario={usuarioEditando} 

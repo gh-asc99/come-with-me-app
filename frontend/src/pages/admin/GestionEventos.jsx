@@ -3,6 +3,7 @@ import api from '../../services/apiService';
 import { subirImagen } from '../../services/invitacionService.js';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
 import Cargando from "../../components/ui/Cargando.jsx";
+import ModalConfirmacion from "../../components/ui/ModalConfirmacion.jsx";
 
 const GestionEventos = () => {
   const [eventos, setEventos] = useState([]);
@@ -19,6 +20,12 @@ const GestionEventos = () => {
   const [subiendoImg, setSubiendoImg] = useState(false);
 
   const [orden, setOrden] = useState({ columna: null, direccion: 'asc' });
+
+  const [modalConfirmacion, setModalConfirmacion] = useState({
+    abierto: false,
+    eventoId: null,
+    nombreEvento: ''
+  });
 
   const estadoInicial = { id: '', nombre: '', descripcion: '', imagen: '' };
   const [formData, setFormData] = useState(estadoInicial);
@@ -177,16 +184,28 @@ const GestionEventos = () => {
     }
   };
 
-  const borrarEvento = async (id, nombre) => {
-    if (window.confirm(`¿Estás seguro de que deseas eliminar el evento "${nombre}"? Se borrarán en cascada los paquetes y compras asociadas.`)) {
-      try {
-        await api.delete(`/eventos/${id}`);
-        await cargarDatos();
-      } catch (err) {
-        console.error(err);
-        alert('Error al eliminar el evento.');
-      }
+  const solicitarBorradoEvento = (id, nombre) => {
+    setModalConfirmacion({
+      abierto: true,
+      eventoId: id,
+      nombreEvento: nombre
+    });
+  };
+
+  const confirmarBorrado = async () => {
+    try {
+      await api.delete(`/eventos/${modalConfirmacion.eventoId}`);
+      await cargarDatos();
+    } catch (err) {
+      console.error(err);
+      alert('Error al eliminar el evento.');
+    } finally {
+      setModalConfirmacion({ abierto: false, eventoId: null, nombreEvento: '' });
     }
+  };
+
+  const cancelarBorrado = () => {
+    setModalConfirmacion({ abierto: false, eventoId: null, nombreEvento: '' });
   };
 
   const toggleBloqueoEvento = async (evt) => {
@@ -339,7 +358,7 @@ const GestionEventos = () => {
 
                     {/* BOTÓN BORRAR */}
                     <button
-                      onClick={() => borrarEvento(evt.id, evt.nombre)}
+                      onClick={() => solicitarBorradoEvento(evt.id, evt.nombre)}
                       className="p-2 sm:p-2.5 text-pink-300 bg-pink-300/50 border border-pink-300/30 hover:bg-pink-400 hover:text-white rounded-lg sm:rounded-xl transition-all shadow-md backdrop-blur-sm md:hover:scale-110"
                       title="Eliminar evento"
                     >
@@ -352,6 +371,18 @@ const GestionEventos = () => {
           </div>
         </div>
       )}
+
+      <ModalConfirmacion
+        isOpen={modalConfirmacion.abierto}
+        titulo="Eliminar Evento"
+        mensaje={`¿Estás seguro de que deseas eliminar el evento "${modalConfirmacion.nombreEvento}"? Se borrarán en cascada los paquetes y compras asociadas. Esta acción no se puede deshacer.`}
+        textoConfirmar="Eliminar"
+        textoCancelar="Cancelar"
+        onConfirm={confirmarBorrado}
+        onCancel={cancelarBorrado}
+        esDestructivo={true}
+        tipo="error"
+      />
 
       {modalAbierto && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">

@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
+import ModalConfirmacion from "../../components/ui/ModalConfirmacion.jsx";
 
 const GestionPlanes = () => {
   const [suscripciones, setSuscripciones] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+
+  const [modalConfirmacion, setModalConfirmacion] = useState({
+    abierto: false,
+    suscripcionId: null,
+    nombreUsuario: ''
+  });
 
   const cargarSuscripciones = async () => {
     setCargando(true);
@@ -25,16 +32,28 @@ const GestionPlanes = () => {
     cargarSuscripciones();
   }, []);
 
-  const cancelarSuscripcion = async (id, nombreUsuario) => {
-    if (window.confirm(`¿Estás seguro de que quieres CANCELAR la suscripción de ${nombreUsuario}? Perderá sus privilegios VIP de inmediato.`)) {
-      try {
-        await api.put(`/suscripciones/${id}/cancelar`);
-        await cargarSuscripciones(); 
-      } catch (err) {
-        console.error(err);
-        alert('Hubo un error al intentar cancelar la suscripción.');
-      }
+  const solicitarCancelacion = (id, nombreUsuario) => {
+    setModalConfirmacion({
+      abierto: true,
+      suscripcionId: id,
+      nombreUsuario: nombreUsuario || 'Usuario Desconocido'
+    });
+  };
+
+  const confirmarCancelacion = async () => {
+    try {
+      await api.put(`/suscripciones/${modalConfirmacion.suscripcionId}/cancelar`);
+      await cargarSuscripciones(); 
+    } catch (err) {
+      console.error(err);
+      alert('Hubo un error al intentar cancelar la suscripción.');
+    } finally {
+      setModalConfirmacion({ abierto: false, suscripcionId: null, nombreUsuario: '' });
     }
+  };
+
+  const abortarCancelacion = () => {
+    setModalConfirmacion({ abierto: false, suscripcionId: null, nombreUsuario: '' });
   };
 
   const metricas = {
@@ -197,7 +216,7 @@ const GestionPlanes = () => {
                   
                   {sub.estado === 'activa' ? (
                     <button 
-                      onClick={() => cancelarSuscripcion(sub.id, sub.usuario?.nombre)}
+                      onClick={() => solicitarCancelacion(sub.id, sub.usuario?.nombre)}
                       className="px-4 py-2 sm:px-3 bg-pink-300/10 border border-pink-300/30 text-pink-300 hover:bg-pink-400 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md md:hover:scale-105"
                       title="Cancelar Suscripción"
                     >
@@ -215,6 +234,18 @@ const GestionPlanes = () => {
           </div>
         )}
       </div>
+
+      <ModalConfirmacion
+        isOpen={modalConfirmacion.abierto}
+        titulo="Cancelar Suscripción"
+        mensaje={`¿Estás seguro de que quieres CANCELAR la suscripción de ${modalConfirmacion.nombreUsuario}? Perderá sus privilegios VIP de inmediato.`}
+        textoConfirmar="Cancelar Suscripción"
+        textoCancelar="Mantener"
+        onConfirm={confirmarCancelacion}
+        onCancel={abortarCancelacion}
+        esDestructivo={true}
+        tipo="error"
+      />
 
     </ContenedorPrincipal>
   );

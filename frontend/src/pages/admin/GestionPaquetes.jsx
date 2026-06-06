@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import { subirImagen } from '../../services/invitacionService.js';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
+import ModalConfirmacion from "../../components/ui/ModalConfirmacion.jsx";
 
 const GestionPaquetes = () => {
   const [paquetes, setPaquetes] = useState([]);
@@ -18,6 +19,12 @@ const GestionPaquetes = () => {
   const [subiendoImg, setSubiendoImg] = useState(false);
 
   const [orden, setOrden] = useState({ columna: null, direccion: 'asc' });
+
+  const [modalConfirmacion, setModalConfirmacion] = useState({
+    abierto: false,
+    paqueteId: null,
+    nombrePaquete: ''
+  });
 
   const estadoInicial = { 
     id: '', 
@@ -194,17 +201,30 @@ const GestionPaquetes = () => {
     }
   };
 
-  const borrarPaquete = async (id, nombre) => {
-    if (window.confirm(`¿Estás seguro de que deseas eliminar el paquete "${nombre}"?`)) {
-      try {
-        await api.delete(`/paquetes/${id}`);
-        await cargarDatos();
-      } catch (err) {
-        console.error(err);
-        alert('Error al eliminar el paquete.');
-      }
+  const solicitarBorradoPaquete = (id, nombre) => {
+    setModalConfirmacion({
+      abierto: true,
+      paqueteId: id,
+      nombrePaquete: nombre
+    });
+  };
+
+  const confirmarBorrado = async () => {
+    try {
+      await api.delete(`/paquetes/${modalConfirmacion.paqueteId}`);
+      await cargarDatos();
+    } catch (err) {
+      console.error(err);
+      alert('Error al eliminar el paquete.');
+    } finally {
+      setModalConfirmacion({ abierto: false, paqueteId: null, nombrePaquete: '' });
     }
   };
+
+  const cancelarBorrado = () => {
+    setModalConfirmacion({ abierto: false, paqueteId: null, nombrePaquete: '' });
+  };
+  // ------------------------------------
 
   const toggleBloqueoPaquete = async (pkt) => {
     try {
@@ -220,161 +240,176 @@ const GestionPaquetes = () => {
     if (orden.columna !== columnaActual) return <span className="w-3 h-3 sm:w-4 sm:h-4 inline-block opacity-0 group-hover:opacity-30 transition-opacity">↕</span>;
     return orden.direccion === 'asc' 
       ? <svg className="w-3 h-3 sm:w-4 sm:h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" /></svg>
-      : <svg className="w-3 h-3 sm:w-4 sm:h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7-7-7-7" /></svg>;
+      : <svg className="w-3 h-3 sm:w-4 sm:h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>;
   };
 
   return (
-    <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
-      
-      <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 sm:gap-6">
-        <div className="text-left w-full xl:w-auto">
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">Gestión de Paquetes</h1>
-          <p className="text-xs sm:text-sm text-gray-300 mt-2 font-medium">Crea, asigna y configura los planes que ofreces en cada evento.</p>
-        </div>
+    <>
+      <ContenedorPrincipal className="flex flex-col animate-fade-in-up py-6 sm:py-0">
         
-        <div className="flex flex-col sm:flex-row w-full xl:w-auto items-center gap-4 sm:gap-6 mt-2 xl:mt-0">
-          <div className="relative w-full sm:w-80 flex-shrink-0">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </div>
-            <input 
-              type="text" 
-              placeholder="Buscar por nombre del paquete"
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-black/40 border border-white/10 text-white placeholder-gray-500 rounded-xl sm:rounded-2xl focus:outline-none focus:border-sky-400 transition-colors shadow-inner text-sm"
-            />
+        <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:px-12 md:py-8 mb-5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 sm:gap-6">
+          <div className="text-left w-full xl:w-auto">
+            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">Gestión de Paquetes</h1>
+            <p className="text-xs sm:text-sm text-gray-300 mt-2 font-medium">Crea, asigna y configura los planes que ofreces en cada evento.</p>
           </div>
-
-          <button 
-            onClick={abrirModalCrear}
-            className="w-full sm:w-auto bg-pink-300 text-white font-black text-[11px] uppercase tracking-widest px-6 sm:px-8 py-3.5 sm:py-3.5 rounded-xl sm:rounded-2xl hover:bg-pink-400 hover:scale-105 active:scale-95 transition-all flex justify-center items-center gap-2 flex-shrink-0"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-            Nuevo Paquete
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="bg-red-500/20 backdrop-blur-md border border-red-500/30 text-red-200 p-4 rounded-xl sm:rounded-2xl mb-6 flex items-center gap-3">
-           <svg className="w-5 h-5 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-           <span className="text-xs sm:text-sm font-bold tracking-wide">{error}</span>
-        </div>
-      )}
-
-      {/* ZONA DEL LISTADO */}
-      {cargando && paquetes.length === 0 ? (
-        <div className="flex-1 flex justify-center items-center py-32">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-4 border-sky-400"></div>
-        </div>
-      ) : paquetesOrdenados.length === 0 ? (
-        <div className="flex-1 bg-black/10 backdrop-blur-md p-8 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center text-center shadow-inner min-h-[300px]">
-          <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500 mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-          <p className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight">
-            {busqueda ? 'No se encontraron paquetes' : 'No hay paquetes creados.'}
-          </p>
-          <p className="text-xs sm:text-sm text-gray-400 font-medium">
-            {busqueda ? 'Prueba con otros términos de búsqueda.' : 'Comienza asociando tu primer paquete a un evento.'}
-          </p>
-        </div>
-      ) : (
-        <div className="bg-black/25 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 shadow-inner min-h-[500px]">
           
-          {/* Cabecera del Listado (Oculto en móvil) */}
-          <div className="hidden sm:grid sm:grid-cols-12 gap-4 px-6 pb-4 border-b border-white/10 text-gray-300 uppercase text-[10px] tracking-[0.2em] font-black mb-6">
-            <div 
-              className="sm:col-span-6 cursor-pointer hover:text-white transition-colors flex items-center gap-2 select-none"
-              onClick={() => manejarOrden('paquete')}
-            >
-              Paquete <IconoOrden columnaActual="paquete" />
+          <div className="flex flex-col sm:flex-row w-full xl:w-auto items-center gap-4 sm:gap-6 mt-2 xl:mt-0">
+            <div className="relative w-full sm:w-80 flex-shrink-0">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+              <input 
+                type="text" 
+                placeholder="Buscar por nombre del paquete"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-black/40 border border-white/10 text-white placeholder-gray-500 rounded-xl sm:rounded-2xl focus:outline-none focus:border-sky-400 transition-colors shadow-inner text-sm"
+              />
             </div>
-            <div 
-              className="sm:col-span-3 flex justify-center items-center gap-2 cursor-pointer hover:text-white transition-colors select-none"
-              onClick={() => manejarOrden('evento')}
-            >
-              Evento <IconoOrden columnaActual="evento" />
-            </div>
-            <div className="sm:col-span-3 text-center">Acciones</div>
-          </div>
 
-          {/* Filas del Listado */}
-          <div className="space-y-4">
-            {paquetesOrdenados.map((pkt) => {
-              return (
-                <div 
-                  key={pkt.id} 
-                  className="flex flex-col sm:grid sm:grid-cols-12 gap-4 items-start sm:items-center rounded-3xl overflow-hidden relative group transition-all hover:border-white/20 min-h-[140px] sm:min-h-[120px] pb-16 sm:pb-0 shadow-lg"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(135deg, rgba(25,25,25,0.8) 30%, rgba(0,0,0,0.4) 80%), 
-                      url('${getUrlImagen(pkt.imagen)}')
-                    `,
-                    backgroundSize: '100% 100%, cover',
-                    backgroundPosition: 'center, right center',
-                    backgroundRepeat: 'no-repeat, no-repeat'
-                  }}
-                >
-                  <div className="sm:col-span-6 p-5 sm:p-6 flex flex-col justify-center relative z-10 w-full">
-                    <div className="font-black text-white text-xl drop-shadow-md line-clamp-1" title={pkt.nombre}>{pkt.nombre}</div>
-                    <div className="text-sm text-gray-300 mt-1 line-clamp-2 max-w-sm font-medium drop-shadow-sm" title={pkt.descripcion}>{pkt.descripcion}</div>
+            <button 
+              onClick={abrirModalCrear}
+              className="w-full sm:w-auto bg-pink-300 text-white font-black text-[11px] uppercase tracking-widest px-6 sm:px-8 py-3.5 sm:py-3.5 rounded-xl sm:rounded-2xl hover:bg-pink-400 hover:scale-105 active:scale-95 transition-all flex justify-center items-center gap-2 flex-shrink-0"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+              Nuevo Paquete
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="bg-red-500/20 backdrop-blur-md border border-red-500/30 text-red-200 p-4 rounded-xl sm:rounded-2xl mb-6 flex items-center gap-3">
+             <svg className="w-5 h-5 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+             <span className="text-xs sm:text-sm font-bold tracking-wide">{error}</span>
+          </div>
+        )}
+
+        {/* ZONA DEL LISTADO */}
+        {cargando && paquetes.length === 0 ? (
+          <div className="flex-1 flex justify-center items-center py-32">
+            <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-4 border-sky-400"></div>
+          </div>
+        ) : paquetesOrdenados.length === 0 ? (
+          <div className="flex-1 bg-black/10 backdrop-blur-md p-8 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center text-center shadow-inner min-h-[300px]">
+            <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500 mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <p className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight">
+              {busqueda ? 'No se encontraron paquetes' : 'No hay paquetes creados.'}
+            </p>
+            <p className="text-xs sm:text-sm text-gray-400 font-medium">
+              {busqueda ? 'Prueba con otros términos de búsqueda.' : 'Comienza asociando tu primer paquete a un evento.'}
+            </p>
+          </div>
+        ) : (
+          <div className="bg-black/25 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 shadow-inner min-h-[500px]">
+            
+            {/* Cabecera del Listado (Oculto en móvil) */}
+            <div className="hidden sm:grid sm:grid-cols-12 gap-4 px-6 pb-4 border-b border-white/10 text-gray-300 uppercase text-[10px] tracking-[0.2em] font-black mb-6">
+              <div 
+                className="sm:col-span-6 cursor-pointer hover:text-white transition-colors flex items-center gap-2 select-none"
+                onClick={() => manejarOrden('paquete')}
+              >
+                Paquete <IconoOrden columnaActual="paquete" />
+              </div>
+              <div 
+                className="sm:col-span-3 flex justify-center items-center gap-2 cursor-pointer hover:text-white transition-colors select-none"
+                onClick={() => manejarOrden('evento')}
+              >
+                Evento <IconoOrden columnaActual="evento" />
+              </div>
+              <div className="sm:col-span-3 text-center">Acciones</div>
+            </div>
+
+            {/* Filas del Listado */}
+            <div className="space-y-4">
+              {paquetesOrdenados.map((pkt) => {
+                return (
+                  <div 
+                    key={pkt.id} 
+                    className="flex flex-col sm:grid sm:grid-cols-12 gap-4 items-start sm:items-center rounded-3xl overflow-hidden relative group transition-all hover:border-white/20 min-h-[140px] sm:min-h-[120px] pb-16 sm:pb-0 shadow-lg"
+                    style={{
+                      backgroundImage: `
+                        linear-gradient(135deg, rgba(25,25,25,0.8) 30%, rgba(0,0,0,0.4) 80%), 
+                        url('${getUrlImagen(pkt.imagen)}')
+                      `,
+                      backgroundSize: '100% 100%, cover',
+                      backgroundPosition: 'center, right center',
+                      backgroundRepeat: 'no-repeat, no-repeat'
+                    }}
+                  >
+                    <div className="sm:col-span-6 p-5 sm:p-6 flex flex-col justify-center relative z-10 w-full">
+                      <div className="font-black text-white text-xl drop-shadow-md line-clamp-1" title={pkt.nombre}>{pkt.nombre}</div>
+                      <div className="text-sm text-gray-300 mt-1 line-clamp-2 max-w-sm font-medium drop-shadow-sm" title={pkt.descripcion}>{pkt.descripcion}</div>
+                      
+                      <div className="sm:hidden mt-3 inline-flex">
+                        <span className="bg-white/10 text-sky-300 text-xs px-3 py-1 rounded-full font-black shadow-inner backdrop-blur-md border border-white/20">
+                          {obtenerNombreEvento(pkt.evento_id)}
+                        </span>
+                      </div>
+                    </div>
                     
-                    <div className="sm:hidden mt-3 inline-flex">
-                      <span className="bg-white/10 text-sky-300 text-xs px-3 py-1 rounded-full font-black shadow-inner backdrop-blur-md border border-white/20">
+                    <div className="hidden sm:flex sm:col-span-3 justify-center items-center relative z-10">
+                      <span className="bg-white/10 text-sky-300 text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full font-black shadow-inner backdrop-blur-md border border-white/20 truncate max-w-full" title={obtenerNombreEvento(pkt.evento_id)}>
                         {obtenerNombreEvento(pkt.evento_id)}
                       </span>
                     </div>
-                  </div>
-                  
-                  <div className="hidden sm:flex sm:col-span-3 justify-center items-center relative z-10">
-                    <span className="bg-white/10 text-sky-300 text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full font-black shadow-inner backdrop-blur-md border border-white/20 truncate max-w-full" title={obtenerNombreEvento(pkt.evento_id)}>
-                      {obtenerNombreEvento(pkt.evento_id)}
-                    </span>
-                  </div>
-                  
-                  <div className="absolute bottom-4 right-4 sm:relative sm:top-0 sm:right-0 sm:col-span-3 flex justify-end sm:justify-center items-center gap-2 sm:gap-3 z-10 w-full pr-4 sm:pr-6">
                     
-                    {/* BOTÓN BLOQUEAR / DESBLOQUEAR */}
-                    <button 
-                      onClick={() => toggleBloqueoPaquete(pkt)} 
-                      className={`p-2.5 rounded-xl transition-all shadow-md backdrop-blur-sm border ${
-                        pkt.bloqueado 
-                          ? 'text-white bg-red-500/50 border-red-500/40 hover:bg-red-500 hover:scale-110' 
-                          : 'text-emerald-300 bg-emerald-500/50 border-emerald-500/30 hover:bg-emerald-500 hover:text-white hover:scale-110'
-                      }`}
-                      title={pkt.bloqueado ? "Desbloquear" : "Bloquear"}
-                    >
-                      {pkt.bloqueado ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
-                      )}
-                    </button>
+                    <div className="absolute bottom-4 right-4 sm:relative sm:top-0 sm:right-0 sm:col-span-3 flex justify-end sm:justify-center items-center gap-2 sm:gap-3 z-10 w-full pr-4 sm:pr-6">
+                      
+                      {/* BOTÓN BLOQUEAR / DESBLOQUEAR */}
+                      <button 
+                        onClick={() => toggleBloqueoPaquete(pkt)} 
+                        className={`p-2.5 rounded-xl transition-all shadow-md backdrop-blur-sm border ${
+                          pkt.bloqueado 
+                            ? 'text-white bg-red-500/50 border-red-500/40 hover:bg-red-500 hover:scale-110' 
+                            : 'text-emerald-300 bg-emerald-500/50 border-emerald-500/30 hover:bg-emerald-500 hover:text-white hover:scale-110'
+                        }`}
+                        title={pkt.bloqueado ? "Desbloquear" : "Bloquear"}
+                      >
+                        {pkt.bloqueado ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                        )}
+                      </button>
 
-                    {/* BOTÓN EDITAR */}
-                    <button 
-                      onClick={() => abrirModalEditar(pkt)} 
-                      className="p-2.5 text-sky-300 bg-sky-500/50 border border-sky-500/30 hover:bg-sky-500 hover:text-white rounded-xl transition-all shadow-md backdrop-blur-sm hover:scale-110"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
-                    </button>
-                    
-                    {/* BOTÓN BORRAR */}
-                    <button 
-                      onClick={() => borrarPaquete(pkt.id, pkt.nombre)} 
-                      className="p-2.5 text-pink-300 bg-pink-300/50 border border-pink-300/30 hover:bg-pink-400 hover:text-white rounded-xl transition-all shadow-md backdrop-blur-sm hover:scale-110"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
-                    </button>
+                      {/* BOTÓN EDITAR */}
+                      <button 
+                        onClick={() => abrirModalEditar(pkt)} 
+                        className="p-2.5 text-sky-300 bg-sky-500/50 border border-sky-500/30 hover:bg-sky-500 hover:text-white rounded-xl transition-all shadow-md backdrop-blur-sm hover:scale-110"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
+                      </button>
+                      
+                      {/* BOTÓN BORRAR */}
+                      <button 
+                        onClick={() => solicitarBorradoPaquete(pkt.id, pkt.nombre)} 
+                        className="p-2.5 text-pink-300 bg-pink-300/50 border border-pink-300/30 hover:bg-pink-400 hover:text-white rounded-xl transition-all shadow-md backdrop-blur-sm hover:scale-110"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+      </ContenedorPrincipal>
+
+      <ModalConfirmacion
+        isOpen={modalConfirmacion.abierto}
+        titulo="Eliminar Paquete"
+        mensaje={`¿Estás seguro de que deseas eliminar el paquete "${modalConfirmacion.nombrePaquete}"? Esta acción no se puede deshacer.`}
+        textoConfirmar="Eliminar"
+        textoCancelar="Cancelar"
+        onConfirm={confirmarBorrado}
+        onCancel={cancelarBorrado}
+        esDestructivo={true}
+        tipo="error"
+      />
 
       {modalAbierto && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
@@ -465,8 +500,7 @@ const GestionPaquetes = () => {
           </div>
         </div>
       )}
-
-    </ContenedorPrincipal>
+    </>
   );
 };
 
