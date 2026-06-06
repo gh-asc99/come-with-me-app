@@ -1,38 +1,37 @@
 import CompraModel from '../models/mysql/compraModel.js'
 import { validarCompraEvento, validarCompraPaquete } from '../schemas/compraSchema.js'
-import sequelize from '../models/mysql/index.js';
+import sequelize from '../models/mysql/index.js'
 
 class CompraController {
-  static async getResumenCompra(req, res) {
-    const { tipo, id } = req.params;
-    const idBuffer = Buffer.from(id.replace(/-/g, ''), 'hex');
+  static async getResumenCompra (req, res) {
+    const { tipo, id } = req.params
+    const idBuffer = Buffer.from(id.replace(/-/g, ''), 'hex')
 
     try {
       if (tipo === 'paquete') {
         const [paquete] = await sequelize.query(
           'SELECT nombre, imagen, descripcion, precio FROM paquete WHERE id = ?',
           { replacements: [idBuffer], type: sequelize.QueryTypes.SELECT }
-        );
-        if (!paquete) return res.status(404).json({ error: 'Paquete no encontrado' });
-        return res.json({ item: paquete, total: parseFloat(paquete.precio) });
-
+        )
+        if (!paquete) return res.status(404).json({ error: 'Paquete no encontrado' })
+        return res.json({ item: paquete, total: parseFloat(paquete.precio) })
       } else if (tipo === 'evento') {
         const [evento] = await sequelize.query(
           'SELECT nombre, imagen, descripcion FROM evento WHERE id = ?',
           { replacements: [idBuffer], type: sequelize.QueryTypes.SELECT }
-        );
-        if (!evento) return res.status(404).json({ error: 'Evento no encontrado' });
+        )
+        if (!evento) return res.status(404).json({ error: 'Evento no encontrado' })
 
         const [suma] = await sequelize.query(
           'SELECT COALESCE(SUM(precio), 0) as total FROM paquete WHERE evento_id = ?',
           { replacements: [idBuffer], type: sequelize.QueryTypes.SELECT }
-        );
-        return res.json({ item: evento, total: parseFloat(suma.total) });
+        )
+        return res.json({ item: evento, total: parseFloat(suma.total) })
       }
-      res.status(400).json({ error: 'Tipo inválido' });
+      res.status(400).json({ error: 'Tipo inválido' })
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error al obtener resumen' });
+      console.error(error)
+      res.status(500).json({ error: 'Error al obtener resumen' })
     }
   }
 

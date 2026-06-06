@@ -3,10 +3,8 @@
 ###Recuperar todos los eventos
 GET http://localhost:3300/eventos
 
-
 ###Recuperar evento por id
 GET http://localhost:3300/eventos/1adfec8b-0c60-11f1-947c-309c2315f326
-
 
 ###Crear evento SIN token
 POST http://localhost:3300/eventos
@@ -29,11 +27,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzL
  "imagen": "https://ejemplo.com/imagen.jpg"
 }
 
-
 ###Borrar evento por id
 DELETE http://localhost:3300/eventos/272f686a-0cfc-11f1-947c-309c2315f326
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MTQ0MTIxOSwiZXhwIjoxNzcxNDQ4NDE5fQ.4-MsH7QKxFlqt7_FZrpT6NEzCRaNLrFXV6Mp3oyw8fA
-
 
 ###Actualizar evento por id
 PATCH http://localhost:3300/eventos/5eb683b5-0ca8-11f1-947c-309c2315f326
@@ -43,7 +39,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzL
 {
     "descripcion": "Realmente era esta la descripción buena"
 }
-
 
 
 // Usuarios
@@ -62,7 +57,6 @@ Content-Type: application/json
   "password": "123456",
   "fecha_nacimiento": "2000-05-10"
 }
-
 
 ### Login de usuario
 POST http://localhost:3300/auth/login
@@ -109,7 +103,6 @@ Authorization: Bearer <TU_TOKEN_DE_ADMIN_AQUI>
 {
   "rol": "subscriber"
 }
-
 
 
 // Paquetes
@@ -182,7 +175,6 @@ GET http://localhost:3300/plantillas
 GET http://localhost:3300/plantillas/ae9ff9e6-42cb-4927-9f02-069cdfa8be74
 
 ### Actualizar una Plantilla (SOLO ADMIN)
-# Puedes enviar solo 1 campo, 2, o todos los que quieras actualizar
 PATCH http://localhost:3300/plantillas/944e9d53-dbb3-4d20-be26-fa245f1e17e6
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmLTU4NzMtNDIxMi1hYTRhLWJmN2QwNTIzMDVlZiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjQ1NzE1MiwiZXhwIjoxNzcyNDY0MzUyfQ.vnzKQxywn_6iIgcUTWEpH-12hrwgI0GJlhSZTTNfsis
@@ -195,7 +187,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGU2YTdmL
 
 // Sugerencias
 
-### 1. Crear sugerencia GENERAL para un Evento (ej. Veladas románticas)
+### 1. Crear sugerencia GENERAL para un Evento
 POST http://localhost:3300/sugerencias
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4MjhmYTgzLTUwMTYtNDdjMy04Y2FhLTkzNjBjZDRiYjliMiIsIm5vbWJyZSI6IkFsZXgiLCJyb2wiOiJhZG1pbiIsImlhdCI6MTc3MjMwNTEyNSwiZXhwIjoxNzcyMzEyMzI1fQ.BIKXPjgNKJhsK9q4a9IscaSrDM4rBW2TkKlbC2d-NMU

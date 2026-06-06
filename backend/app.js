@@ -21,15 +21,15 @@ try {
 
   defineAssociations()
 
-  // 1. Apagamos la revisión de seguridad de MySQL temporalmente
+  // 1. Apago la revisión de seguridad de MySQL temporalmente
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true })
-  
-  // 2. Sequelize crea todas las tablas libremente de golpe
+
+  // 2. Sequelize crea todas las tablas
   await sequelize.sync()
-  
-  // 3. Volvemos a encender la seguridad
+
+  // 3. Vuelvo a encender la seguridad
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true })
-  
+
   console.log('🟢 Modelos sincronizados')
 } catch (error) {
   console.error('❌ Error general de Sequelize:', error.message)

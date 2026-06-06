@@ -5,8 +5,8 @@ const CompraEvento = sequelize.define('CompraEvento', {
   id: {
     type: 'BINARY(16)',
     primaryKey: true,
-    allowNull: false, // <-- AÑADIDO
-    defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'), // <-- AÑADIDO CON PARÉNTESIS EXTRA
+    allowNull: false,
+    defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
     get () {
       const value = this.getDataValue('id')
       if (!value) return null

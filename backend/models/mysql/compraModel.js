@@ -6,10 +6,10 @@ import sequelize from './index.js'
 
 class CompraModel {
   static async getMisCompras ({ usuario_id }) {
-    const idBuffer = Buffer.from(usuario_id.replace(/-/g, ''), 'hex');
-    
-    // Hacemos JOIN con las tablas evento y paquete para obtener el nombre y la imagen
-    // Y REINCORPORAMOS evento_id y paquete_id para que el frontend pueda desbloquearlos
+    const idBuffer = Buffer.from(usuario_id.replace(/-/g, ''), 'hex')
+
+    // Hago JOIN con las tablas evento y paquete para obtener el nombre y la imagen
+    // y reincorporo evento_id y paquete_id para que el frontend pueda desbloquearlos
     const [evts, paqs] = await Promise.all([
       sequelize.query(`
         SELECT 
@@ -24,7 +24,7 @@ class CompraModel {
         INNER JOIN evento e ON ce.evento_id = e.id
         WHERE ce.usuario_id = ?
       `, { replacements: [idBuffer], type: sequelize.QueryTypes.SELECT }),
-      
+
       sequelize.query(`
         SELECT 
           BIN_TO_UUID(cp.id) as id,
@@ -38,12 +38,11 @@ class CompraModel {
         INNER JOIN paquete p ON cp.paquete_id = p.id
         WHERE cp.usuario_id = ?
       `, { replacements: [idBuffer], type: sequelize.QueryTypes.SELECT })
-    ]);
+    ])
 
     // Unimos ambos arrays y los ordenamos de más reciente a más antiguo
-    const compras = [...evts, ...paqs].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-    
-    return compras;
+    const compras = [...evts, ...paqs].sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+    return compras
   }
 
   static async comprarEvento ({ input, usuario_id }) {
@@ -73,4 +72,4 @@ class CompraModel {
   }
 }
 
-export default CompraModel;
+export default CompraModel

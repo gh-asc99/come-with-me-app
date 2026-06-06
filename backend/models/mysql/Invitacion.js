@@ -18,7 +18,6 @@ const Invitacion = sequelize.define('Invitacion', {
   fecha_evento: { type: DataTypes.DATEONLY, allowNull: false },
   hora_inicio: { type: DataTypes.TIME, allowNull: false },
   lugar: { type: DataTypes.STRING, allowNull: false },
-  // Dentro de la definición de tu modelo Invitacion:
   paquete_id: { type: 'BINARY(16)', allowNull: false },
   fecha_creacion: { type: DataTypes.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
   estado: {

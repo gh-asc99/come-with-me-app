@@ -1,7 +1,7 @@
 import Invitado from '../models/mysql/Invitado.js'
 import { validarInvitado, validarInvitadoParcial } from '../schemas/invitadoSchema.js'
 import { Sequelize } from 'sequelize'
-import crypto from 'crypto' // Para generar el ID limpio en el store
+import crypto from 'crypto'
 
 // Traductor para limpiar los UUIDs en formato Buffer a texto Hexadecimal
 const formatearInvitado = (invitado) => {

@@ -31,18 +31,15 @@ class UsuarioModel {
   static async update ({ id, input }) {
     const idBuffer = Buffer.from(id.replace(/-/g, ''), 'hex')
 
-    // Solo hacemos la consulta de UPDATE si realmente hay campos que cambiar
     if (Object.keys(input).length > 0) {
       await Usuario.update(input, {
         where: { id: idBuffer }
       })
     }
 
-    // IMPORTANTE: Ya no devolvemos null si no hay filas afectadas.
-    // Siempre devolvemos el usuario actualizado.
     return await Usuario.findOne({
       where: { id: idBuffer },
-      attributes: { exclude: ['password_hash'] } // Corregido el nombre del campo
+      attributes: { exclude: ['password_hash'] }
     })
   }
 

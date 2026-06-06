@@ -1,4 +1,3 @@
-// src/models/mysql/Sugerencia.js
 import { DataTypes, Sequelize } from 'sequelize'
 import sequelize from './index.js'
 
@@ -47,4 +46,4 @@ const Sugerencia = sequelize.define('Sugerencia', {
   timestamps: false
 })
 
-export default Sugerencia;
+export default Sugerencia

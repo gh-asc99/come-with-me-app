@@ -37,7 +37,7 @@ function defineAssociations () {
   Invitacion.hasMany(Invitado, { foreignKey: 'invitacion_id', as: 'invitados', onDelete: 'CASCADE' })
   Invitado.belongsTo(Invitacion, { foreignKey: 'invitacion_id', as: 'invitacion', onDelete: 'CASCADE' })
 
-  // --- SUSCRIPCIONES ---
+  // --- SUSCRIPCIONES Y COMPRA SUSCRIPCIONES ---
   Usuario.hasMany(Suscripcion, { foreignKey: 'usuario_id', as: 'suscripciones', onDelete: 'CASCADE' })
   Suscripcion.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario', onDelete: 'CASCADE' })
 

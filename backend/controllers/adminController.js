@@ -1,15 +1,15 @@
-import Usuario from '../models/mysql/Usuario.js';
-import Invitacion from '../models/mysql/Invitacion.js';
-import Suscripcion from '../models/mysql/Suscripcion.js';
-import sequelize from '../models/mysql/index.js';
+import Usuario from '../models/mysql/Usuario.js'
+import Invitacion from '../models/mysql/Invitacion.js'
+import Suscripcion from '../models/mysql/Suscripcion.js'
+import sequelize from '../models/mysql/index.js'
 
 class AdminController {
-  static async getEstadisticas(req, res) {
+  static async getEstadisticas (req, res) {
     try {
       // 1. KPIs Generales
-      const totalUsuarios = await Usuario.count();
-      const suscripcionesActivas = await Suscripcion.count({ where: { estado: 'activa' } });
-      const totalInvitaciones = await Invitacion.count();
+      const totalUsuarios = await Usuario.count()
+      const suscripcionesActivas = await Suscripcion.count({ where: { estado: 'activa' } })
+      const totalInvitaciones = await Invitacion.count()
 
       // 2. Distribución de Roles (Pie Chart)
       const usuariosPorRol = await Usuario.findAll({
@@ -18,7 +18,7 @@ class AdminController {
           ['rol', 'name']
         ],
         group: ['rol']
-      });
+      })
 
       // 3. Uso de Eventos (Mucho más directo: Evento -> Paquete -> Invitacion)
       const usoEventosRaw = await sequelize.query(`
@@ -27,12 +27,12 @@ class AdminController {
         LEFT JOIN paquete p ON e.id = p.evento_id
         LEFT JOIN invitacion i ON p.id = i.paquete_id
         GROUP BY e.id, e.nombre
-      `, { type: sequelize.QueryTypes.SELECT });
+      `, { type: sequelize.QueryTypes.SELECT })
 
       const usoEventos = usoEventosRaw.map(item => ({
         nombre: item.nombre,
         cantidad: Number(item.cantidad)
-      }));
+      }))
 
       // 4. Popularidad de Paquetes (Directo: Paquete -> Invitacion)
       const usoPaquetesRaw = await sequelize.query(`
@@ -42,22 +42,22 @@ class AdminController {
         GROUP BY p.id, p.nombre
         ORDER BY cantidad DESC
         LIMIT 5
-      `, { type: sequelize.QueryTypes.SELECT });
+      `, { type: sequelize.QueryTypes.SELECT })
 
       const usoPaquetes = usoPaquetesRaw.map(item => ({
         nombre: item.nombre,
         cantidad: Number(item.cantidad)
-      }));
+      }))
 
       // 5. Ingresos Totales (Sumando suscripciones, eventos y paquetes comprados)
-      const ingresosSuscripciones = await sequelize.query('SELECT SUM(precio_pagado) as total FROM compra_suscripcion', { type: sequelize.QueryTypes.SELECT });
-      const ingresosEventos = await sequelize.query('SELECT SUM(precio_pagado) as total FROM compra_evento', { type: sequelize.QueryTypes.SELECT });
-      const ingresosPaquetes = await sequelize.query('SELECT SUM(precio_pagado) as total FROM compra_paquete', { type: sequelize.QueryTypes.SELECT });
+      const ingresosSuscripciones = await sequelize.query('SELECT SUM(precio_pagado) as total FROM compra_suscripcion', { type: sequelize.QueryTypes.SELECT })
+      const ingresosEventos = await sequelize.query('SELECT SUM(precio_pagado) as total FROM compra_evento', { type: sequelize.QueryTypes.SELECT })
+      const ingresosPaquetes = await sequelize.query('SELECT SUM(precio_pagado) as total FROM compra_paquete', { type: sequelize.QueryTypes.SELECT })
 
-      const totalIngresos = 
-        (parseFloat(ingresosSuscripciones[0].total) || 0) + 
-        (parseFloat(ingresosEventos[0].total) || 0) + 
-        (parseFloat(ingresosPaquetes[0].total) || 0);
+      const totalIngresos =
+        (parseFloat(ingresosSuscripciones[0].total) || 0) +
+        (parseFloat(ingresosEventos[0].total) || 0) +
+        (parseFloat(ingresosPaquetes[0].total) || 0)
 
       res.json({
         kpis: {
@@ -74,15 +74,14 @@ class AdminController {
         })),
         usoEventos,
         usoPaquetes
-      });
+      })
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error al generar estadísticas' });
+      console.error(error)
+      res.status(500).json({ error: 'Error al generar estadísticas' })
     }
   }
 
-  // --- AÑADIR DENTRO DE AdminController ---
-  static async getHistorialCompras(req, res) {
+  static async getHistorialCompras (req, res) {
     try {
       const historialRaw = await sequelize.query(`
         SELECT 
@@ -135,14 +134,14 @@ class AdminController {
         JOIN usuario u ON cs.usuario_id = u.id
 
         ORDER BY fecha DESC
-      `, { type: sequelize.QueryTypes.SELECT });
+      `, { type: sequelize.QueryTypes.SELECT })
 
-      res.json(historialRaw);
+      res.json(historialRaw)
     } catch (error) {
-      console.error('Error al obtener historial de compras:', error);
-      res.status(500).json({ error: 'Error al obtener el historial de transacciones' });
+      console.error('Error al obtener historial de compras:', error)
+      res.status(500).json({ error: 'Error al obtener el historial de transacciones' })
     }
   }
 }
 
-export default AdminController;
+export default AdminController

@@ -5,7 +5,7 @@ const CompraSuscripcion = sequelize.define('CompraSuscripcion', {
   id: {
     type: 'BINARY(16)',
     primaryKey: true,
-    allowNull: false, // <-- AÑADIDO
+    allowNull: false,
     defaultValue: Sequelize.literal('(UUID_TO_BIN(UUID()))'),
     get () {
       const value = this.getDataValue('id')

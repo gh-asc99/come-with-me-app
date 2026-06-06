@@ -28,7 +28,7 @@ class PlantillaController {
   }
 
   static async update (req, res) {
-    const result = validarPlantillaParcial(req.body) // Usamos la validación parcial
+    const result = validarPlantillaParcial(req.body)
     if (!result.success) return res.status(400).json({ error: JSON.parse(result.error.message) })
 
     try {

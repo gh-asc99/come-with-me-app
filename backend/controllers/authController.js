@@ -5,16 +5,16 @@ import UsuarioModel from '../models/mysql/usuarioModel.js'
 import Usuario from '../models/mysql/Usuario.js'
 import Suscripcion from '../models/mysql/Suscripcion.js'
 
-import { 
-  validarRegistro, 
-  validarLogin, 
-  validarActualizacionPerfil, 
-  validarActualizacionAdmin, 
-  validarActualizacionRol 
+import {
+  validarRegistro,
+  validarLogin,
+  validarActualizacionPerfil,
+  validarActualizacionAdmin,
+  validarActualizacionRol
 } from '../schemas/usuarioSchema.js'
 
 class AuthController {
-  static async getAllUsers(req, res) {
+  static async getAllUsers (req, res) {
     try {
       const usuarios = await Usuario.findAll({
         attributes: { exclude: ['password_hash'] },
@@ -25,11 +25,11 @@ class AuthController {
           required: false
         }],
         order: [['fecha_registro', 'DESC']]
-      });
-      res.json(usuarios);
+      })
+      res.json(usuarios)
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error al obtener los usuarios' });
+      console.error(error)
+      res.status(500).json({ error: 'Error al obtener los usuarios' })
     }
   }
 
@@ -87,11 +87,10 @@ class AuthController {
     }
   }
 
-  // --- NUESTRA FUNCIÓN ESTRELLA PARA EL PERFIL ---
   static async update (req, res) {
-    const { id } = req.params; // Extraemos el ID de la URL
-    
-    const result = validarActualizacionPerfil(req.body) // Usamos el esquema que permite imagen
+    const { id } = req.params
+
+    const result = validarActualizacionPerfil(req.body)
     if (!result.success) return res.status(400).json({ error: JSON.parse(result.error.message) })
 
     try {

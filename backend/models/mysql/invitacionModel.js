@@ -8,7 +8,6 @@ const formatearSalida = (invitacion) => {
   if (Buffer.isBuffer(obj.id)) obj.id = obj.id.toString('hex')
   if (Buffer.isBuffer(obj.usuario_id)) obj.usuario_id = obj.usuario_id.toString('hex')
   if (Buffer.isBuffer(obj.plantilla_id)) obj.plantilla_id = obj.plantilla_id.toString('hex')
-  // NUEVO: Formateamos también el paquete_id
   if (Buffer.isBuffer(obj.paquete_id)) obj.paquete_id = obj.paquete_id.toString('hex')
   return obj
 }
@@ -20,21 +19,15 @@ class InvitacionModel {
         where: { usuario_id: Sequelize.fn('UUID_TO_BIN', usuario_id) },
         include: [
           'plantilla_usada',
-          // Incluimos la relación de invitados, pero sin traer todos sus datos.
-          // Solo queremos que Sequelize nos permita usar sus atributos para contar.
           {
-            association: 'invitados', // <-- IMPORTANTE: Este nombre debe coincidir con el alias de tu relación (ej: Invitacion.hasMany(Invitado, { as: 'invitados' }))
-            attributes: [] 
+            association: 'invitados',
+            attributes: []
           }
         ],
-        // Le pedimos a Sequelize que añada dos columnas dinámicas a los resultados
         attributes: {
           include: [
-            // Cuenta TODOS los invitados asociados a esta invitación
             [Sequelize.fn('COUNT', Sequelize.col('invitados.id')), 'total_invitados'],
-            
-            // Cuenta SOLO los invitados cuyo estado es 'confirmado'
-            // Usamos SUM y un CASE para emular el conteo condicional sin romper la consulta principal
+
             [
               Sequelize.fn(
                 'SUM',
@@ -44,8 +37,7 @@ class InvitacionModel {
             ]
           ]
         },
-        // Como estamos usando funciones de agregación (COUNT, SUM), necesitamos agrupar por el ID de la invitación
-        group: ['Invitacion.id', 'plantilla_usada.id'] 
+        group: ['Invitacion.id', 'plantilla_usada.id']
       })
 
       return invitaciones.map(formatearSalida)
@@ -64,7 +56,7 @@ class InvitacionModel {
       id: Sequelize.fn('UUID_TO_BIN', id),
       usuario_id: Sequelize.fn('UUID_TO_BIN', usuario_id),
       plantilla_id: Sequelize.fn('UUID_TO_BIN', plantilla_id),
-      paquete_id: Sequelize.fn('UUID_TO_BIN', paquete_id), // <--- REPARADO
+      paquete_id: Sequelize.fn('UUID_TO_BIN', paquete_id),
       imagen: imagen
     })
 
@@ -81,7 +73,6 @@ class InvitacionModel {
 
     if (!invitacion) return false
 
-    // Añadimos paquete_id a la extracción de datos
     const { titulo, mensaje, fecha_evento, hora_inicio, lugar, datos_extra, imagen, plantilla_id, paquete_id } = input
 
     await invitacion.update({
@@ -93,7 +84,6 @@ class InvitacionModel {
       datos_extra: datos_extra !== undefined ? datos_extra : invitacion.datos_extra,
       imagen: imagen !== undefined ? imagen : invitacion.imagen,
       plantilla_id: plantilla_id ? Sequelize.fn('UUID_TO_BIN', plantilla_id) : invitacion.plantilla_id,
-      // NUEVO: Actualizamos el paquete si viene en el input
       paquete_id: paquete_id ? Sequelize.fn('UUID_TO_BIN', paquete_id) : invitacion.paquete_id
     })
 

@@ -63,7 +63,6 @@ class SuscripcionController {
     }
   }
 
-  // --- NUEVO: Enviar todas las suscripciones al panel Admin ---
   static async getAll (req, res) {
     try {
       const suscripciones = await SuscripcionModel.getAllAdmin()
@@ -74,7 +73,6 @@ class SuscripcionController {
     }
   }
 
-  // --- NUEVO: Procesar la cancelación desde el Admin ---
   static async cancelarAdmin (req, res) {
     const { id } = req.params
     try {

@@ -1,10 +1,9 @@
-// src/models/mysql/sugerenciaModel.js
 import Sugerencia from './Sugerencia.js'
 import { Op, Sequelize } from 'sequelize'
 
 class SugerenciaModel {
   static async getAll ({ evento_id, paquete_id }) {
-    // Si el admin pide la ruta sin filtros, devolvemos TODAS las sugerencias ordenadas por título
+    // Si el admin pide la ruta sin filtros, devuelve TODAS las sugerencias ordenadas por título
     if (!evento_id && !paquete_id) {
       return await Sugerencia.findAll({
         order: [['titulo_campo', 'ASC']]
@@ -79,4 +78,4 @@ class SugerenciaModel {
   }
 }
 
-export default SugerenciaModel;
+export default SugerenciaModel
