@@ -108,6 +108,7 @@ const Checkout = () => {
 
     try {
       await esperar(2000);
+      let esAdmin = false;
 
       if (tipo === 'suscripcion') {
         const fechaInicio = new Date();
@@ -130,8 +131,18 @@ const Checkout = () => {
         
         const usuarioGuardado = JSON.parse(localStorage.getItem('user') || '{}');
         if (usuarioGuardado.id) {
-          usuarioGuardado.rol = 'subscriber';
-          localStorage.setItem('user', JSON.stringify(usuarioGuardado));
+          if (usuarioGuardado.rol === 'admin') {
+            esAdmin = true;
+            setAviso({ 
+              visible: true, 
+              mensaje: "Ya tienes acceso total y sin restricciones a toda la plataforma por ser administrador.\n\nPara prevenir que pierdas tus superpoderes, tu tipo de usuario se mantendrá y no cambiará a suscriptor.", 
+              tipo: 'info' 
+            });
+            // Omitimos cambiar a 'subscriber'
+          } else {
+            usuarioGuardado.rol = 'subscriber';
+            localStorage.setItem('user', JSON.stringify(usuarioGuardado));
+          }
         }
       } 
       else {
@@ -144,7 +155,8 @@ const Checkout = () => {
       }
       
       setExito(true);
-      await esperar(2500);
+      // Damos más tiempo si es admin para que pueda leer tranquilamente el aviso
+      await esperar(esAdmin ? 5500 : 2500);
       window.location.href = '/perfil-usuario';
 
     } catch (error) {
@@ -170,6 +182,12 @@ const Checkout = () => {
 
   if (exito) return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden flex items-center justify-center py-6 sm:py-10 px-4">
+      <Aviso 
+        mensaje={aviso.mensaje} 
+        tipo={aviso.tipo} 
+        visible={aviso.visible} 
+        onClose={() => setAviso({ ...aviso, visible: false })} 
+      />
       <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat scale-105" style={{ backgroundImage: `url(${suscripcionesFondo})` }}>
         <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
       </div>
