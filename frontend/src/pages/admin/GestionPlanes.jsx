@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import ContenedorPrincipal from "../../components/layout/ContenedorPrincipal.jsx";
 import ModalConfirmacion from "../../components/ui/ModalConfirmacion.jsx";
+import Cargando from "../../components/ui/Cargando.jsx";
 
 const GestionPlanes = () => {
   const [suscripciones, setSuscripciones] = useState([]);
@@ -94,6 +95,8 @@ const GestionPlanes = () => {
     );
   };
 
+  if (cargando && suscripciones.length === 0) return <Cargando mensaje="Cargando suscripciones " />;
+
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
       
@@ -139,11 +142,8 @@ const GestionPlanes = () => {
           <div className="md:col-span-5 lg:col-span-2 text-right md:text-center pr-2">Precio / Acción</div>
         </div>
         
-        {cargando ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-pink-400"></div>
-          </div>
-        ) : suscripciones.length === 0 ? (
+        {/* Renderizado de la lista limpio del spinner antiguo */}
+        {suscripciones.length === 0 ? (
           <div className="p-10 sm:p-16 text-center flex flex-col items-center">
             <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500 mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
             <p className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight">No hay suscripciones registradas.</p>

@@ -223,6 +223,8 @@ const GestionSugerencias = () => {
       : <svg className="w-4 h-4 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>;
   };
 
+  if (cargando && sugerencias.length === 0) return <Cargando mensaje="Cargando sugerencias " />;
+
   return (
     <ContenedorPrincipal className="flex flex-col animate-fade-in-up">
       
@@ -263,11 +265,8 @@ const GestionSugerencias = () => {
         </div>
       )}
 
-      {cargando && sugerencias.length === 0 ? (
-        <div className="flex-1 flex justify-center items-center py-32">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-sky-400"></div>
-        </div>
-      ) : sugerenciasOrdenadas.length === 0 ? (
+      {/* ZONA DEL LISTADO LIMPIA DEL SPINNER */}
+      {sugerenciasOrdenadas.length === 0 ? (
         <div className="flex-1 bg-black/10 backdrop-blur-md p-8 sm:p-12 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center text-center shadow-inner min-h-[300px]">
           <svg className="w-12 h-12 text-gray-500 mb-4 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -282,7 +281,6 @@ const GestionSugerencias = () => {
       ) : (
         <div className="bg-black/25 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 shadow-inner min-h-[500px]">
           
-          {/* Cabecera del Listado (Solo visible desde md:) */}
           <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 pb-4 border-b border-white/10 text-gray-300 uppercase text-[10px] tracking-[0.2em] font-black mb-6">
             <div className="col-span-5 cursor-pointer hover:text-white transition-colors flex items-center gap-2 select-none" onClick={() => manejarOrden('titulo')}>
               Sugerencia <IconoOrden columnaActual="titulo" />
@@ -312,7 +310,6 @@ const GestionSugerencias = () => {
                     </div>
                     <div className="text-sm text-gray-400 font-medium truncate">{sug.descripcion_sugerida || 'Sin descripción'}</div>
                     
-                    {/* Metadatos visibles en móvil */}
                     <div className="md:hidden flex flex-wrap items-center gap-2 mt-3">
                       <span className="bg-sky-500/10 text-sky-400 border border-sky-500/30 text-[10px] uppercase tracking-wider px-3 py-1 rounded-full font-bold">
                         {traducirTipo(sug.tipo_campo)}
