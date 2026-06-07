@@ -43,7 +43,7 @@ const ModalConfirmacion = ({
       };
     }
     return {
-      bg: 'bg-white', border: 'border-pink-300', iconColor: 'text-pink-500', iconBg: 'bg-pink-50', btnConfirmar: 'bg-pink-500 hover:bg-pink-600',
+      bg: 'bg-white', border: 'border-pink-300', iconColor: 'text-pink-300', iconBg: 'bg-pink-50', btnConfirmar: 'bg-pink-300 hover:bg-pink-400',
       icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     };
   };
