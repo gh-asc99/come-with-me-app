@@ -25,10 +25,9 @@ const Suscripciones = () => {
   };
 
   const ventajasPremium = [
-    "Invitaciones y eventos ilimitados",
-    "Sin marcas de agua en tus creaciones",
-    "Acceso a estilos y plantillas exclusivas",
-    "Soporte técnico prioritario 24/7"
+    "Cantidad ilimitada de invitaciones que se pueden crear",
+    "Sin marcas de agua al descargar tus creaciones en PDF",
+    "Acceso a todos los eventos y paquetes exclusivos"
   ];
 
   return (
