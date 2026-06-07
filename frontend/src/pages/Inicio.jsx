@@ -243,7 +243,7 @@ const Inicio = () => {
           {/* LLAMADA A LA ACCIÓN FINAL Y FOOTER CORPORATIVO */}
           <div className="w-full text-center py-5 flex flex-col items-center px-4">
             <h3 className="text-2xl sm:text-4xl font-black text-white mb-6 md:mb-8 drop-shadow-md">¿Listo para empezar tu propia historia?</h3>
-            <Link to="/acceso-usuario" className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-sky-400 to-pink-400 text-white font-black text-xs uppercase tracking-widest px-8 py-4 md:px-12 md:py-5 rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 mb-12 md:mb-16 w-full sm:w-auto">
+            <Link to="/acceso-usuario" className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-sky-400 to-pink-300 text-white font-black text-xs uppercase tracking-widest px-8 py-4 md:px-12 md:py-5 rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 mb-12 md:mb-16 w-full sm:w-auto">
               Crear mi cuenta gratuita
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
