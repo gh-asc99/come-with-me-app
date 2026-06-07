@@ -137,7 +137,7 @@ const HistorialCreaciones = () => {
   if (generandoPDF) {
     return (
       <>
-        <Cargando mensaje="Generando archivo PDF..." />
+        <Cargando mensaje="Generando archivo PDF " />
         {/* ZONA OCULTA PARA GENERAR EL PDF */}
         <div
           style={{
