@@ -52,6 +52,22 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
     }
 
     if (esUrlImagen(valor)) {
+      if (esModoPDF) {
+        return (
+          <div 
+            className="mt-3 w-full rounded-xl shadow-sm border border-pink-100 flex-shrink-0"
+            style={{
+              height: '180px',
+              backgroundImage: `url(${formatearUrlImagen(valor)})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              pageBreakInside: 'avoid',
+              display: 'block'
+            }}
+          />
+        );
+      }
       return (
         <img 
           src={formatearUrlImagen(valor)} 
@@ -67,7 +83,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
         return (
           <div className="mt-2 ml-1 border-l-2 border-pink-200 pl-2 sm:pl-3 space-y-2 py-1 font-sans w-full">
             {valor.map((fase, i) => (
-              <div key={i} className="relative w-full">
+              <div key={i} className="relative w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                 <span className="absolute -left-[13px] sm:-left-[17px] top-1.5 w-1.5 h-1.5 rounded-full bg-pink-400"></span>
                 <span className="font-black text-pink-500 text-[9px] sm:text-[10px] md:text-xs block leading-none mb-0.5">{fase.hora}</span>
                 <span className="text-gray-700 text-[10px] sm:text-xs md:text-sm leading-tight block">{fase.titulo}</span>
@@ -79,7 +95,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
       return (
         <ul className="mt-1 space-y-1 font-sans w-full pl-1">
           {valor.map((item, i) => (
-            <li key={i} className="flex gap-1.5 sm:gap-2 items-start text-gray-700 text-[10px] sm:text-xs md:text-sm">
+            <li key={i} className="flex gap-1.5 sm:gap-2 items-start text-gray-700 text-[10px] sm:text-xs md:text-sm" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
               <span className="text-pink-300 font-bold shrink-0">-</span> 
               <span className="flex-1">{item}</span>
             </li>
@@ -98,7 +114,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
       </h3>
       <div className="flex flex-col gap-2 sm:gap-4 w-full">
         {items.map(([clave, valor]) => (
-          <div key={clave} className="flex items-start break-inside-avoid w-full">
+          <div key={clave} className="flex items-start w-full" style={esModoPDF ? { pageBreakInside: 'avoid', marginBottom: '8px' } : {}}>
             <span className="h-3 w-3 sm:h-5 sm:w-5 rounded-full bg-pink-400 text-white flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0 mt-0.5 text-[6px] sm:text-[10px] shadow-sm">
               ✓
             </span>
@@ -137,7 +153,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
           </ComponenteAnimado>
 
           {extraIzquierda.length > 0 && (
-            <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="w-full">
+            <ComponenteAnimado {...animationProps} className="w-full">
               <BloqueSugerencias titulo="Detalles del evento" items={extraIzquierda} />
             </ComponenteAnimado>
           )}
@@ -150,12 +166,14 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
             <ComponenteAnimado {...animationProps} className="w-full shadow-md rounded-[1rem] sm:rounded-[2rem]">
               {esModoPDF ? (
                 <div 
-                  className="w-full h-[250px] rounded-[2rem] bg-white"
+                  className="w-full rounded-[2rem] bg-white flex-shrink-0"
                   style={{
+                    height: '250px',
                     backgroundImage: `url(${urlImagen})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
+                    backgroundRepeat: 'no-repeat',
+                    pageBreakInside: 'avoid'
                   }}
                 />
               ) : (
@@ -170,7 +188,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
           )}
 
           {/* TIEMPO Y LUGAR */}
-          <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="flex flex-col gap-3 sm:gap-4">
+          <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid' } : {}} className="flex flex-col gap-3 sm:gap-4">
             <div className="bg-gradient-to-br from-sky-400 to-sky-600 p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] shadow-md text-white flex flex-col items-center justify-center text-center">
               <span className="text-sky-100 uppercase text-[7px] sm:text-[9px] font-black tracking-[0.2em] mb-1">¿Cuándo nos vemos?</span>
               <div className={`font-bold ${esModoPDF ? 'text-sm' : 'text-[10px] sm:text-lg'}`}>
@@ -195,7 +213,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
           </ComponenteAnimado>
 
           {extraDerecha.length > 0 && (
-            <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="w-full">
+            <ComponenteAnimado {...animationProps} className="w-full">
               <BloqueSugerencias titulo="Más información" items={extraDerecha} />
             </ComponenteAnimado>
           )}
@@ -206,7 +224,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
       {/* FOOTER CREADOR Y MARCA DE AGUA */}
       <ComponenteAnimado 
         {...animationProps} 
-        style={{ pageBreakInside: 'avoid' }} 
+        style={esModoPDF ? { pageBreakInside: 'avoid', marginTop: '40px' } : {}} 
         className="text-center mt-8 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full"
       >
         <p className="text-gray-500 font-serif italic text-[10px] sm:text-sm mb-2 sm:mb-4">
