@@ -29,7 +29,6 @@ const HistorialCreaciones = () => {
   const tieneCreaciones = invitaciones.length > 0;
 
   // LÓGICA DE GENERACIÓN DE PDF
-
   useEffect(() => {
     if (generandoPDF && invitacionActiva && areaPdfRef.current) {
       const generarDocumento = async () => {
@@ -64,8 +63,7 @@ const HistorialCreaciones = () => {
 
           setAviso({
             visible: true,
-            mensaje:
-              "Hubo un problema al crear el archivo. Inténtalo de nuevo.",
+            mensaje: "Hubo un problema al crear el archivo. Inténtalo de nuevo.",
             tipo: "error",
           });
         } finally {
@@ -122,8 +120,6 @@ const HistorialCreaciones = () => {
     }
   };
 
-  if (cargando) return <Cargando mensaje="Cargando tus creaciones " />;
-
   let urlImagenActiva = null;
 
   if (invitacionActiva?.imagen) {
@@ -134,6 +130,40 @@ const HistorialCreaciones = () => {
     } else {
       urlImagenActiva = `/${invitacionActiva.imagen.replace(/^\//, "")}`;
     }
+  }
+
+  if (cargando) return <Cargando mensaje="Cargando tus creaciones " />;
+
+  if (generandoPDF) {
+    return (
+      <>
+        <Cargando mensaje="Generando archivo PDF..." />
+        {/* ZONA OCULTA PARA GENERAR EL PDF */}
+        <div
+          style={{
+            position: "absolute",
+            zIndex: "-100",
+            top: "0",
+            left: "0",
+            opacity: 0,
+            pointerEvents: "none",
+            width: "100%",
+          }}
+        >
+          <div
+            ref={areaPdfRef}
+            className="bg-white relative"
+            style={{ width: "680px", margin: "0 auto", paddingBottom: "20px" }}
+          >
+            <RenderizadorPlantilla
+              invitacion={invitacionActiva}
+              urlImagen={urlImagenActiva}
+              esModoPDF={true}
+            />
+          </div>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -160,7 +190,6 @@ const HistorialCreaciones = () => {
           <div className="w-full max-w-6xl mx-auto flex flex-col">
             
             {/* MODO CON CREACIONES: PANEL SUPERIOR RESPONSIVE */}
-
             <div className="w-full bg-black/25 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 overflow-hidden mb-5 flex flex-col">
               <div className="w-full bg-black/20 p-5 sm:p-8 md:px-12 md:py-6 flex flex-col md:flex-row justify-between items-center md:items-center gap-4 md:gap-6 text-center md:text-left">
                 <div className="flex flex-col">
@@ -186,24 +215,7 @@ const HistorialCreaciones = () => {
               </div>
             </div>
 
-            {generandoPDF && (
-              <div className="w-full mb-5 bg-sky-500/20 backdrop-blur-xl border border-sky-500/30 p-4 rounded-2xl shadow-sm flex justify-center items-center gap-3 animate-pulse">
-                <svg className="w-5 h-5 sm:w-6 h-6 text-sky-300 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-
-                <p className="text-xs sm:text-sm text-sky-200 font-bold tracking-widest uppercase">
-                  Generando archivo PDF...
-                </p>
-              </div>
-            )}
-
             {/* LISTA DE INVITACIONES */}
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-4">
               {invitaciones.map((inv) => (
                 <TarjetaInvitacion
@@ -221,7 +233,6 @@ const HistorialCreaciones = () => {
           </div>
         ) : (
           /* MODO VACÍO: ADAPTADO A RESOLUCIONES MÓVILES */
-
           <div className="flex-1 flex flex-col items-center justify-center text-center w-full h-full min-h-[50vh] px-2 sm:px-4">
             <div className="bg-black/40 backdrop-blur-2xl p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-white/10 flex flex-col items-center shadow-2xl max-w-2xl w-full">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3 md:mb-4 tracking-tighter drop-shadow-md">
@@ -303,7 +314,6 @@ const HistorialCreaciones = () => {
                 id="qr-canvas-historial"
                 value={`${window.location.origin}/invitacion/${invitacionActiva?.id}`}
                 size={180}
-                lg:size={200}
                 level={"H"}
               />
             </div>
@@ -331,33 +341,6 @@ const HistorialCreaciones = () => {
         </div>
       )}
 
-      {/* ZONA OCULTA PARA GENERAR EL PDF */}
-
-      {invitacionActiva && generandoPDF && (
-        <div
-          style={{
-            position: "absolute",
-            zIndex: "-100",
-            top: "0",
-            left: "0",
-            opacity: 0,
-            pointerEvents: "none",
-            width: "100%",
-          }}
-        >
-          <div
-            ref={areaPdfRef}
-            className="bg-white relative"
-            style={{ width: "680px", margin: "0 auto", paddingBottom: "20px" }}
-          >
-            <RenderizadorPlantilla
-              invitacion={invitacionActiva}
-              urlImagen={urlImagenActiva}
-              esModoPDF={true}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
