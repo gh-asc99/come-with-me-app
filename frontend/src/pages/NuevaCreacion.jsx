@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import FaseSeleccionEvento from '../components/creacion/FaseSeleccionEvento.jsx';
 import FaseSeleccionPaquete from '../components/creacion/FaseSeleccionPaquete.jsx';
 import FaseFormularioDinamico from '../components/creacion/FaseFormularioDinamico.jsx';
@@ -8,10 +7,10 @@ import useCreacion from '../hooks/useCreacion.js';
 import FaseExito from '../components/creacion/FaseExito.jsx';
 import ContenedorPrincipal from "../components/layout/ContenedorPrincipal.jsx";
 import fondoMosaico from '../../public/fondo_mosaico.png';
+import ModalConfirmacion from '../components/ui/ModalConfirmacion.jsx';
 
 const NuevaCreacion = () => {
   const navegar = useNavigate();
-  // Asegúrate de exportar limiteAlcanzado y setLimiteAlcanzado desde tu hook useCreacion
   const { faseActual, limiteAlcanzado, setLimiteAlcanzado } = useCreacion();
 
   const fases = [
@@ -93,52 +92,17 @@ const NuevaCreacion = () => {
       </ContenedorPrincipal>
 
       {/* MODAL DE LÍMITE ALCANZADO */}
-      <AnimatePresence>
-        {limiteAlcanzado && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-8 sm:p-10 max-w-md w-full text-center shadow-2xl relative border border-white/20 overflow-hidden"
-            >
-              {/* Decoración de fondo */}
-              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-pink-100 to-sky-100 opacity-50 -z-10"></div>
-              
-              <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-yellow-400 to-amber-300 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(251,191,36,0.4)] mb-6 border-4 border-white">
-                <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-              </div>
-              
-              <h2 className="text-2xl sm:text-3xl font-black text-[#252525] tracking-tight mb-3">
-                ¡Límite Alcanzado!
-              </h2>
-              <p className="text-gray-500 font-medium mb-8 leading-relaxed text-sm sm:text-base">
-                Has alcanzado el límite de 6 creaciones gratuitas. Desbloquea todo el potencial de la plataforma y crea invitaciones ilimitadas.
-              </p>
-              
-              <div className="flex flex-col gap-3">
-                <button 
-                  onClick={() => navegar('/suscripciones')}
-                  className="w-full bg-[#252525] hover:bg-black text-white font-black text-xs sm:text-sm uppercase tracking-widest py-4 sm:py-4 rounded-xl transition-all shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 flex justify-center items-center gap-2"
-                >
-                  <svg className="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  Ver Planes Premium
-                </button>
-                <button 
-                  onClick={() => setLimiteAlcanzado(false)}
-                  className="w-full py-4 font-bold text-gray-400 hover:text-gray-600 transition-colors text-xs uppercase tracking-widest"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <ModalConfirmacion 
+        isOpen={limiteAlcanzado}
+        titulo="¡Límite Alcanzado!"
+        mensaje="Has alcanzado el límite de 6 creaciones gratuitas. Desbloquea todo el potencial de la plataforma y crea invitaciones ilimitadas."
+        textoConfirmar="Ver Planes Premium"
+        textoCancelar="Cancelar"
+        onConfirm={() => navegar('/suscripciones')}
+        onCancel={() => setLimiteAlcanzado(false)}
+        tipo="info"
+        esDestructivo={false}
+      />
 
     </div>
   );
