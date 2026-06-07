@@ -27,6 +27,7 @@ class SuscripcionModel {
     const compraIdStr = crypto.randomUUID()
     const compraBuffer = Buffer.from(compraIdStr.replace(/-/g, ''), 'hex')
 
+    // 1. Crea la suscripción
     const nuevaSuscripcion = await Suscripcion.create({
       id: suscripcionBuffer,
       usuario_id: usuarioBuffer,
@@ -37,6 +38,7 @@ class SuscripcionModel {
       estado: 'activa'
     })
 
+    // 2. Registra el pago
     await CompraSuscripcion.create({
       id: compraBuffer,
       usuario_id: usuarioBuffer,
@@ -44,37 +46,48 @@ class SuscripcionModel {
       precio_pagado: input.precio_pagado
     })
 
-    await Usuario.update(
-      { rol: 'subscriber' },
-      { where: { id: usuarioBuffer } }
-    )
+    // 3. Protege el rol si es administrador
+    const usuarioActual = await Usuario.findOne({ where: { id: usuarioBuffer } })
+    
+    if (usuarioActual && usuarioActual.rol !== 'admin') {
+      await Usuario.update(
+        { rol: 'subscriber' },
+        { where: { id: usuarioBuffer } }
+      )
+    }
 
     return nuevaSuscripcion
   }
 
-  // --- NUEVO: Obtener todas las suscripciones (Para el panel Admin) ---
+  // Obtiene todas las suscripciones
   static async getAllAdmin () {
     return await Suscripcion.findAll({
       include: [{
         model: Usuario,
-        as: 'usuario', // Asegúrate de que esta asociación existe en tu associations.js
+        as: 'usuario', 
         attributes: ['id', 'nombre', 'correo', 'imagen']
       }],
       order: [['fecha_inicio', 'DESC']]
     })
   }
 
-  // --- NUEVO: Cancelar una suscripción y quitar el rol VIP ---
+  // Cancela una suscripción y quita el rol subscriber
   static async cancelarSuscripcion ({ id }) {
     const idBuffer = Buffer.from(id.replace(/-/g, ''), 'hex')
 
-    // Buscamos la suscripción
+    // Busca la suscripción
     const suscripcion = await Suscripcion.findOne({ where: { id: idBuffer } })
     if (!suscripcion) return null
-    // 1. Cambiamos el estado a cancelada
+
+    // 1. Cambia el estado a cancelada
     await Suscripcion.update({ estado: 'cancelada' }, { where: { id: idBuffer } })
-    // 2. Le quitamos los privilegios al usuario (lo devolvemos a 'user')
-    await Usuario.update({ rol: 'user' }, { where: { id: suscripcion.usuario_id } })
+
+    // 2. Le quita los privilegios al usuario si no es admin
+    const usuarioActual = await Usuario.findOne({ where: { id: suscripcion.usuario_id } })
+
+    if (usuarioActual && usuarioActual.rol !== 'admin') {
+      await Usuario.update({ rol: 'user' }, { where: { id: suscripcion.usuario_id } })
+    }
 
     return true
   }
