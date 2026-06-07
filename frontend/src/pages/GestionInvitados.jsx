@@ -18,6 +18,11 @@ const GestionInvitados = () => {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [invitadoAEliminar, setInvitadoAEliminar] = useState(null);
 
+  // CÁLCULO DE MÉTRICAS DE ASISTENCIA
+  const totalConfirmados = invitados.filter(inv => inv.estado === 'confirmado').length;
+  const totalDeclinados = invitados.filter(inv => inv.estado === 'rechazado').length;
+  const totalPendientes = invitados.length - totalConfirmados - totalDeclinados;
+
   const manejarAgregarInvitado = async (e) => {
     e.preventDefault();
     if (!nombre.trim()) return;
@@ -140,6 +145,7 @@ const GestionInvitados = () => {
           <div className="w-full lg:w-7/12 flex flex-col bg-black/20">
             
             <div className="p-6 sm:p-8 md:p-12 border-b border-white/10 flex flex-col h-full min-h-[400px] md:min-h-[500px]">
+              
               <h3 className="text-lg sm:text-xl font-black text-white mb-6 sm:mb-8 flex items-center justify-between gap-3 drop-shadow-sm border-b border-white/10 pb-3 sm:pb-4">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 text-sky-400 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -149,6 +155,26 @@ const GestionInvitados = () => {
                 </div>
                 <span className="bg-sky-500/20 text-sky-300 px-3 py-1 rounded-full text-[10px] sm:text-xs font-black border border-sky-500/30">{invitados.length}</span>
               </h3>
+
+              {/* MÉTRICAS DE ASISTENCIA */}
+              {invitados.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-inner">
+                    <span className="text-2xl sm:text-3xl font-black text-emerald-400 drop-shadow-sm leading-none mb-1.5">{totalConfirmados}</span>
+                    <span className="text-[8px] sm:text-[9px] font-black text-emerald-300 uppercase tracking-widest">Confirmados</span>
+                  </div>
+                  
+                  <div className="bg-gray-500/10 border border-gray-500/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-inner">
+                    <span className="text-2xl sm:text-3xl font-black text-gray-300 drop-shadow-sm leading-none mb-1.5">{totalPendientes}</span>
+                    <span className="text-[8px] sm:text-[9px] font-black text-gray-400 uppercase tracking-widest">Pendientes</span>
+                  </div>
+                  
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-inner">
+                    <span className="text-2xl sm:text-3xl font-black text-red-400 drop-shadow-sm leading-none mb-1.5">{totalDeclinados}</span>
+                    <span className="text-[8px] sm:text-[9px] font-black text-red-300 uppercase tracking-widest">Declinados</span>
+                  </div>
+                </div>
+              )}
 
               <div className="flex-grow flex flex-col">
                 {invitados.length === 0 ? (
@@ -160,7 +186,7 @@ const GestionInvitados = () => {
                     <p className="font-medium text-xs sm:text-sm text-gray-400">Añade a la primera persona a tu lista para empezar a enviar invitaciones.</p>
                   </div>
                 ) : (
-                  <ul className="space-y-3 sm:space-y-4 max-h-[400px] sm:max-h-[500px] overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full">
+                  <ul className="space-y-3 sm:space-y-4 max-h-[350px] sm:max-h-[450px] overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full">
                     {invitados.map((invitado) => (
                       <li key={invitado.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-5 rounded-[1.2rem] sm:rounded-[1.5rem] bg-white/5 hover:bg-white/10 transition-colors border border-white/10 shadow-sm group">
                         

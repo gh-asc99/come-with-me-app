@@ -155,8 +155,8 @@ const Checkout = () => {
       }
       
       setExito(true);
-      // Damos más tiempo si es admin para que pueda leer tranquilamente el aviso
-      await esperar(esAdmin ? 7500 : 2500);
+      // Dar más tiempo si es admin para que pueda leer tranquilamente el aviso
+      await esperar(esAdmin ? 5500 : 2500);
       window.location.href = '/perfil-usuario';
 
     } catch (error) {
