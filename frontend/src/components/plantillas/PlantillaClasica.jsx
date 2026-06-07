@@ -136,7 +136,7 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
             <img 
               src={urlImagen} 
               alt="Portada" 
-              className="w-full sm:max-w-full max-h-[250px] sm:max-h-[380px] object-cover rounded-[1.5rem] sm:rounded-[2rem] shadow-xl bg-white border border-gray-100" 
+              className="w-full sm:max-w-full max-h-[250px] sm:max-h-[380px] object-cover sm:object-contain rounded-[1.5rem] sm:rounded-[2rem] shadow-xl bg-white" 
               crossOrigin="anonymous" 
             />
           )}
@@ -145,65 +145,70 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
       {/* 2. CABECERA */}
       <ComponenteAnimado {...animationProps} className="text-center px-6 sm:px-8 relative z-10 mt-2 sm:mt-0">
-        <h1 className={`font-black mb-4 sm:mb-5 px-2 pb-2 leading-tight ${esModoPDF ? 'text-4xl text-[#252525]' : 'text-4xl sm:text-5xl md:text-6xl text-[#1a1a1a]'}`}>
+        <h1 className={`font-black mb-3 sm:mb-4 px-2 pb-2 sm:pb-3 leading-tight ${esModoPDF ? 'text-4xl text-[#252525]' : 'text-3xl sm:text-5xl md:text-6xl bg-gradient-to-r from-sky-500 via-pink-300 to-sky-500 bg-clip-text text-transparent'}`}>
           {invitacion.titulo}
         </h1>
-        <p className={`${esModoPDF ? 'text-base' : 'text-sm sm:text-lg md:text-xl'} text-gray-600 font-serif leading-relaxed sm:leading-loose max-w-3xl mx-auto whitespace-pre-wrap text-left md:text-center`}>
+        <p className={`${esModoPDF ? 'text-base md:text-lg' : 'text-sm sm:text-lg md:text-xl'} text-gray-700 font-serif leading-relaxed sm:leading-loose max-w-3xl mx-auto whitespace-pre-wrap text-left md:text-center px-2`}>
           {invitacion.mensaje}
         </p>
-        <div className="w-16 sm:w-20 h-1.5 bg-gradient-to-r from-pink-300 to-sky-300 mx-auto mt-6 sm:mt-8 rounded-full opacity-60" />
+        <div className="w-12 sm:w-16 h-1 bg-gradient-to-r from-sky-300 to-pink-300 mx-auto mt-4 sm:mt-6 rounded-full opacity-50" />
       </ComponenteAnimado>
 
       {/* 3. TIEMPO Y LUGAR */}
       <ComponenteAnimado 
         {...animationProps} 
         style={{ pageBreakInside: 'avoid' }} 
-        className={`flex ${esModoPDF ? 'flex-row gap-6' : 'flex-col sm:flex-row gap-4 sm:gap-6'} px-4 sm:px-6 relative z-10 w-full`}
+        className={`grid grid-cols-1 sm:grid-cols-2 ${esModoPDF ? 'grid-cols-2 gap-4' : 'gap-4 sm:gap-6'} px-2 relative z-10`}
       >
-        <div className={`bg-gradient-to-br from-pink-50 to-white p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border border-pink-100 flex flex-col items-center justify-center text-center ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
-          <span className="text-pink-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-2 sm:mb-3">¿Cuándo nos vemos?</span>
-          <div className={`font-black text-[#252525] ${esModoPDF ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}>
+        <div className="bg-gradient-to-br from-sky-400 to-sky-600 p-5 sm:p-6 rounded-[1.5rem] shadow-md text-white flex flex-col items-center justify-center text-center">
+          <span className="text-sky-100 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-1 sm:mb-2">¿Cuándo nos vemos?</span>
+          <div className={`font-bold ${esModoPDF ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}>
             {new Date(invitacion.fecha_evento).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
           </div>
           {invitacion.hora_inicio && (
-            <div className={`font-black text-pink-500 ${esModoPDF ? 'mt-2 text-3xl' : 'mt-2 sm:mt-3 text-3xl md:text-4xl'}`}>
+            <div className={`font-black ${esModoPDF ? 'mt-1 text-3xl' : 'mt-1 sm:mt-2 text-3xl md:text-4xl'}`}>
               {invitacion.hora_inicio.slice(0, 5)} <span className={`${esModoPDF ? 'text-base' : 'text-base sm:text-lg'} font-normal opacity-80`}>h</span>
             </div>
           )}
         </div>
 
-        <div className={`bg-gradient-to-br from-sky-50 to-white p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border border-sky-100 flex flex-col items-center justify-center text-center ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
-          <span className="text-sky-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-2 sm:mb-3">¿Dónde será?</span>
-          <p className={`font-black text-[#252525] ${esModoPDF ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}>
+        <div className="bg-white p-5 sm:p-6 rounded-[1.5rem] shadow-md border border-sky-100 flex flex-col items-center justify-center text-center">
+          <span className="text-sky-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-1 sm:mb-2">¿Dónde será?</span>
+          <p className={`font-black text-[#252525] ${esModoPDF ? 'text-xl' : 'text-lg sm:text-xl md:text-2xl'}`}>
             {invitacion.lugar}
           </p>
-          <div className="mt-4 sm:mt-5 px-4 py-1.5 sm:px-5 sm:py-2 bg-white text-sky-500 rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold border border-sky-200 inline-block leading-none uppercase tracking-widest shadow-sm">
+          <div className="mt-3 sm:mt-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-sky-50 text-sky-500 rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold border border-sky-100 inline-block leading-none uppercase tracking-wider">
             Punto de encuentro
           </div>
         </div>
       </ComponenteAnimado>
 
-      {/* 4. SUGERENCIAS (REDISEÑADO) */}
+      {/* 4. SUGERENCIAS (REDISEÑADO CON FONDO MOSAICO) */}
       {invitacion.datos_extra && Object.keys(invitacion.datos_extra).length > 0 && (
         <ComponenteAnimado 
           {...animationProps} 
           className="px-4 sm:px-6 mt-6 sm:mt-8 relative z-10 w-full"
         >
-          <div className="bg-white px-6 sm:px-8 pt-8 pb-8 sm:pb-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-lg border border-gray-100 relative">
+          {/* Contenedor principal con la imagen de mosaico */}
+          <div className="relative px-6 sm:px-8 pt-8 pb-8 sm:pb-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-lg border border-gray-200 overflow-hidden">
             
-            <div className="text-center mb-8 sm:mb-10 relative">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                <div className="w-full border-t border-gray-100"></div>
-              </div>
-              <div className="relative flex justify-center">
-                <span className="bg-white px-4 text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-gray-400">
-                  Más Detalles del Evento
-                </span>
-              </div>
+            {/* Capa de fondo con la imagen de mosaico */}
+            <div 
+              className="absolute inset-0 z-0 bg-cover bg-center"
+              style={{ backgroundImage: 'url(/fondo_mosaico.png)' }}
+            />
+            {/* Capa oscurecedora para que el contenido sea legible */}
+            <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px] z-0" />
+
+            {/* Título de las sugerencias (Destacado sobre el mosaico) */}
+            <div className="text-center mb-8 sm:mb-10 relative z-10">
+              <span className="inline-block bg-white/90 backdrop-blur-sm px-6 py-2 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-gray-800 shadow-md border border-white/50">
+                Más Detalles del Evento
+              </span>
             </div>
             
-            {/* NUEVA ESTRUCTURA GRID 2 COLUMNAS (Estable para PDF y Web) */}
-            <div className={`flex items-start w-full ${esModoPDF ? 'flex-row gap-6' : 'flex-col md:flex-row gap-6 md:gap-8'}`}>
+            {/* ESTRUCTURA GRID 2 COLUMNAS */}
+            <div className={`relative z-10 flex items-start w-full ${esModoPDF ? 'flex-row gap-6' : 'flex-col md:flex-row gap-6 md:gap-8'}`}>
               
               {/* Columna Izquierda */}
               <div className={`flex flex-col gap-6 ${esModoPDF ? 'w-1/2' : 'w-full md:w-1/2'}`}>
@@ -211,19 +216,19 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
                   const color = idx % 2 === 0 ? 'pink' : 'sky';
                   return (
                     <div key={clave} className="break-inside-avoid" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
-                      <div className={`bg-${color}-50/50 p-5 rounded-2xl border border-${color}-100/50 relative overflow-hidden group hover:bg-${color}-50 transition-colors duration-300`}>
-                        <div className={`absolute top-0 left-0 w-1 h-full bg-${color}-300 opacity-50`}></div>
+                      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-md relative overflow-hidden group hover:border-gray-200 transition-colors duration-300">
+                        <div className={`absolute top-0 left-0 w-1.5 h-full bg-${color}-400`}></div>
                         
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className={`w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm border border-${color}-100 shrink-0 text-[10px]`}>
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className={`w-7 h-7 rounded-full bg-${color}-50 flex items-center justify-center border border-${color}-100 shrink-0 text-[12px]`}>
                             ✨
                           </div>
-                          <h4 className={`text-[9px] sm:text-[10px] md:text-xs font-black text-${color}-400 uppercase tracking-widest`}>
+                          <h4 className={`text-[10px] md:text-xs font-black text-gray-500 uppercase tracking-widest`}>
                             {clave}
                           </h4>
                         </div>
                         
-                        <div className="pl-9 w-full">
+                        <div className="w-full">
                           {renderizarValor(valor, idx)}
                         </div>
                       </div>
@@ -235,24 +240,23 @@ const PlantillaClasica = ({ invitacion, urlImagen, esModoPDF = false }) => {
               {/* Columna Derecha */}
               <div className={`flex flex-col gap-6 ${esModoPDF ? 'w-1/2' : 'w-full md:w-1/2'}`}>
                 {extraDerecha.map(([clave, valor], idx) => {
-                  // Invertimos los colores en la columna derecha para hacer un patrón cruzado
                   const color = idx % 2 === 0 ? 'sky' : 'pink'; 
                   return (
                     <div key={clave} className="break-inside-avoid" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
-                      <div className={`bg-${color}-50/50 p-5 rounded-2xl border border-${color}-100/50 relative overflow-hidden group hover:bg-${color}-50 transition-colors duration-300`}>
-                        <div className={`absolute top-0 left-0 w-1 h-full bg-${color}-300 opacity-50`}></div>
+                      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-md relative overflow-hidden group hover:border-gray-200 transition-colors duration-300">
+                        <div className={`absolute top-0 left-0 w-1.5 h-full bg-${color}-400`}></div>
                         
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className={`w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm border border-${color}-100 shrink-0 text-[10px]`}>
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className={`w-7 h-7 rounded-full bg-${color}-50 flex items-center justify-center border border-${color}-100 shrink-0 text-[12px]`}>
                             ✨
                           </div>
-                          <h4 className={`text-[9px] sm:text-[10px] md:text-xs font-black text-${color}-400 uppercase tracking-widest`}>
+                          <h4 className={`text-[10px] md:text-xs font-black text-gray-500 uppercase tracking-widest`}>
                             {clave}
                           </h4>
                         </div>
                         
-                        <div className="pl-9 w-full">
-                          {renderizarValor(valor, idx + 1)} {/* +1 para que los estilos alternen bien */}
+                        <div className="w-full">
+                          {renderizarValor(valor, idx + 1)} 
                         </div>
                       </div>
                     </div>
