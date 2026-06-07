@@ -1,4 +1,5 @@
 import Invitacion from './Invitacion.js'
+import Usuario from './Usuario.js'
 import { Sequelize } from 'sequelize'
 import crypto from 'crypto'
 
@@ -47,7 +48,16 @@ class InvitacionModel {
     }
   }
 
-  static async create ({ input, usuario_id }) {
+  static async create ({ input, usuario_id, bypassLimit = false }) {
+    const usuarioBuffer = Buffer.from(usuario_id.replace(/-/g, ''), 'hex')
+
+    if (!bypassLimit) {
+      const usuario = await Usuario.findOne({ where: { id: usuarioBuffer } })
+      if (usuario && usuario.rol === 'user' && usuario.creaciones_historicas >= 6) {
+        throw new Error('LIMITE_ALCANZADO')
+      }
+    }
+
     const { plantilla_id, imagen, paquete_id, ...restoDatos } = input
     const id = crypto.randomUUID().replace(/-/g, '')
 
@@ -58,6 +68,11 @@ class InvitacionModel {
       plantilla_id: Sequelize.fn('UUID_TO_BIN', plantilla_id),
       paquete_id: Sequelize.fn('UUID_TO_BIN', paquete_id),
       imagen: imagen
+    })
+
+    await Usuario.increment('creaciones_historicas', {
+      by: 1, 
+      where: { id: usuarioBuffer }
     })
 
     return { ...restoDatos, id, usuario_id, plantilla_id, paquete_id, imagen }

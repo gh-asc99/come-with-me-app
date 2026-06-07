@@ -51,6 +51,9 @@ class InvitacionController {
       const nueva = await InvitacionModel.create({ input: result.data, usuario_id })
       res.status(201).json(nueva)
     } catch (error) {
+      if (error.message === 'LIMITE_ALCANZADO') {
+        return res.status(403).json({ error: 'Has alcanzado el límite de 6 creaciones gratuitas. Pásate a Premium para seguir creando sin límites.' })
+      }
       console.error(error)
       res.status(500).json({ error: 'Error al crear la invitación' })
     }
@@ -86,7 +89,7 @@ class InvitacionController {
     if (!result.success) return res.status(400).json({ error: JSON.parse(result.error.message) })
 
     try {
-      const nueva = await InvitacionModel.create({ input: result.data, usuario_id: id })
+      const nueva = await InvitacionModel.create({ input: result.data, usuario_id: id, bypassLimit: true })
       res.status(201).json({
         message: 'Invitación creada con éxito',
         invitacion: nueva

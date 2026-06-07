@@ -17,6 +17,8 @@ const ProveedorCreacion = ({ children }) => {
   // Estados para controlar el botón de la Fase 3
   const [cargandoCreacion, setCargandoCreacion] = useState(false);
   const [errorCreacion, setErrorCreacion] = useState(null);
+  
+  const [limiteAlcanzado, setLimiteAlcanzado] = useState(false);
 
   const seleccionarEvento = (eventoSeleccionado) => {
     setDatosCreacion(prev => ({ ...prev, evento: eventoSeleccionado }));
@@ -32,6 +34,7 @@ const ProveedorCreacion = ({ children }) => {
   const generarInvitacionFinal = async (datosFijos, datosDinamicos, plantillaId) => {
     setCargandoCreacion(true);
     setErrorCreacion(null);
+    setLimiteAlcanzado(false);
     
     try {
       const payload = {
@@ -47,6 +50,7 @@ const ProveedorCreacion = ({ children }) => {
       };
 
       const nuevaInvitacion = await crearInvitacion(payload);
+      
       setDatosCreacion(prev => ({ 
         ...prev, 
         datosFijos,
@@ -59,10 +63,20 @@ const ProveedorCreacion = ({ children }) => {
       return { success: true };
 
     } catch (err) {
+      if (err?.response?.status === 403) {
+        setLimiteAlcanzado(true);
+        return { success: false };
+      }
+
       let textoError = 'Error al generar la invitación';
       if (typeof err === 'string') textoError = err;
       else if (err?.response?.data?.error) textoError = String(err.response.data.error);
       else if (err?.message) textoError = err.message;
+      
+      if (textoError.includes('límite de 6 creaciones')) {
+        setLimiteAlcanzado(true);
+        return { success: false };
+      }
       
       setErrorCreacion(textoError);
       return { success: false };
@@ -86,6 +100,7 @@ const ProveedorCreacion = ({ children }) => {
       invitacionGenerada: null
     });
     setErrorCreacion(null);
+    setLimiteAlcanzado(false);
   };
 
   const datosInsertadosContexto = {
@@ -97,7 +112,9 @@ const ProveedorCreacion = ({ children }) => {
     cargandoCreacion,
     errorCreacion,
     volverFaseAnterior,
-    reiniciarCreacion
+    reiniciarCreacion,
+    limiteAlcanzado,
+    setLimiteAlcanzado
   };
 
   return (

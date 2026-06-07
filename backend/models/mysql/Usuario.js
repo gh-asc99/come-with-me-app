@@ -19,7 +19,11 @@ const Usuario = sequelize.define('Usuario', {
   imagen: { type: DataTypes.STRING, allowNull: true },
   fecha_nacimiento: { type: DataTypes.DATEONLY, allowNull: false },
   fecha_registro: { type: DataTypes.DATE, defaultValue: Sequelize.NOW },
-  rol: { type: DataTypes.STRING, defaultValue: 'user' }
+  rol: { type: DataTypes.STRING, defaultValue: 'user' },
+  creaciones_historicas: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  }
 }, {
   tableName: 'usuario',
   timestamps: false
