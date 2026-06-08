@@ -117,7 +117,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
       {/* MARCA DE AGUA (SOLO PDF Y USUARIOS DE TIPO USER) */}
       {esModoPDF && rolUsuario === 'user' && (
         <div 
-          className="absolute inset-0 z-0 pointer-events-none opacity-[0.20]"
+          className="absolute inset-0 z-0 pointer-events-none opacity-[0.30]"
           style={{
             backgroundImage: 'url(/logo_CWM_oficial.png)',
             backgroundSize: '300px',
