@@ -39,10 +39,12 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
   const extraDerecha = entradasSinTimeline.slice(mitad);
 
   let nombreCreador = 'el anfitrión';
+  let rolUsuario = 'user';
   try {
     const userData = JSON.parse(localStorage.getItem('user'));
-    if (userData && userData.nombre) {
-      nombreCreador = userData.nombre;
+    if (userData) {
+      if (userData.nombre) nombreCreador = userData.nombre;
+      if (userData.rol) rolUsuario = userData.rol;
     }
   } catch (error) {
     console.error("No se pudo leer el usuario del localStorage");
@@ -72,7 +74,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
     if (esUrlImagen(valor)) {
       if (esModoPDF) {
         return (
-          <div className={`mt-3 w-full bg-white p-2 shadow-md border border-gray-100 rounded-xl`}>
+          <div className={`mt-3 w-full bg-white p-2 shadow-md border border-gray-100 rounded-xl relative z-10`}>
             <div 
               className="w-full rounded-lg"
               style={{
@@ -88,7 +90,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
         );
       }
       return (
-        <div className={`mt-3 w-full bg-white p-2 sm:p-3 shadow-md border border-gray-100 rounded-xl ${esIzquierda ? '-rotate-2' : 'rotate-2 sm:hover:rotate-0 transition-transform'}`}>
+        <div className={`mt-3 w-full bg-white p-2 sm:p-3 shadow-md border border-gray-100 rounded-xl relative z-10 ${esIzquierda ? '-rotate-2' : 'rotate-2 sm:hover:rotate-0 transition-transform'}`}>
           <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-auto max-h-48 object-cover rounded-lg" />
         </div>
       );
@@ -96,7 +98,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
     
     if (Array.isArray(valor)) {
       return (
-        <ul className="mt-2 w-full space-y-1.5 font-sans">
+        <ul className="mt-2 w-full space-y-1.5 font-sans relative z-10">
           {valor.map((item, i) => (
             <li key={i} className="flex gap-2 items-start text-xs sm:text-sm text-gray-600">
               <span className={`font-black ${textColor}`}>•</span> {item}
@@ -106,12 +108,31 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
       );
     }
     
-    return <span className={`font-serif font-medium text-[#252525] block ${esModoPDF ? 'text-sm' : 'text-sm sm:text-base'}`}>{valor}</span>;
+    return <span className={`font-serif font-medium text-[#252525] block relative z-10 ${esModoPDF ? 'text-sm' : 'text-sm sm:text-base'}`}>{valor}</span>;
   };
 
   return (
-    <div className={`w-full mx-auto flex flex-col relative overflow-hidden ${esModoPDF ? 'pb-0 max-w-[700px]' : 'pb-10 sm:pb-20 max-w-4xl'}`}>
+    
+    <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px] min-h-screen overflow-visible' : 'pb-10 sm:pb-20 max-w-4xl px-2 sm:px-4 overflow-hidden'}`}>
       
+      {/* MARCA DE AGUA GIGANTE (SOLO PDF Y USUARIOS GRATIS) */}
+      {esModoPDF && rolUsuario === 'user' && (
+        <div 
+          className="absolute z-0 pointer-events-none opacity-[0.20]"
+          style={{
+            top: 0,
+            left: '-50%',
+            right: '-50%',
+            bottom: '-100%', 
+            backgroundImage: 'url(/logo_CWM_oficial.png)',
+            backgroundSize: '350px',
+            backgroundRepeat: 'repeat',
+            transform: 'rotate(-25deg)',
+            transformOrigin: 'center center'
+          }}
+        />
+      )}
+
       <div className="flex items-center justify-center sm:justify-start gap-3 mb-4 sm:mb-6 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
         <img src="/logo_CWM_oficial.png" alt="Come With Me" className="h-6 sm:h-8 w-auto object-contain" />
@@ -150,8 +171,8 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
       {/* 3. FECHA Y LUGAR */}
       <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className={`w-full relative z-10 px-2 ${esModoPDF ? 'mb-12 mt-6' : 'mb-8 sm:mb-10 mt-4 sm:mt-6'}`}>
-        <div className={`flex bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-md border border-gray-100 overflow-hidden ${esModoPDF ? 'flex-row' : 'flex-col md:flex-row'}`}>
-          <div className={`w-full p-5 sm:p-6 md:p-8 bg-pink-50 border-pink-100 flex flex-col justify-center text-center ${esModoPDF ? 'w-1/2 border-r items-center' : 'md:w-1/2 border-b md:border-b-0 md:border-r items-center sm:items-start sm:text-left'}`}>
+        <div className={`flex bg-white/90 backdrop-blur-sm rounded-[1.5rem] sm:rounded-[2rem] shadow-md border border-gray-100 overflow-hidden ${esModoPDF ? 'flex-row' : 'flex-col md:flex-row'}`}>
+          <div className={`w-full p-5 sm:p-6 md:p-8 bg-pink-50/80 border-pink-100 flex flex-col justify-center text-center ${esModoPDF ? 'w-1/2 border-r items-center' : 'md:w-1/2 border-b md:border-b-0 md:border-r items-center sm:items-start sm:text-left'}`}>
             <span className="text-pink-400 uppercase text-[9px] sm:text-[10px] font-black tracking-widest mb-2 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-pink-400"></span> Día del evento
             </span>
@@ -164,7 +185,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
               </div>
             )}
           </div>
-          <div className={`w-full p-5 sm:p-6 md:p-8 bg-sky-50 flex flex-col justify-center text-center ${esModoPDF ? 'w-1/2 items-center' : 'md:w-1/2 items-center sm:items-start sm:text-left'}`}>
+          <div className={`w-full p-5 sm:p-6 md:p-8 bg-sky-50/80 flex flex-col justify-center text-center ${esModoPDF ? 'w-1/2 items-center' : 'md:w-1/2 items-center sm:items-start sm:text-left'}`}>
             <span className="text-sky-400 uppercase text-[9px] sm:text-[10px] font-black tracking-widest mb-2 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-sky-400"></span> Coordenadas
             </span>
@@ -190,15 +211,18 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
       {/* 5. LISTA A DOS COLUMNAS */}
       {entradasSinTimeline.length > 0 && (
         <ComponenteAnimado {...animationProps} className={`px-2 w-full relative z-10 ${esModoPDF ? 'mt-8' : ''}`}>
-          <h3 className="text-center text-gray-400 font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] md:text-xs mb-5 sm:mb-8 border-b border-gray-100 pb-3 sm:pb-4">
-            Notas de la historia
-          </h3>
+          
+          <div className="text-center mb-5 sm:mb-8" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
+            <h3 className="inline-block px-5 py-1.5 bg-white/80 backdrop-blur-sm text-gray-400 font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] rounded-full border border-gray-100 shadow-sm">
+              Notas de la historia
+            </h3>
+          </div>
           
           <div className={`flex items-start w-full ${esModoPDF ? 'flex-row gap-8' : 'flex-col sm:flex-row gap-4 sm:gap-6 md:gap-12'}`}>
             
             <div className={`flex flex-col gap-3 sm:gap-4 ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
               {extraIzquierda.map(([clave, valor]) => (
-                <div key={clave} className="flex items-start gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-50 shadow-sm w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
+                <div key={clave} className="flex items-start gap-3 sm:gap-4 bg-white/90 backdrop-blur-sm p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-50 shadow-sm w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                   <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 shrink-0 mt-0.5 font-bold text-xs sm:text-base">★</div>
                   <div className="flex flex-col w-full">
                     <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5 sm:mb-1">{clave}</span>
@@ -210,7 +234,7 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
             <div className={`flex flex-col gap-3 sm:gap-4 ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
               {extraDerecha.map(([clave, valor]) => (
-                <div key={clave} className="flex items-start gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-50 shadow-sm w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
+                <div key={clave} className="flex items-start gap-3 sm:gap-4 bg-white/90 backdrop-blur-sm p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-50 shadow-sm w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                   <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-500 shrink-0 mt-0.5 font-bold text-xs sm:text-base">★</div>
                   <div className="flex flex-col w-full">
                     <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5 sm:mb-1">{clave}</span>
@@ -224,9 +248,9 @@ const PlantillaNarrativa = ({ invitacion, urlImagen, esModoPDF = false }) => {
         </ComponenteAnimado>
       )}
 
-      {/* FOOTER CREADOR Y MARCA DE AGUA */}
-      <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid', marginTop: '50px' } : {}} className="text-center mt-10 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full">
-        <div className="w-16 sm:w-24 h-[1px] bg-gray-200 mb-4 sm:mb-6" />
+      {/* FOOTER CREADOR Y LOGO PEQUEÑO */}
+      <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid', marginTop: '50px' } : {}} className="text-center mt-10 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full bg-white/60 backdrop-blur-sm py-4 rounded-xl">
+        <div className="w-16 sm:w-24 h-[1px] bg-gray-300 mb-4 sm:mb-6" />
         <p className="text-gray-400 font-serif italic text-xs sm:text-sm mb-3 sm:mb-4">
           Un evento organizado por <span className="font-bold text-gray-600 not-italic">{nombreCreador}</span>
         </p>
