@@ -23,10 +23,12 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
   const extraDerecha = entradasExtra.slice(mitad);
 
   let nombreCreador = 'el anfitrión';
+  let rolUsuario = 'user';
   try {
     const userData = JSON.parse(localStorage.getItem('user'));
-    if (userData && userData.nombre) {
-      nombreCreador = userData.nombre;
+    if (userData) {
+      if (userData.nombre) nombreCreador = userData.nombre;
+      if (userData.rol) rolUsuario = userData.rol;
     }
   } catch (error) {
     console.error("No se pudo leer el usuario del localStorage");
@@ -58,7 +60,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
     if (esUrlImagen(valor)) {
       if (esModoPDF) {
         return (
-          <div className="mt-3 w-full rounded-2xl overflow-hidden border-[3px] border-white shadow-md bg-white">
+          <div className="mt-3 w-full rounded-2xl overflow-hidden border-[3px] border-white shadow-md bg-white relative z-10">
              <div 
               className="w-full"
               style={{
@@ -74,7 +76,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
         );
       }
       return (
-        <div className="mt-3 w-full rounded-2xl overflow-hidden border-[3px] border-white shadow-md bg-white">
+        <div className="mt-3 w-full rounded-2xl overflow-hidden border-[3px] border-white shadow-md bg-white relative z-10">
           <img src={formatearUrlImagen(valor)} alt={clave} crossOrigin="anonymous" className="w-full h-auto max-h-48 object-cover" />
         </div>
       );
@@ -83,7 +85,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
     if (Array.isArray(valor)) {
       if (valor.length > 0 && valor[0].hora !== undefined) {
         return (
-          <div className="mt-3 w-full flex flex-col gap-2.5 font-sans">
+          <div className="mt-3 w-full flex flex-col gap-2.5 font-sans relative z-10">
             {valor.map((fase, i) => (
               <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 bg-white/50 p-2.5 rounded-xl border border-gray-100/50 shadow-[0_2px_10px_rgba(0,0,0,0.02)] break-inside-avoid" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                 <div className={`w-fit px-2.5 py-1 rounded-lg ${colorBg} ${colorText} font-black text-[10px] tracking-wider shrink-0`}>
@@ -96,7 +98,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
         );
       }
       return (
-        <div className="mt-2 w-full flex flex-wrap gap-2 font-sans">
+        <div className="mt-2 w-full flex flex-wrap gap-2 font-sans relative z-10">
           {valor.map((item, i) => (
             <span key={i} className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold border bg-white shadow-sm ${colorText} ${colorBorder}`} style={esModoPDF ? { pageBreakInside: 'avoid', display: 'inline-block', marginBottom: '4px' } : {}}>
               {item}
@@ -106,11 +108,26 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
       );
     }
     
-    return <span className={`font-serif font-medium text-[#252525] block ${esModoPDF ? 'text-sm' : 'text-sm sm:text-base'}`}>{valor}</span>;
+    return <span className={`font-serif font-medium text-[#252525] block relative z-10 ${esModoPDF ? 'text-sm' : 'text-sm sm:text-base'}`}>{valor}</span>;
   };
 
   return (
-    <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px]' : 'pb-10 sm:pb-20 max-w-4xl px-2 sm:px-4'}`}>
+    <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px] overflow-visible' : 'pb-10 sm:pb-20 max-w-4xl px-2 sm:px-4 overflow-hidden'}`}>
+
+      {/* --- MARCA DE AGUA (SOLO PDF Y USUARIOS GRATIS) --- */}
+      {esModoPDF && rolUsuario === 'user' && (
+        <div 
+          className="absolute inset-0 z-0 pointer-events-none opacity-[0.12]"
+          style={{
+            backgroundImage: 'url(/logo_CWM_oficial.png)',
+            backgroundSize: '300px',
+            backgroundRepeat: 'repeat',
+            backgroundPosition: 'center',
+            transform: 'rotate(-15deg) scale(1.5)',
+            transformOrigin: 'center center'
+          }}
+        />
+      )}
 
       <div className="flex items-center justify-center sm:justify-start gap-3 mb-6 sm:mb-8 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
@@ -126,7 +143,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
             {urlImagen ? (
               esModoPDF ? (
                 <div 
-                  className="w-full rounded-[1.5rem] bg-white shadow-lg border-2 border-white"
+                  className="w-full rounded-[1.5rem] bg-white shadow-lg border-2 border-white relative z-10"
                   style={{ 
                     height: '280px',
                     backgroundImage: `url(${urlImagen})`, 
@@ -136,10 +153,10 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
                   }}
                 />
               ) : (
-                <img src={urlImagen} alt="Portada" className="w-full h-56 sm:h-64 md:h-[320px] object-cover rounded-[1.5rem] sm:rounded-3xl bg-white shadow-lg border-2 border-white" crossOrigin="anonymous" />
+                <img src={urlImagen} alt="Portada" className="w-full h-56 sm:h-64 md:h-[320px] object-cover rounded-[1.5rem] sm:rounded-3xl bg-white shadow-lg border-2 border-white relative z-10" crossOrigin="anonymous" />
               )
             ) : (
-              <div className="w-full h-56 sm:h-[280px] rounded-[1.5rem] sm:rounded-3xl bg-gray-100 flex items-center justify-center border-2 border-white shadow-lg">
+              <div className="w-full h-56 sm:h-[280px] rounded-[1.5rem] sm:rounded-3xl bg-gray-100 flex items-center justify-center border-2 border-white shadow-lg relative z-10">
                 <span className="text-gray-300 font-bold text-sm sm:text-base">Sin imagen</span>
               </div>
             )}
@@ -147,11 +164,11 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
         </div>
 
         <div className={`flex flex-col text-center sm:text-left ${esModoPDF ? 'w-[55%]' : 'w-full sm:w-[55%]'}`}>
-          <ComponenteAnimado {...animationProps}>
-            <h1 className={`font-black mb-4 sm:mb-6 px-2 pb-2 sm:pb-3 leading-tight ${esModoPDF ? 'text-4xl text-[#252525]' : 'text-3xl sm:text-4xl md:text-5xl bg-gradient-to-r from-pink-300 to-sky-500 bg-clip-text text-transparent'}`}>
+          <ComponenteAnimado {...animationProps} className="relative z-10 bg-white/40 backdrop-blur-sm p-4 rounded-2xl">
+            <h1 className={`font-black mb-4 sm:mb-6 px-2 pb-2 sm:pb-3 leading-tight ${esModoPDF ? 'text-3xl text-[#252525]' : 'text-3xl sm:text-4xl md:text-5xl bg-gradient-to-r from-pink-300 to-sky-500 bg-clip-text text-transparent'}`}>
               {invitacion.titulo}
             </h1>
-            <p className={`${esModoPDF ? 'text-base' : 'text-sm sm:text-base md:text-lg'} text-gray-700 font-serif leading-relaxed sm:leading-loose whitespace-pre-wrap px-2`}>
+            <p className={`${esModoPDF ? 'text-sm' : 'text-sm sm:text-base md:text-lg'} text-gray-700 font-serif leading-relaxed sm:leading-loose whitespace-pre-wrap px-2`}>
               {invitacion.mensaje}
             </p>
           </ComponenteAnimado>
@@ -168,26 +185,26 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
       {/* 2. SECCIÓN MEDIA: Fecha y Lugar */}
       <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid' } : {}} className={`grid ${esModoPDF ? 'grid-cols-2 gap-6' : 'grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'} px-2 relative z-10 w-full`}>
-        <div className="bg-white p-5 sm:p-6 md:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border-2 border-pink-100 flex flex-col items-center justify-center text-center relative overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-sm p-5 sm:p-6 md:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border-2 border-pink-100 flex flex-col items-center justify-center text-center relative overflow-hidden">
           <div className="absolute -top-6 -right-6 sm:-top-10 sm:-right-10 w-16 h-16 sm:w-24 sm:h-24 bg-pink-50 rounded-full -z-10" />
-          <span className="text-pink-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-2 sm:mb-3">¿Cuándo nos vemos?</span>
-          <div className={`font-black text-[#252525] ${esModoPDF ? 'text-xl' : 'text-lg sm:text-xl md:text-2xl'}`}>
+          <span className="text-pink-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-2 sm:mb-3 relative z-10">¿Cuándo nos vemos?</span>
+          <div className={`font-black text-[#252525] relative z-10 ${esModoPDF ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}>
             {new Date(invitacion.fecha_evento).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
           </div>
           {invitacion.hora_inicio && (
-            <div className={`font-black text-pink-500 ${esModoPDF ? 'mt-2 text-4xl' : 'mt-1 sm:mt-2 text-3xl sm:text-4xl'}`}>
-              {invitacion.hora_inicio.slice(0, 5)} <span className={`${esModoPDF ? 'text-lg' : 'text-base sm:text-lg'} font-normal opacity-80`}>h</span>
+            <div className={`font-black text-pink-500 relative z-10 ${esModoPDF ? 'mt-1 text-3xl' : 'mt-1 sm:mt-2 text-3xl sm:text-4xl'}`}>
+              {invitacion.hora_inicio.slice(0, 5)} <span className={`${esModoPDF ? 'text-base' : 'text-base sm:text-lg'} font-normal opacity-80`}>h</span>
             </div>
           )}
         </div>
 
-        <div className="bg-white p-5 sm:p-6 md:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border-2 border-sky-100 flex flex-col items-center justify-center text-center relative overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-sm p-5 sm:p-6 md:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border-2 border-sky-100 flex flex-col items-center justify-center text-center relative overflow-hidden">
           <div className="absolute -bottom-6 -left-6 sm:-bottom-10 sm:-left-10 w-16 h-16 sm:w-24 sm:h-24 bg-sky-50 rounded-full -z-10" />
-          <span className="text-sky-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-2 sm:mb-3">¿Dónde será?</span>
-          <p className={`font-black text-[#252525] ${esModoPDF ? 'text-xl' : 'text-lg sm:text-xl md:text-2xl'}`}>
+          <span className="text-sky-400 uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] mb-2 sm:mb-3 relative z-10">¿Dónde será?</span>
+          <p className={`font-black text-[#252525] relative z-10 ${esModoPDF ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}>
             {invitacion.lugar}
           </p>
-          <div className="mt-3 sm:mt-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-sky-50 text-sky-500 rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider inline-block leading-none">
+          <div className="mt-3 sm:mt-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-sky-50 text-sky-500 rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider inline-block leading-none relative z-10">
             Punto de encuentro
           </div>
         </div>
@@ -195,9 +212,9 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
       {/* 3. SECCIÓN INFERIOR: Datos Extra */}
       {invitacion.datos_extra && Object.keys(invitacion.datos_extra).length > 0 && (
-        <ComponenteAnimado {...animationProps} className="px-2 w-full mt-8 sm:mt-12 relative z-10">
+        <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="px-2 w-full mt-8 sm:mt-12 relative z-10">
           <div className="text-center mb-6 sm:mb-8">
-            <span className="inline-block px-5 py-1.5 sm:px-6 sm:py-2 bg-gray-50 text-gray-400 font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] rounded-full border border-gray-100">
+            <span className="inline-block px-5 py-1.5 sm:px-6 sm:py-2 bg-gray-50/90 backdrop-blur-sm text-gray-400 font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] rounded-full border border-gray-100">
               Datos de interés
             </span>
           </div>
@@ -207,7 +224,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
             {/* Columna Izquierda */}
             <div className={`flex flex-col gap-5 sm:gap-6 ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
               {extraIzquierda.map(([clave, valor]) => (
-                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
+                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-white">
                   <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pink-300 shadow-[0_0_10px_rgba(244,114,182,0.4)] shrink-0 mt-0.5 sm:mt-1" />
                   <div className="flex flex-col border-b border-gray-100 pb-3 w-full">
                     <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-1.5">{clave}</span>
@@ -220,7 +237,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
             {/* Columna Derecha */}
             <div className={`flex flex-col gap-5 sm:gap-6 ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
               {extraDerecha.map(([clave, valor]) => (
-                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
+                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-white">
                   <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-sky-300 shadow-[0_0_10px_rgba(56,189,248,0.4)] shrink-0 mt-0.5 sm:mt-1" />
                   <div className="flex flex-col border-b border-gray-100 pb-3 w-full">
                     <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-1.5">{clave}</span>
@@ -235,7 +252,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
       )}
 
       {/* FOOTER */}
-      <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid', marginTop: '60px' } : {}} className="text-center mt-10 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full">
+      <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid', marginTop: '60px' } : {}} className="text-center mt-10 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full bg-white/60 backdrop-blur-sm py-4 rounded-xl">
         <p className="text-gray-400 font-serif italic text-xs sm:text-sm mb-3 sm:mb-4">
           Diseñado por <span className="font-bold text-gray-600 not-italic">{nombreCreador}</span>
         </p>
