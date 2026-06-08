@@ -112,18 +112,22 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
   };
 
   return (
-    <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px] overflow-visible' : 'pb-10 sm:pb-20 max-w-4xl px-2 sm:px-4 overflow-hidden'}`}>
+    // EL CONTENEDOR PRINCIPAL AHORA TIENE POSICION RELATIVA
+    <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px] min-h-screen' : 'pb-10 sm:pb-20 max-w-4xl px-2 sm:px-4 overflow-hidden'}`}>
 
-      {/* MARCA DE AGUA (SOLO PDF Y USUARIOS DE TIPO USER) */}
+      {/* MARCA DE AGUA (SOLO PDF Y USUARIOS GRATIS) */}
       {esModoPDF && rolUsuario === 'user' && (
         <div 
-          className="absolute inset-0 z-0 pointer-events-none opacity-[0.30]"
+          className="absolute z-0 pointer-events-none opacity-[0.20]"
           style={{
+            top: 0,
+            left: '-50%',
+            right: '-50%',
+            bottom: '-100%', 
             backgroundImage: 'url(/logo_CWM_oficial.png)',
-            backgroundSize: '300px',
+            backgroundSize: '350px',
             backgroundRepeat: 'repeat',
-            backgroundPosition: 'center',
-            transform: 'rotate(-15deg) scale(1.5)',
+            transform: 'rotate(-25deg)',
             transformOrigin: 'center center'
           }}
         />
@@ -211,9 +215,10 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
       </ComponenteAnimado>
 
       {/* 3. SECCIÓN INFERIOR: Datos Extra */}
+      {/* ELIMINADO EL PAGEBREAKINSIDE: 'AVOID' DEL PADRE PARA QUE LAS COLUMNAS FLUYAN LIBRES */}
       {invitacion.datos_extra && Object.keys(invitacion.datos_extra).length > 0 && (
-        <ComponenteAnimado {...animationProps} style={{ pageBreakInside: 'avoid' }} className="px-2 w-full mt-8 sm:mt-12 relative z-10">
-          <div className="text-center mb-6 sm:mb-8">
+        <ComponenteAnimado {...animationProps} className="px-2 w-full mt-8 sm:mt-12 relative z-10">
+          <div className="text-center mb-6 sm:mb-8" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
             <span className="inline-block px-5 py-1.5 sm:px-6 sm:py-2 bg-gray-50/90 backdrop-blur-sm text-gray-400 font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] rounded-full border border-gray-100">
               Datos de interés
             </span>
@@ -224,7 +229,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
             {/* Columna Izquierda */}
             <div className={`flex flex-col gap-5 sm:gap-6 ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
               {extraIzquierda.map(([clave, valor]) => (
-                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-white">
+                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-white" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                   <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pink-300 shadow-[0_0_10px_rgba(244,114,182,0.4)] shrink-0 mt-0.5 sm:mt-1" />
                   <div className="flex flex-col border-b border-gray-100 pb-3 w-full">
                     <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-1.5">{clave}</span>
@@ -237,7 +242,7 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
             {/* Columna Derecha */}
             <div className={`flex flex-col gap-5 sm:gap-6 ${esModoPDF ? 'w-1/2' : 'w-full sm:w-1/2'}`}>
               {extraDerecha.map(([clave, valor]) => (
-                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-white">
+                <div key={clave} className="flex items-start gap-3 sm:gap-4 break-inside-avoid w-full bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-white" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                   <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-sky-300 shadow-[0_0_10px_rgba(56,189,248,0.4)] shrink-0 mt-0.5 sm:mt-1" />
                   <div className="flex flex-col border-b border-gray-100 pb-3 w-full">
                     <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-1.5">{clave}</span>
