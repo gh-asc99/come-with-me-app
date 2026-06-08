@@ -23,10 +23,12 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
   const extraDerecha = entradasExtra.slice(mitad);
 
   let nombreCreador = 'el anfitrión';
+  let rolUsuario = 'user'; // <-- Añadido para verificar si lleva marca de agua
   try {
     const userData = JSON.parse(localStorage.getItem('user'));
-    if (userData && userData.nombre) {
-      nombreCreador = userData.nombre;
+    if (userData) {
+      if (userData.nombre) nombreCreador = userData.nombre;
+      if (userData.rol) rolUsuario = userData.rol;
     }
   } catch (error) {
     console.error("No se pudo leer el usuario del localStorage");
@@ -45,7 +47,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
   const renderizarValor = (valor) => {
     if (typeof valor === 'boolean') {
       return (
-        <span className={`${valor ? 'text-pink-600 font-bold' : 'text-gray-500'}`}>
+        <span className={`${valor ? 'text-pink-600 font-bold' : 'text-gray-500'} relative z-10`}>
           {valor ? 'Sí, muy importante' : 'No incluido'}
         </span>
       );
@@ -55,14 +57,13 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
       if (esModoPDF) {
         return (
           <div 
-            className="mt-3 w-full rounded-xl shadow-sm border border-pink-100 flex-shrink-0"
+            className="mt-3 w-full rounded-xl shadow-sm border border-pink-100 flex-shrink-0 relative z-10"
             style={{
               height: '180px',
               backgroundImage: `url(${formatearUrlImagen(valor)})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
-              pageBreakInside: 'avoid',
               display: 'block'
             }}
           />
@@ -73,7 +74,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
           src={formatearUrlImagen(valor)} 
           alt="Sugerencia Visual" 
           crossOrigin="anonymous" 
-          className="mt-3 w-full h-24 sm:h-48 md:h-56 object-cover rounded-xl shadow-sm border border-pink-100" 
+          className="mt-3 w-full h-24 sm:h-48 md:h-56 object-cover rounded-xl shadow-sm border border-pink-100 relative z-10" 
         />
       );
     }
@@ -81,7 +82,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
     if (Array.isArray(valor)) {
       if (valor.length > 0 && valor[0].hora !== undefined) {
         return (
-          <div className="mt-2 ml-1 border-l-2 border-pink-200 pl-2 sm:pl-3 space-y-2 py-1 font-sans w-full">
+          <div className="mt-2 ml-1 border-l-2 border-pink-200 pl-2 sm:pl-3 space-y-2 py-1 font-sans w-full relative z-10">
             {valor.map((fase, i) => (
               <div key={i} className="relative w-full" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
                 <span className="absolute -left-[13px] sm:-left-[17px] top-1.5 w-1.5 h-1.5 rounded-full bg-pink-400"></span>
@@ -93,7 +94,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
         );
       }
       return (
-        <ul className="mt-1 space-y-1 font-sans w-full pl-1">
+        <ul className="mt-1 space-y-1 font-sans w-full pl-1 relative z-10">
           {valor.map((item, i) => (
             <li key={i} className="flex gap-1.5 sm:gap-2 items-start text-gray-700 text-[10px] sm:text-xs md:text-sm" style={esModoPDF ? { pageBreakInside: 'avoid' } : {}}>
               <span className="text-pink-300 font-bold shrink-0">-</span> 
@@ -104,11 +105,11 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
       );
     }
     
-    return <span className="block text-xs sm:text-sm md:text-base leading-snug">{valor}</span>;
+    return <span className="block text-xs sm:text-sm md:text-base leading-snug relative z-10">{valor}</span>;
   };
 
   const BloqueSugerencias = ({ titulo, items }) => (
-    <div className="bg-gradient-to-br from-pink-50 to-white p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] border border-pink-100 shadow-sm w-full">
+    <div className="bg-gradient-to-br from-pink-50/80 to-white/80 backdrop-blur-sm p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] border border-pink-100 shadow-sm w-full relative z-10">
       <h3 className="text-pink-500 font-black uppercase tracking-[0.2em] text-[7px] sm:text-[10px] mb-2 sm:mb-4 border-b border-pink-100 pb-2">
         {titulo}
       </h3>
@@ -131,8 +132,26 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
   );
 
   return (
-    <div className={`w-full mx-auto flex flex-col relative overflow-hidden ${esModoPDF ? 'pb-0 max-w-[700px]' : 'pb-10 sm:pb-20 max-w-5xl px-2 sm:px-4'}`}>
+    <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px] min-h-screen overflow-visible' : 'pb-10 sm:pb-20 max-w-5xl px-2 sm:px-4 overflow-hidden'}`}>
       
+      {/* MARCA DE AGUA GIGANTE (SOLO PDF Y USUARIOS GRATIS) */}
+      {esModoPDF && rolUsuario === 'user' && (
+        <div 
+          className="absolute z-0 pointer-events-none opacity-[0.20]"
+          style={{
+            top: 0,
+            left: '-50%',
+            right: '-50%',
+            bottom: '-100%', 
+            backgroundImage: 'url(/logo_CWM_oficial.png)',
+            backgroundSize: '350px',
+            backgroundRepeat: 'repeat',
+            transform: 'rotate(-25deg)',
+            transformOrigin: 'center center'
+          }}
+        />
+      )}
+
       <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6 px-2 relative z-10">
         <span className="text-gray-400 font-bold text-[8px] sm:text-[10px] uppercase tracking-widest">Generado con</span>
         <img src="/logo_CWM_oficial.png" alt="Come With Me" className="h-5 sm:h-8 w-auto object-contain" />
@@ -143,7 +162,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
         {/* --- COLUMNA IZQUIERDA (50%) --- */}
         <div className={`flex flex-col ${esModoPDF ? 'w-1/2 gap-6' : 'w-1/2 gap-4 sm:gap-8'}`}>
           
-          <ComponenteAnimado {...animationProps} className="text-left px-1 sm:px-0">
+          <ComponenteAnimado {...animationProps} className="text-left px-1 sm:px-0 bg-white/40 backdrop-blur-sm p-3 rounded-2xl">
             <h1 className={`font-black mb-2 sm:mb-4 leading-tight ${esModoPDF ? 'text-3xl text-[#252525]' : 'text-xl sm:text-4xl md:text-5xl bg-gradient-to-r from-sky-500 via-pink-300 to-sky-500 bg-clip-text text-transparent'}`}>
               {invitacion.titulo}
             </h1>
@@ -163,7 +182,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
         <div className={`flex flex-col ${esModoPDF ? 'w-1/2 gap-6' : 'w-1/2 gap-4 sm:gap-8'}`}>
           
           {urlImagen && (
-            <ComponenteAnimado {...animationProps} className="w-full shadow-md rounded-[1rem] sm:rounded-[2rem]">
+            <ComponenteAnimado {...animationProps} className="w-full shadow-md rounded-[1rem] sm:rounded-[2rem] relative z-10 border border-white">
               {esModoPDF ? (
                 <div 
                   className="w-full rounded-[2rem] bg-white flex-shrink-0"
@@ -172,8 +191,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
                     backgroundImage: `url(${urlImagen})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    pageBreakInside: 'avoid'
+                    backgroundRepeat: 'no-repeat'
                   }}
                 />
               ) : (
@@ -188,7 +206,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
           )}
 
           {/* TIEMPO Y LUGAR */}
-          <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid' } : {}} className="flex flex-col gap-3 sm:gap-4">
+          <ComponenteAnimado {...animationProps} style={esModoPDF ? { pageBreakInside: 'avoid' } : {}} className="flex flex-col gap-3 sm:gap-4 relative z-10">
             <div className="bg-gradient-to-br from-sky-400 to-sky-600 p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] shadow-md text-white flex flex-col items-center justify-center text-center">
               <span className="text-sky-100 uppercase text-[7px] sm:text-[9px] font-black tracking-[0.2em] mb-1">¿Cuándo nos vemos?</span>
               <div className={`font-bold ${esModoPDF ? 'text-sm' : 'text-[10px] sm:text-lg'}`}>
@@ -201,7 +219,7 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
               )}
             </div>
 
-            <div className="bg-white p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] shadow-md border border-sky-100 flex flex-col items-center justify-center text-center">
+            <div className="bg-white/90 backdrop-blur-sm p-3 sm:p-5 rounded-[1rem] sm:rounded-[1.5rem] shadow-md border border-sky-100 flex flex-col items-center justify-center text-center">
               <span className="text-sky-400 uppercase text-[7px] sm:text-[9px] font-black tracking-[0.2em] mb-1">¿Dónde será?</span>
               <p className={`font-black text-[#252525] ${esModoPDF ? 'text-lg' : 'text-sm sm:text-xl'}`}>
                 {invitacion.lugar}
@@ -221,11 +239,11 @@ const PlantillaDosColumnas = ({ invitacion, urlImagen, esModoPDF = false }) => {
 
       </div>
 
-      {/* FOOTER CREADOR Y MARCA DE AGUA */}
+      {/* FOOTER CREADOR Y LOGO PEQUEÑO */}
       <ComponenteAnimado 
         {...animationProps} 
         style={esModoPDF ? { pageBreakInside: 'avoid', marginTop: '40px' } : {}} 
-        className="text-center mt-8 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full"
+        className="text-center mt-8 sm:mt-12 flex flex-col items-center justify-center relative z-10 w-full bg-white/60 backdrop-blur-sm py-3 rounded-xl"
       >
         <p className="text-gray-500 font-serif italic text-[10px] sm:text-sm mb-2 sm:mb-4">
           Invitación creada por <span className="font-bold text-gray-700 not-italic">{nombreCreador}</span>
