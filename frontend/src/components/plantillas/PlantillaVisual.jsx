@@ -114,10 +114,10 @@ const PlantillaVisual = ({ invitacion, urlImagen, esModoPDF = false }) => {
   return (
     <div className={`w-full mx-auto flex flex-col relative ${esModoPDF ? 'pb-0 max-w-[700px] overflow-visible' : 'pb-10 sm:pb-20 max-w-4xl px-2 sm:px-4 overflow-hidden'}`}>
 
-      {/* --- MARCA DE AGUA (SOLO PDF Y USUARIOS GRATIS) --- */}
+      {/* MARCA DE AGUA (SOLO PDF Y USUARIOS DE TIPO USER) */}
       {esModoPDF && rolUsuario === 'user' && (
         <div 
-          className="absolute inset-0 z-0 pointer-events-none opacity-[0.12]"
+          className="absolute inset-0 z-0 pointer-events-none opacity-[0.20]"
           style={{
             backgroundImage: 'url(/logo_CWM_oficial.png)',
             backgroundSize: '300px',
