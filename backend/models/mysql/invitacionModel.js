@@ -59,11 +59,14 @@ class InvitacionModel {
     }
 
     const { plantilla_id, imagen, paquete_id, ...restoDatos } = input
-    const id = crypto.randomUUID().replace(/-/g, '')
+
+    const idConGuiones = crypto.randomUUID()
+
+    const idSinGuiones = idConGuiones.replace(/-/g, '')
 
     await Invitacion.create({
       ...restoDatos, 
-      id: Sequelize.fn('UUID_TO_BIN', id),
+      id: Sequelize.fn('UUID_TO_BIN', idSinGuiones),
       usuario_id: Sequelize.fn('UUID_TO_BIN', usuario_id),
       plantilla_id: Sequelize.fn('UUID_TO_BIN', plantilla_id),
       paquete_id: Sequelize.fn('UUID_TO_BIN', paquete_id),
@@ -75,7 +78,7 @@ class InvitacionModel {
       where: { id: usuarioBuffer }
     })
 
-    return { ...restoDatos, id, usuario_id, plantilla_id, paquete_id, imagen }
+    return { ...restoDatos, id: idConGuiones, usuario_id, plantilla_id, paquete_id, imagen }
   }
 
   static async update ({ id, input, usuario_id }) {
