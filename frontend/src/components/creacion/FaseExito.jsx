@@ -130,7 +130,7 @@ const FaseExito = () => {
       {/* OPCIONES DE COMPARTIR Y DESCARGAR */}
       <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
         <button 
-          onClick={compartirWhatsApp} 
+          onClick={navegar(`/gestion-invitados/${invitacion?.id}`)} 
           className="flex flex-row sm:flex-col items-center justify-start sm:justify-center p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-black/50 border border-sky-400 hover:bg-sky-500/10 hover:border-sky-400 transition-all group backdrop-blur-md gap-4 sm:gap-0"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 sm:h-10 sm:w-10 sm:mb-4 text-sky-400 md:group-hover:scale-110 transition-transform drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor">
