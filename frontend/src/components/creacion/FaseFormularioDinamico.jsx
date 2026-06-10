@@ -291,7 +291,7 @@ export const FormularioInvitacionUI = ({
           </div>
         ))}
         {items.length < 8 && (
-          <button type="button" onClick={() => manejarCambioDinamico(sug.titulo_campo, [...items, { hora: '', titulo: '' }])} className="w-full mt-2 py-3 border-2 border-dashed border-pink-400/30 text-pink-400 rounded-xl hover:bg-pink-400/10 font-bold text-[11px] sm:text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
+          <button type="button" onClick={() => manejarCambioDinamico(sug.titulo_campo, [...items, { hora: '', titulo: '' }])} className="w-full mt-2 py-3 border-2 border-dashed border-white text-white rounded-xl hover:text-pink-400 hover:bg-pink-400/10 font-bold text-[11px] sm:text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Añadir nueva fase ({items.length}/8)
           </button>
