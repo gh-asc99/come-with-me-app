@@ -28,6 +28,13 @@ const HistorialCreaciones = () => {
   const areaPdfRef = useRef(null);
   const tieneCreaciones = invitaciones.length > 0;
 
+  // Se ordenan de más reciente a más antigua usando fecha_creacion (o createdAt)
+  const invitacionesOrdenadas = [...invitaciones].sort((a, b) => {
+    const fechaA = new Date(a.fecha_creacion || a.createdAt).getTime();
+    const fechaB = new Date(b.fecha_creacion || b.createdAt).getTime();
+    return fechaB - fechaA;
+  });
+
   // LÓGICA DE GENERACIÓN DE PDF
   useEffect(() => {
     if (generandoPDF && invitacionActiva && areaPdfRef.current) {
@@ -215,9 +222,9 @@ const HistorialCreaciones = () => {
               </div>
             </div>
 
-            {/* LISTA DE INVITACIONES */}
+            {/* LISTA DE INVITACIONES (AHORA ORDENADAS) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-4">
-              {invitaciones.map((inv) => (
+              {invitacionesOrdenadas.map((inv) => (
                 <TarjetaInvitacion
                   key={inv.id}
                   invitacion={inv}
